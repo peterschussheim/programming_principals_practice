@@ -1,56 +1,68 @@
-﻿#include <iostream>
-#include <string>
-#include <vector>
-#include <algorithm>
-#include <cmath>
-#include <algorithm>
+﻿#define _SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS
 
-using namespace std;
-inline void keep_window_open() { char ch; cin >> ch; }
+#include "std_lib_facilities.h"
 
+int main()
+{
+  string first_name;
+  string friend_name;
+  string friend_pronoun;
+  char friend_sex;
+  int age;
 
-int main() {
-  // Detects if two words entered into stdin are repeated
-  // and if true, output the repeated word.
+  friend_sex = 0;
 
-  string previous = " ";
-  string current;
+  cout << "Enter the name of the person you want to write to\n";
+  cin >> first_name;
+  cout << "Enter the name of one of your friends\n";
+  cin >> friend_name;
+  cout << "What is your friend's sex? Enter 'm' for male or 'f' for female.\n";
+  cin >> friend_sex;
+  cout << "What is the age of the letter recipient?\n";
+  cin >> age;
 
-  while (cin >> current) {
-    if (previous == current) {
-      cout << "repeated word: " << current << "\n";
-    }
-
-    previous = current;
+  if (friend_sex == 'm') {
+    friend_pronoun = "him";
   }
+  
+  if (friend_sex == 'f') {
+    friend_pronoun = "her";
+  }
+
+  cout << "\n";
+  cout << "Dear " << first_name << ",\n";
+  cout << "\n";
+  cout << "    " << "How are you? I am fine. I miss you.\n";
+  cout << "Today the weather is mild with light showers in the afternoon.\n";
+  cout << "I hear you just had a birthday and you are " << age << " years old.\n";
+
+  if (age < 12) {
+    cout << "Next year you will be " << age + 1 << ". ";
+  }
+
+  if (age == 17) {
+    cout << "Next year you will be able to vote. ";
+  }
+
+  if (age > 70) {
+    cout << "I hope you are enjoying retirement. ";
+  }
+
+  cout << "Have you seen " << friend_name << " lately?"
+    << " If you see " << friend_name << " please ask " << friend_pronoun << " to call me.\n";
+
+  cout << "\n";
+  cout << "Yours sincerely,\n";
+  cout << "\n\n";
+  cout << "Peter\n";
+
+  if (age <= 0) {
+    simple_error("you're kidding!");
+  }
+  
+  if (age >= 100) {
+    simple_error("you're kidding!");
+  }
+
+  keep_window_open();
 }
-
-//int main() {
-//  cout << "Please enter a integer value: ";
-//  int n;
-//
-//  cin >> n;
-//  cout << "n == " << n
-//    << "\nn+1 == " << n + 1
-//    << "\nthree modulo n == " << 3 % n
-//    << "\ntwice n == " << n + n
-//    << "\nn squared " << n * n
-//    << "\nhalf of n == " << n / 2
-//    << "\nn square root of n == " << sqrt(n)
-//    << '\n'; // end of line in output
-//}
-
-// Console program which asks the user to enter their first name
-// and their age in years (including a decimal).
-
-// The program outputs to standard out the first name and the age
-// converted into the number of months.
-//int main()
-//{
-//  cout << "Please enter your first name and age\n";
-//  string first;
-//  double age;
-//
-//  cin >> first >> age;
-//  cout << "Hello, " << first << " " << age * 12 << "\n";
-//}
