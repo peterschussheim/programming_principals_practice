@@ -5,5 +5,3 @@ cmake_minimum_required (VERSION 3.8)
 
 project (programming_principals CXX)
 add_subdirectory(src)
-# Add source to this project's executable.
-
