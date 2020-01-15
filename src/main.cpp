@@ -2,8 +2,7 @@
 
 #include "std_lib_facilities.h"
 
-int main()
-{
+int main() {
   string first_name;
   string friend_name;
   string friend_pronoun;
@@ -24,7 +23,7 @@ int main()
   if (friend_sex == 'm') {
     friend_pronoun = "him";
   }
-  
+
   if (friend_sex == 'f') {
     friend_pronoun = "her";
   }
@@ -32,7 +31,8 @@ int main()
   cout << "\n";
   cout << "Dear " << first_name << ",\n";
   cout << "\n";
-  cout << "    " << "How are you? I am fine. I miss you.\n";
+  cout << "    "
+       << "How are you? I am fine. I miss you.\n";
   cout << "Today the weather is mild with light showers in the afternoon.\n";
   cout << "I hear you just had a birthday and you are " << age << " years old.\n";
 
@@ -49,7 +49,7 @@ int main()
   }
 
   cout << "Have you seen " << friend_name << " lately?"
-    << " If you see " << friend_name << " please ask " << friend_pronoun << " to call me.\n";
+       << " If you see " << friend_name << " please ask " << friend_pronoun << " to call me.\n";
 
   cout << "\n";
   cout << "Yours sincerely,\n";
@@ -59,7 +59,7 @@ int main()
   if (age <= 0) {
     simple_error("you're kidding!");
   }
-  
+
   if (age >= 100) {
     simple_error("you're kidding!");
   }
