@@ -2,40 +2,31 @@
 
 #include "std_lib_facilities.h"
 
-// Function which accepts an amount of currency as a double
-// and a currency to convert from.
-// Ex: convert_to_usd(3.33, 'k')
-// currency can be either 'y' for yen or 'k' for kroner
-// Using switch-statements allows us to refactor and add/remove cases
-// more easily than using is-statements.
+using namespace std;
+// Using a while loop, write out a table of chars
+// and their int mapping.
+// EX:
+//
+// a  97
+// b  98
+// z  122
 int main() {
-  constexpr double jpy_to_usd = 0.0091;
-  constexpr double k_to_usd = 0.11;
-  constexpr double yuan_to_usd = 0.15;
+  // 48-57 for digits
+  cout << "Digits\n";
+  for (char start = 47; start < 57; ++start) {
+    cout << char(start + 1) << "\t" << int(start + 1) << "\n";
+  }
 
-  double amount = 1;
-  char unit = ' ';
+  cout << "\n";
+  // 65 - 90 for uppercase
+  cout << "Uppercase Letters\n";
+  for (char start = 64; start < 90; ++start) {
+    cout << char(start + 1) << "\t" << int(start + 1) << "\n";
+  }
 
-  cout << "Please enter an amount followed by a unit (j for yen or k for kroner or y for "
-          "yuan):\n";
-  cin >> amount >> unit;
-
-  switch (unit) {
-    case 'j': {
-      cout << amount << " yen == $" << amount * jpy_to_usd << "\n";
-      break;
-    }
-    case 'k': {
-      cout << amount << " kroner == $" << amount * k_to_usd << "\n";
-      break;
-    }
-    case 'y': {
-      cout << amount << " yuan == $" << amount * yuan_to_usd << "\n";
-      break;
-    }
-    default: {
-      cout << "Sorry, I don't a currency unit called '" << unit << "'\n";
-      break;
-    }
+  cout << "\n";
+  cout << "Lowercase Letters\n";
+  for (char start = 96; start < 122; ++start) {  // stop at char 'z'
+    cout << char(start + 1) << "\t" << int(start + 1) << "\n";
   }
 }
