@@ -4,24 +4,24 @@
 
 using namespace std;
 
-int main() {  // NOLINT
-  vector<string> words;
-  words.push_back("Broccoli");
-  words.push_back("Tasty");
-  words.push_back("Many");
+int main() {
+  cout << "Enter two integers, hit 'enter' after typing each\n";
+  double num1;
+  double num2;
+  while (cin >> num1, cin >> num2) {
+    double smallest = num1 < num2 ? num1 : num2;
+    double largest = num1 > num2 ? num1 : num2;
 
-  for (string temp; cin >> temp;) {           // write into temp from cin
-    for (int i = 0; i < words.size(); ++i) {  // if the current word (temp) is in our blacklist
-      if (temp == words[i]) {                 // output "BLEEP" if temp is in blacklist
-        cout << "BLEEP"
-             << "\n";
+    if (num1 == num2) {
+      cout << "the numbers are equal\n";
+    } else {
+      cout << "the smaller value is: " << smallest << "    "
+           << "the larger value is: " << largest << "\n";
 
-        continue;
-      } else {
-        cout << "You entered: " << temp << "\n";
+      double diff = largest - smallest;
+      if (diff < (1.0 / 100)) {
+        cout << "the numbers are almost equal\n";
       }
     }
   }
-  const int pos_x = 44;
-  keep_window_open();
 }
