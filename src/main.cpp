@@ -4,20 +4,24 @@
 
 using namespace std;
 
-int square(int x);
+int main() {  // NOLINT
+  vector<string> words;
+  words.push_back("Broccoli");
+  words.push_back("Tasty");
+  words.push_back("Many");
 
-int square(int x) {
-  int result = 0;
-  for (int count = x; count > 0; --count) {
-    result += x;
+  for (string temp; cin >> temp;) {           // write into temp from cin
+    for (int i = 0; i < words.size(); ++i) {  // if the current word (temp) is in our blacklist
+      if (temp == words[i]) {                 // output "BLEEP" if temp is in blacklist
+        cout << "BLEEP"
+             << "\n";
+
+        continue;
+      } else {
+        cout << "You entered: " << temp << "\n";
+      }
+    }
   }
-
-  return result;
-}
-
-int main() {
-  int val;
-  cout << "Enter an integer to square: \n";
-  cin >> val;
-  cout << "The square of " << val << " is " << square(val) << "\n";
+  const int pos_x = 44;
+  keep_window_open();
 }
