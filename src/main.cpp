@@ -1,5 +1,7 @@
 ﻿#define _SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS
 
+#include <algorithm>
+
 #include "std_lib_facilities.h"
 
 using namespace std;
@@ -89,6 +91,7 @@ int main() {
   cout << "number of values entered: " << count << "\n";
   cout << "sum: " << sum << "m\n";
 
+  sort(values.begin(), values.end());
   for (double x : values) {
     cout << x << "\n";
   }
