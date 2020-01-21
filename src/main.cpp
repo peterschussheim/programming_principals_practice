@@ -16,6 +16,7 @@ int main() {
   int count = 0;     // Tracks how many values have been entered
   double smallest = std::numeric_limits<double>::max();
   double largest = std::numeric_limits<double>::min();
+  vector<double> values;
 
   constexpr double cm_to_meter = 0.01;
   constexpr double in_to_meter = 0.0254;
@@ -35,6 +36,7 @@ int main() {
       if (converted > largest) {
         largest = converted;
       }
+      values.push_back(converted);
       sum += converted;
       ++count;
       print_value(dist, unit);
@@ -46,6 +48,7 @@ int main() {
       if (dist > largest) {
         largest = dist;
       }
+      values.push_back(dist);
       sum += dist;
       ++count;
       print_value(dist, unit);
@@ -58,6 +61,7 @@ int main() {
       if (converted > largest) {
         largest = converted;
       }
+      values.push_back(converted);
       sum += converted;
       ++count;
       print_value(dist, unit);
@@ -70,7 +74,7 @@ int main() {
       if (converted > largest) {
         largest = converted;
       }
-
+      values.push_back(converted);
       sum += converted;
       ++count;
       print_value(dist, unit);
@@ -84,6 +88,10 @@ int main() {
   cout << "largest value: " << largest << "m\n";
   cout << "number of values entered: " << count << "\n";
   cout << "sum: " << sum << "m\n";
+
+  for (double x : values) {
+    cout << x << "\n";
+  }
 
   keep_window_open("|");
 }
