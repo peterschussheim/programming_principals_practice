@@ -3,6 +3,12 @@
 using namespace std;
 
 void temp_stats();
+double ctok(double c);
+
+double ctok(double c) {
+  double k = c + 273.15;
+  return k;
+}
 
 void temp_stats() {
   constexpr double record_high_temp = -128.6;  // lowest temp recorded in Vostok Station
