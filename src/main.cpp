@@ -1,8 +1,19 @@
-﻿#include "ch5.cpp"
-#include "std_lib_facilities.h"
+﻿#include "std_lib_facilities.h"
+
 using namespace std;
 
 int main() {
-  temp_stats();
-  keep_window_open("|");
+  try {
+    cout << "Success!\n";
+    keep_window_open();
+    return 0;
+  } catch (exception& e) {
+    cerr << "error: " << e.what() << '\n';
+    keep_window_open();
+    return 1;
+  } catch (...) {
+    cerr << "Oops: unknown exception!\n";
+    keep_window_open();
+    return 2;
+  }
 }
