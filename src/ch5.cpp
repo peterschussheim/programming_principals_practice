@@ -1,11 +1,18 @@
 #include <iostream>
 
+#include "std_lib_facilities.h"
+
 using namespace std;
 
 void temp_stats();
 double ctok(double c);
 
 double ctok(double c) {
+  constexpr double abs_zero_celsius = -273.15;  // throw error if provided a smaller val
+  if (c < abs_zero_celsius) {
+    error("Please enter a temp higher than -273.15");
+  }
+
   double k = c + 273.15;
   return k;
 }

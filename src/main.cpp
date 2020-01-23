@@ -3,17 +3,17 @@
 using namespace std;
 
 int main() {
-  constexpr double abs_zero_celsius = -273.15;
-  double c = 0;
-  cout << "enter a temperature\n";
-  cin >> c;
-  if (c < abs_zero_celsius) {
-    cerr << "please enter a temperature higher than -273.15\n";
-    keep_window_open();
-    return 1;
-  } else {
+  try {
+    double c = 0;
+    cout << "enter a temperature\n";
+    cin >> c;
     double k = ctok(c);
     cout << k << '\n';
     keep_window_open();
+    return 0;                   // 0 indicates success
+  } catch (runtime_error& e) {  // catch runtime errors from invalid arguments
+    cerr << "runtime error: " << e.what() << '\n';
+    keep_window_open();
+    return 1;  // 1 indicates failure
   }
 }
