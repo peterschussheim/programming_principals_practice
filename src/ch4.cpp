@@ -1,4 +1,3 @@
-#define _SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS
 #include "std_lib_facilities.h"
 
 void print_value(double distance, string unit) {

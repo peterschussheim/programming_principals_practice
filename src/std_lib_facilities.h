@@ -24,7 +24,7 @@
 #include <stdexcept>
 #include <string>
 #include <vector>
-
+#define _SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS
 //------------------------------------------------------------------------------
 
 #ifdef _MSC_VER
