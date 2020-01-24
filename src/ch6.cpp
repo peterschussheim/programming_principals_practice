@@ -48,8 +48,8 @@ Token Token_stream::get() {
   cin >> ch;  // remember that >> skips whitespace (space, neline, tab)
 
   switch (ch) {
-    case ';':  // for "print"
-    case 'q':  // for quit
+    case '=':  // for "print"
+    case 'x':  // for quit
     case '(':
     case ')':
     case '+':
