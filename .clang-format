@@ -8,7 +8,7 @@ UseTab: Never
 AccessModifierOffset: -2
 AlignTrailingComments: true
 AllowShortBlocksOnASingleLine: false
-AllowShortCaseLabelsOnASingleLine: true
+AllowShortCaseLabelsOnASingleLine: false
 AllowShortFunctionsOnASingleLine : Empty
 AllowShortLoopsOnASingleLine: true
 BinPackParameters: true

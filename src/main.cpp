@@ -1,19 +1,26 @@
-﻿#include "ch5.cpp"
+﻿
+#include "ch6.cpp"
 #include "std_lib_facilities.h"
 using namespace std;
 
-int main() {
-  try {
-    double c = 0;
-    cout << "enter a temperature\n";
-    cin >> c;
-    double k = ctok(c);
-    cout << k << '\n';
-    keep_window_open();
-    return 0;                   // 0 indicates success
-  } catch (runtime_error& e) {  // catch runtime errors from invalid arguments
-    cerr << "runtime error: " << e.what() << '\n';
-    keep_window_open();
-    return 1;  // 1 indicates failure
+int main() try {
+  while (cin) {
+    Token t = ts.get();
+    double val;
+    if (t.kind == 'q') break;  // 'q' for quit
+    if (t.kind == ';')         // ';' for "print now"
+      cout << "=" << val << '\n';
+    else
+      ts.putback(t);
+    val = expression();
   }
+  keep_window_open();
+} catch (exception& e) {
+  cerr << "error: " << e.what() << '\n';
+  keep_window_open();
+  return 1;
+} catch (...) {
+  cerr << "Oops: unknown exception!\n";
+  keep_window_open();
+  return 2;
 }
