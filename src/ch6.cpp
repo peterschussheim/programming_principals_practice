@@ -144,28 +144,39 @@ double expression() {
   }
 }
 
-// int main()
-// try
-//{
-//    while (cin) {
-//        Token t = ts.get();
+// int main() {
+//  try {
+//    cout << "Welcome to our simple calculator. Please enter expressions using floating-point "
+//            "numbers.\n\n";
+//    cout <<
+//    "--------------------------------------------------------------------------------------"
+//            "--\n";
+//    cout << "Supported operators include: '*', '/', '+', '-'.\n";
+//    cout << "Use parentheses '(' and ')' to instruct the program on the evaluation order.\n";
+//    cout << "To print the calculation, type a '=' after your expression.\n";
+//    cout << "When finished, enter the 'x' key and hit 'enter'.\n";
+//    cout <<
+//    "--------------------------------------------------------------------------------------"
+//            "--\n";
 //
-//        if (t.kind == 'q') break; // 'q' for quit
-//        if (t.kind == ';')        // ';' for "print now"
-//            cout << "=" << val << '\n';
-//        else
-//            ts.putback(t);
-//        val = expression();
+//    while (cin) {
+//      Token t = ts.get();
+//      double val;
+//      if (t.kind == 'x') break;  // 'x' for quit
+//      if (t.kind == '=')         // '=' for "print now"
+//        cout << "= " << val << '\n';
+//      else
+//        ts.putback(t);
+//      val = expression();
 //    }
-//	keep_window_open();
-//}
-// catch (exception& e) {
+//    keep_window_open();
+//  } catch (exception& e) {
 //    cerr << "error: " << e.what() << '\n';
-//	keep_window_open();
+//    keep_window_open();
 //    return 1;
-//}
-// catch (...) {
+//  } catch (...) {
 //    cerr << "Oops: unknown exception!\n";
-//	keep_window_open();
+//    keep_window_open();
 //    return 2;
+//  }
 //}
