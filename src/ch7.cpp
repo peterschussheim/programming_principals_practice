@@ -9,12 +9,14 @@
 
 #include "std_lib_facilities.h"
 
-struct Token {
+class Token {
+public:
   char kind;
   double value;
   string name;
-  Token(char ch) : kind(ch), value(0) {}
-  Token(char ch, double val) : kind(ch), value(val) {}
+  Token(char ch) : kind{ch}, value{0} {}                // make a Token from a char
+  Token(char ch, double val) : kind{ch}, value{val} {}  // make a Token from a char and a double
+  Token(char ch, string n) : kind{ch}, name{n} {}       // make a Token from char and string
 };
 
 class Token_stream {
@@ -25,7 +27,7 @@ public:
   Token_stream() : full(0), buffer(0) {}
 
   Token get();
-  void unget(Token t) {
+  void putback(Token t) {
     buffer = t;
     full = true;
   }
@@ -33,11 +35,12 @@ public:
   void ignore(char);
 };
 
-const char let = 'L';
 const char quit = 'Q';
 const char print = ';';
 const char number = '8';
-const char name = 'a';
+const char let = 'L';          // declaration token
+const char name = 'a';         // name token
+const string declkey = "let";  // declaration keyword
 
 Token Token_stream::get() {
   if (full) {
@@ -68,20 +71,20 @@ Token Token_stream::get() {
     case '7':
     case '8':
     case '9': {
-      cin.unget();
+      cin.unget();  // put digit back into stream
       double val;
-      cin >> val;
+      cin >> val;  // read a floating-point
       return Token(number, val);
     }
     default:
       if (isalpha(ch)) {
         string s;
         s += ch;
-        while (cin.get(ch) && (isalpha(ch) || isdigit(ch))) s = ch;
-        cin.unget();
-        if (s == "let") return Token(let);
+        while (cin.get(ch) && (isalpha(ch) || isdigit(ch))) s += ch;
+        cin.putback(ch);                      // should we be using cin.unget??
+        if (s == declkey) return Token{let};  // declaration keyword
         if (s == "quit") return Token(name);
-        return Token(name, s);
+        return Token{name, s};
       }
       error("Bad token");
   }
@@ -139,11 +142,14 @@ double primary() {
       double d = expression();
       t = ts.get();
       if (t.kind != ')') error("'(' expected");
+      return d;
     }
-    case '-':
-      return -primary();
     case number:
       return t.value;
+    case '-':
+      return -primary();
+    case '+':
+      return primary();
     case name:
       return get_value(t.name);
     default:
@@ -166,7 +172,7 @@ double term() {
         break;
       }
       default:
-        ts.unget(t);
+        ts.putback(t);
         return left;
     }
   }
@@ -184,7 +190,7 @@ double expression() {
         left -= term();
         break;
       default:
-        ts.unget(t);
+        ts.putback(t);
         return left;
     }
   }
@@ -208,7 +214,7 @@ double statement() {
     case let:
       return declaration();
     default:
-      ts.unget(t);
+      ts.putback(t);
       return expression();
   }
 }
@@ -226,7 +232,7 @@ void calculate() {
       Token t = ts.get();
       while (t.kind == print) t = ts.get();
       if (t.kind == quit) return;
-      ts.unget(t);
+      ts.putback(t);
       cout << result << statement() << endl;
     } catch (runtime_error& e) {
       cerr << e.what() << endl;
