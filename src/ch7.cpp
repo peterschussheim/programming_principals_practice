@@ -1,10 +1,24 @@
 
 /*
-        calculator08buggy.cpp
+    Original code from http://www.stroustrup.com/Programming/calculator08buggy.cpp
 
-        Helpful comments removed.
+    Simple calculator command line program implemented as an excercise in building
+    a relatively complex program and making improvements iteratively.
 
-        We have inserted 3 bugs that the compiler will catch and 3 that it won't.
+    Features:
+      - Supports operators: '+', '-', '*', '/', '%', "'(' expression ')'"
+      - User-defined variables: 'let x = 33 + 2;' -> 'x;' = 35
+      - System-defined variables: pi, e, etc.
+
+    Example Usage:
+      **Use the ';' operator to terminate an expression (ex: '44 * 3;')**
+      **Use the 'let' keyword to declare a user-defined variable (ex: 'let y = 200.094;')**
+      **To quit the program**
+
+      '> let s = 100 * 0.75;'
+      '> s * (33 + pi) - 2;'
+      '> 300 * (33 + 2) / 3;'
+      '> (17 + 4) / (5 - 1)'
 */
 
 #include "std_lib_facilities.h"
@@ -14,53 +28,51 @@ public:
   char kind;
   double value;
   string name;
-  Token(char ch) : kind{ch}, value{0} {}                // make a Token from a char
-  Token(char ch, double val) : kind{ch}, value{val} {}  // make a Token from a char and a double
-  Token(char ch, string n) : kind{ch}, name{n} {}       // make a Token from char and string
+  Token(char ch) : kind{ch}, value{0} {}                     // Token{'*'}
+  Token(char ch, double val) : kind{ch}, value{val} {}       // Token{number, 4.321}
+  Token(char ch, string n) : kind{ch}, value{0}, name{n} {}  // Token{name, "pi"}
 };
 
 class Token_stream {
-  bool full;
-  Token buffer;
-
 public:
-  Token_stream() : full(0), buffer(0) {}
+  Token_stream() : full(0), buffer(0) {}  // initialize a Token_stream
+  Token get();                            // Get a Token
+  void putback(Token t);                  // Put a Token back
+  void ignore(char c);                    // discard characters up to and including a c
 
-  Token get();
-  void putback(Token t) {
-    buffer = t;
-    full = true;
-  }
-
-  void ignore(char);
+private:
+  bool full{false};  // is there a Token in the buffer?
+  Token buffer;      // storage location when we keep a Token using Token_stream::putback()
 };
 
-const char quit = 'Q';
-const char print = ';';
-const char number = '8';
+const char quit_key = 'q';     // keyword to exit the program
+const char print = ';';        // terminates an expression and prints the result on a newline
+const char number = '8';       // arbitrary choice to represent numeric literals
 const char let = 'L';          // declaration token
 const char name = 'a';         // name token
 const string declkey = "let";  // declaration keyword
 
 Token Token_stream::get() {
-  if (full) {
+  // read chars from cin and compose a Token
+  if (full) {  // if we already have a Token ready
     full = false;
     return buffer;
   }
   char ch;
-  cin >> ch;
+  cin >> ch;  // remember, >> operator skips ws (space, newline, tab, etc)
   switch (ch) {
+    case quit_key:
+    case print:
     case '(':
     case ')':
     case '+':
     case '-':
     case '*':
     case '/':
-    case '%':
-    case ';':
     case '=':
-      return Token(ch);
-    case '.':
+    case '%':
+      return Token(ch);  // each character represent itself
+    case '.':            // a floating-point literal can start with a dot ex: .9483
     case '0':
     case '1':
     case '2':
@@ -71,7 +83,7 @@ Token Token_stream::get() {
     case '7':
     case '8':
     case '9': {
-      cin.unget();  // put digit back into stream
+      cin.putback(ch);  // put digit back into stream
       double val;
       cin >> val;  // read a floating-point
       return Token(number, val);
@@ -83,20 +95,27 @@ Token Token_stream::get() {
         while (cin.get(ch) && (isalpha(ch) || isdigit(ch))) s += ch;
         cin.putback(ch);                      // should we be using cin.unget??
         if (s == declkey) return Token{let};  // declaration keyword
-        if (s == "quit") return Token(name);
+        if (ch == quit_key) return Token{name};
         return Token{name, s};
       }
       error("Bad token");
   }
 }
 
-void Token_stream::ignore(char c) {
+void Token_stream::putback(Token t) {
+  buffer = t;
+  full = true;
+}
+
+void Token_stream::ignore(char c) {  // c represents the kind of Token
+  // first look in buffer
   if (full && c == buffer.kind) {
     full = false;
     return;
   }
   full = false;
 
+  // now search input:
   char ch;
   while (cin >> ch)
     if (ch == c) return;
@@ -108,27 +127,35 @@ struct Variable {
   Variable(string n, double v) : name(n), value(v) {}
 };
 
-vector<Variable> names;
+vector<Variable> var_table;
 
-double get_value(string s) {
-  for (int i = 0; i < names.size(); ++i)
-    if (names[i].name == s) return names[i].value;
+double get_value(string s) {  // return the value of a Variable names s
+  for (int i = 0; i < var_table.size(); ++i)
+    if (var_table[i].name == s) return var_table[i].value;
   error("get: undefined name ", s);
 }
 
 void set_value(string s, double d) {
-  for (int i = 0; i <= names.size(); ++i)
-    if (names[i].name == s) {
-      names[i].value = d;
+  for (int i = 0; i <= var_table.size(); ++i)
+    if (var_table[i].name == s) {
+      var_table[i].value = d;
       return;
     }
   error("set: undefined name ", s);
 }
 
 bool is_declared(string s) {
-  for (int i = 0; i < names.size(); ++i)
-    if (names[i].name == s) return true;
+  // is var already in var_table?
+  for (int i = 0; i < var_table.size(); ++i)
+    if (var_table[i].name == s) return true;
   return false;
+}
+
+double define_name(string var, double val) {
+  // add (var,val) to names vector
+  if (is_declared(var)) error(var, " declared twice");
+  var_table.push_back(Variable(var, val));
+  return val;
 }
 
 Token_stream ts;
@@ -171,6 +198,19 @@ double term() {
         left /= d;
         break;
       }
+      case '%': {
+        double d = primary();
+        if (d == 0) error("%: divide by zero");
+        left = fmod(left, d);
+        t = ts.get();
+        break;
+        /* int i1 = narrow_cast<int>(left);
+         int i2 = narrow_cast<int>(primary());
+         if (i2 == 0) error("%: divide by zero");
+         left = i1 % i2;
+         t = ts.get();
+         break;*/
+      }
       default:
         ts.putback(t);
         return left;
@@ -197,14 +237,19 @@ double expression() {
 }
 
 double declaration() {
+  // assume we have seen "let"
+  // handle name = expression
+  // declare a variable called "name" with initial val "expression"
   Token t = ts.get();
   if (t.kind != 'a') error("name expected in declaration");
   string name = t.name;
+
   if (is_declared(name)) error(name, " declared twice");
   Token t2 = ts.get();
   if (t2.kind != '=') error("= missing in declaration of ", name);
+
   double d = expression();
-  names.push_back(Variable(name, d));
+  var_table.push_back(Variable(name, d));
   return d;
 }
 
@@ -230,12 +275,12 @@ void calculate() {
   while (true) try {
       cout << prompt;
       Token t = ts.get();
-      while (t.kind == print) t = ts.get();
-      if (t.kind == quit) return;
+      while (t.kind == print) t = ts.get();  // discard all print statements
+      if (t.kind == quit_key) return;        // quit program
       ts.putback(t);
-      cout << result << statement() << endl;
+      cout << result << statement() << '\n';
     } catch (runtime_error& e) {
-      cerr << e.what() << endl;
+      cerr << e.what() << '\n';
       clean_up_mess();
     }
 }
