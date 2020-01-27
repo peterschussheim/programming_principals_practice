@@ -13,7 +13,7 @@
     Example Usage:
       **Use the ';' operator to terminate an expression (ex: '44 * 3;')**
       **Use the 'let' keyword to declare a user-defined variable (ex: 'let y = 200.094;')**
-      **To quit the program**
+      **To quit the program, type 'quit' and hit enter**
 
       '> let s = 100 * 0.75;'
       '> s * (33 + pi) - 2;'
@@ -45,12 +45,13 @@ private:
   Token buffer;      // storage location when we keep a Token using Token_stream::putback()
 };
 
-const char quit_key = 'q';     // keyword to exit the program
-const char print = ';';        // terminates an expression and prints the result on a newline
-const char number = '8';       // arbitrary choice to represent numeric literals
-const char let = 'L';          // declaration token
-const char name = 'a';         // name token
-const string declkey = "let";  // declaration keyword
+const char print = ';';          // terminates an expression and prints the result on a newline
+const char number = '8';         // arbitrary choice to represent numeric literals
+const char let = 'L';            // declaration token
+const char name = 'a';           // name token
+const char quit = 'Q';           // quit token
+const string declkey = "let";    // declaration keyword
+const string quit_key = "quit";  // keyword to exit the program
 
 Token Token_stream::get() {
   // read chars from cin and compose a Token
@@ -61,7 +62,6 @@ Token Token_stream::get() {
   char ch;
   cin >> ch;  // remember, >> operator skips ws (space, newline, tab, etc)
   switch (ch) {
-    case quit_key:
     case print:
     case '(':
     case ')':
@@ -93,9 +93,10 @@ Token Token_stream::get() {
         string s;
         s += ch;
         while (cin.get(ch) && (isalpha(ch) || isdigit(ch))) s += ch;
-        cin.putback(ch);                      // should we be using cin.unget??
-        if (s == declkey) return Token{let};  // declaration keyword
-        if (ch == quit_key) return Token{name};
+        cin.putback(ch);                        // should we be using cin.unget??
+        if (s == declkey) return Token{let};    // declaration keyword
+        if (s == quit_key) return Token{quit};  // quit keyword
+
         return Token{name, s};
       }
       error("Bad token");
@@ -274,9 +275,9 @@ const string result = "= ";
 void calculate() {
   while (true) try {
       cout << prompt;
-      Token t = ts.get();
+      Token t = ts.get();                    // get Token from Token_stream
       while (t.kind == print) t = ts.get();  // discard all print statements
-      if (t.kind == quit_key) return;        // quit program
+      if (t.kind == quit) return;            // quit program
       ts.putback(t);
       cout << result << statement() << '\n';
     } catch (runtime_error& e) {
