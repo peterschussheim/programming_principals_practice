@@ -1,42 +1,16 @@
-﻿#include "std_lib_facilities.h"
+﻿#include "fib.cpp"
+#include "std_lib_facilities.h"
+
 using namespace std;
-
-namespace X {
-  int var;
-  void print() {
-    cout << "X::var: " << var << '\n';
-  }
-}
-
-namespace Y {
-  int var;
-  void print() {
-    cout << "Y::var: " << var << '\n';
-  }
-}
-
-namespace Z {
-  int var;
-  void print() {
-    cout << "Z::var: " << var << '\n';
-  }
-}
 
 int main() {
   try {
-    X::var = 7;
-    X::print();  // print X's var
+    // create a vector of fibonacci numbers
+    // print vector
 
-    using namespace Y;
-    var = 9;
-    print();  // print Y's var
-
-    {
-      using Z::print;
-      using Z::var;
-      var = 11;
-      print();  // print Z's var
-    }
+    vector<int> v_fib;
+    fibonacci(1, 2, v_fib, 10);
+    print("Fibonacci number: ", v_fib);
     keep_window_open("~");
     return 0;
   } catch (exception& e) {
