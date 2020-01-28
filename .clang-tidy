@@ -1,3 +1,3 @@
-Checks: '-*,clang-analyzer-cplusplus-*,cppcoreguidelines-*,modernize-*,-modernize-use-trailing-return-type'
+Checks: '-*,clang-analyzer-cplusplus-*,cppcoreguidelines-*'
 WarningsAsErrors: ''
-HeaderFilterRegex: src/*.h'
+HeaderFilterRegex: 'src/std_lib_facilities.h'
