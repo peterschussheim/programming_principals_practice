@@ -1,15 +1,26 @@
-﻿#include "fib.h"
+﻿#include "reverse.h"
 #include "std_lib_facilities.h"
 
 using namespace std;
 
+/*
+  print elements of vector on single line, seperated by spaces
+*/
+void print_on_one_line(string label, vector<int> v) {
+  cout << label << ' ';
+  for (int i = 0; i < v.size(); ++i) {
+    cout << v[i] << " ";
+  }
+  cout << '\n';
+}
+
 int main() {
   try {
-    // create a vector of fibonacci numbers
-    // print vector
-    vector<int> v_fib;
-    fibonacci(1, 2, v_fib, 40);
-    print("Fibonacci number: ", v_fib, true);
+    vector<int> vec{1, 3, 5, 7, 9};  // init a vector of ints
+    print_on_one_line("original vector: ", vec);
+    reverse_inplace(vec);
+    print_on_one_line("reverse_inplace: ", vec);
+
     keep_window_open("~");
     return 0;
   } catch (exception& e) {

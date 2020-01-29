@@ -17,9 +17,9 @@ using namespace std;
  * accepts a string to label output and a vector
  * as well as a boolean if user wants the indices printed.
  */
-void print(string label, vector<int> v, bool print_idx) {
+void print(string label, vector<int> v) {
   for (int i = 0; i < v.size() - 1; ++i) {
-    cout << label << ((print_idx == true) ? i : ' ') << ": " << v[i] << '\n';
+    cout << label << v[i] << '\n';
   }
 }
 
