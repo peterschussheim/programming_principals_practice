@@ -18,6 +18,10 @@ int main() {
   try {
     vector<int> vec{1, 3, 5, 7, 9};  // init a vector of ints
     print_on_one_line("original vector: ", vec);
+
+    vector<int> reversed = reverse_cpy(vec);  // vec is passed by value and returns a new vector
+    print_on_one_line("reverse_cpy:     ", reversed);
+
     reverse_inplace(vec);
     print_on_one_line("reverse_inplace: ", vec);
 

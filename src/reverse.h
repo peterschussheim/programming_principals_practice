@@ -9,15 +9,24 @@
   */
 
 #include "std_lib_facilities.h"
+
+void swap(vector<int>& v, int idx_i, int idx_j);  // forward declaration so we can call swap
+
 /**
-  Accepts a vector of integers and returns a copy
-  in reverse order.
-  */
-vector<int> reverse(vector<int> v) {
+Accepts a vector of integers and returns a copy
+in reverse order.
+*/
+vector<int> reverse_cpy(vector<int> v) {
   int i = 0;
-  int j = v.size();
+  int j = v.size() - 1;
   while (i != j) {
-    // swap(v, i, j);
+    // set temp to v[i]
+    // set v[i] to v[j]
+    // set v[j] to temp;
+    /*  int temp = v[i];
+      v[i] = v[j];
+      v[j] = temp;*/
+    swap(v, i, j);  // we can reuse swap
     ++i;
     --j;
   }
