@@ -14,7 +14,8 @@ AllowShortLoopsOnASingleLine: true
 BinPackParameters: true
 ConstructorInitializerAllOnOneLineOrOnePerLine: true
 IndentCaseLabels: true
-NamespaceIndentation: None
+IncludeBlocks: Preserve
+NamespaceIndentation: All
 PointerAlignment: Left
 SpaceBeforeParens: ControlStatements
 SpaceAfterTemplateKeyword: false
@@ -22,3 +23,4 @@ Standard: Cpp11
 Cpp11BracedListStyle: true
 # IndentPPDirectives: AfterHash
 AlwaysBreakTemplateDeclarations: false
+FixNamespaceComments: false
