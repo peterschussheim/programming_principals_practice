@@ -19,10 +19,16 @@
 
 #include "std_lib_facilities.h"
 
-struct Date {
+class Date {
+public:
+  Date(int y, int m, int d);  // check for valid dates and initialize
+  void add_day(int n);        // increase Date by n days
+  int month() { return m; }
+  int day() { return d; }
+  int year() { return y; }
+
+private:
   int y, m, d;
-  Date(int yy, int mm, int dd);  // check for valid dates and initialize
-  void add_day(int n);           // increase Date by n days
 };
 
 Date::Date(int yy, int mm, int dd) {
