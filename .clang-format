@@ -9,18 +9,21 @@ AccessModifierOffset: -2
 AlignTrailingComments: true
 AllowShortBlocksOnASingleLine: false
 AllowShortCaseLabelsOnASingleLine: false
-AllowShortFunctionsOnASingleLine : Empty
+AllowShortFunctionsOnASingleLine : InlineOnly
 AllowShortLoopsOnASingleLine: true
 BinPackParameters: true
+BreakConstructorInitializers: BeforeColon
 ConstructorInitializerAllOnOneLineOrOnePerLine: true
 IndentCaseLabels: true
 IncludeBlocks: Preserve
 NamespaceIndentation: All
 PointerAlignment: Left
+SpaceBeforeCtorInitializerColon: true
 SpaceBeforeParens: ControlStatements
 SpaceAfterTemplateKeyword: false
 Standard: Cpp11
 Cpp11BracedListStyle: true
-# IndentPPDirectives: AfterHash
 AlwaysBreakTemplateDeclarations: false
 FixNamespaceComments: false
+# BreakBeforeBraces: Stroustrup
+# IndentPPDirectives: AfterHash
