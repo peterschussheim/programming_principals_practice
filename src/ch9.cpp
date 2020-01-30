@@ -10,7 +10,8 @@
     - reject month outside of [1,12] range
     - reject day of month outside of [1,31] range
     - test each version with an invalid date (ex: 2004, 13, -5)
-    // 9.4.2
+    // 9.4.1 DONE
+    // 9.4.2 DONE
     // 9.4.3
     // 9.7.1
     // 9.7.4
@@ -19,41 +20,40 @@
 #include "std_lib_facilities.h"
 
 struct Date {
-  int y;
-  int m;
-  int d;
+  int y, m, d;
+  Date(int yy, int mm, int dd);  // check for valid dates and initialize
+  void add_day(int n);           // increase Date by n days
 };
 
-void init_day(Date& dd, int y, int m, int d) {
+Date::Date(int yy, int mm, int dd) {
   // check that (y,m,d) is valid date
   // if true, use it to intialize dd
-  if (d < 1 || d > 31) error("init_day: Invalid day");
-  if (m < 1 || m > 12) error("init_day: Invalid month");
+  if (dd < 1 || dd > 31) error("init_day: Invalid day");
+  if (mm < 1 || mm > 12) error("init_day: Invalid month");
 
-  dd.y = y;  // year (not checked yet)
-  dd.m = m;  // month in year
-  dd.d = d;  // day of month
+  y = yy;  // year (not checked yet)
+  m = mm;  // month in year
+  d = dd;  // day of month
 }
 
-void add_day(Date& dd, int n) {  // add or subtract days from a Date
-  // increase dd by n days
-  dd.d += n;
+void Date::add_day(int n) {  // add or subtract days from a Date
+  d += n;                    // increase d by n days
 
-  if (dd.d > 31) {  // day overflow
-    ++dd.m;
-    dd.d -= 31;
+  if (d > 31) {  // day overflow
+    ++m;
+    d -= 31;
   }
-  if (dd.d < 1) {  // day underflow
-    --dd.m;
-    dd.d += 31;
+  if (d < 1) {  // day underflow
+    --m;
+    d += 31;
   }
-  if (dd.m > 12) {  // month overflow
-    ++dd.y;
-    dd.m -= 12;
+  if (m > 12) {  // month overflow
+    ++y;
+    m -= 12;
   }
-  if (dd.m < 1) {  // month underflow
-    --dd.y;
-    dd.m += 12;
+  if (m < 1) {  // month underflow
+    --y;
+    m += 12;
   }
 }
 
@@ -63,22 +63,16 @@ ostream& operator<<(ostream& os, const Date& d) {
 
 int main() {
   try {
-    Date today;
-    init_day(today, 1978, 6, 26);
-
-    Date tomorrow{today};  // copy today into tomorrow
-    add_day(tomorrow, 1);  // increment by 1 using add_day()
-
-    // output today and tomorrow using << defined in 9.8
+    Date today{2000, 12, 31};
+    Date tomorrow{today};  // construct new Date object based on today
+    tomorrow.add_day(1);   // increment by 1
     cout << "Today: " << today << '\n';
     cout << "Tomorrow: " << tomorrow << '\n';
 
-    Date test1;
-    init_day(test1, 2004, 13, -5);
-    cout << "test1: " << test1 << '\n';  // fails due to invalid month and day args
+    // Date test1{2004, 13, -5};
+    // cout << "test1: " << test1 << '\n';  // fails due to invalid month and day args
 
-    Date test2;
-    init_day(test2, 2004, 0, 5);  // fails due to invalid month and day args
+    Date test2{2004, 0, 5};
     cout << "test2: " << test2 << '\n';
 
     keep_window_open("~");
