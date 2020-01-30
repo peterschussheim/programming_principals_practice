@@ -17,12 +17,16 @@
     // 9.7.4
 */
 
-void init_day(Date& dd, int y, int m, int d) {
-  // check that (y,m,d) is valid date
-  // if true, use it to intialize dd
-}
+// void init_day(Date& dd, int y, int m, int d) {
+//  // check that (y,m,d) is valid date
+//  // if true, use it to intialize dd
+//}
+//
+// void Date::add_day(Date& dd, int n) {
+//  // increase dd by n days
+//  dd += n;
+//}
 
-void Date::add_day(Date& dd, int n) {
-  // increase dd by n days
-  dd += n;
+int main() {
+  return 0;
 }
