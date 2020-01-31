@@ -9,7 +9,7 @@ AccessModifierOffset: -2
 AlignTrailingComments: true
 AllowShortBlocksOnASingleLine: false
 AllowShortCaseLabelsOnASingleLine: false
-AllowShortFunctionsOnASingleLine : InlineOnly
+AllowShortFunctionsOnASingleLine : All
 AllowShortLoopsOnASingleLine: true
 BinPackParameters: true
 BreakConstructorInitializers: BeforeColon

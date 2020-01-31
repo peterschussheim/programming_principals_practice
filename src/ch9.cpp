@@ -19,13 +19,36 @@
 
 #include "std_lib_facilities.h"
 
+enum class Month { jan = 1, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec };
+
+Month operator+(const Month& m, int n) {
+  int r = int(m) + n;
+  r %= int(Month::dec);
+  if (r == 0) return Month::dec;  // roll back modulo effect
+
+  return Month{r};
+}
+
+Month operator-(const Month& m, int n) { return (m + (-n)); }
+Month& operator+=(Month& m, int n) {
+  m = m + n;
+  return m;
+}
+bool operator<(const Month& m1, int d) { return true; }
+bool operator>(const Month& m1, int d) { return true; }
+
+Month& operator++(Month& m) {  // overloaded prefix ++
+  m = static_cast<Month>(m + 1);
+  return m;
+}
+
 class Date {
 public:
-  class Invalid {};           // exception handling
-  Date(int y, int m, int d);  // check for valid dates and initialize
+  class Invalid {};             // exception handling
+  Date(int y, Month m, int d);  // check for valid dates and initialize
 
-  // non-modifying operations
-  int month() const { return m; }
+  // non-modifying operations (note the const keyword)
+  Month month() const { return m; }
   int day() const { return d; }
   int year() const { return y; }
 
@@ -33,12 +56,13 @@ public:
   void add_day(int n);  // increase Date by n days
 
 private:
-  int y, m, d;
+  int y, d;
+  Month m;
   bool is_valid();  // return true if date is valid
 };
 
-Date::Date(int yy, int mm, int dd)  // constructor
-    : y{yy}, m{mm}, d{dd}           // initialize members
+Date::Date(int yy, Month mm, int dd)  // constructor
+    : y{yy}, m{mm}, d{dd}             // initialize members
 {
   if (!is_valid()) throw Invalid{};  // valid initialized values
 }
@@ -77,13 +101,13 @@ ostream& operator<<(ostream& os, const Date& d) {
 
 int main() {
   try {
-    Date today{2000, 12, 31};
+    Date today{2000, Month::dec, 31};
     Date tomorrow{today};  // construct new Date object based on today
     tomorrow.add_day(1);   // increment by 1
     cout << "Today: " << today << '\n';
     cout << "Tomorrow: " << tomorrow << '\n';
 
-    Date test1{2004, 13, -5};
+    Date test1{2004, 1, -5};
     cout << "test1: " << test1 << '\n';  // fails due to invalid month and day args
 
     // Date test2{2004, 0, 5};
