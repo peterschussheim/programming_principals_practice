@@ -12,7 +12,7 @@
     - test each version with an invalid date (ex: 2004, 13, -5)
     // 9.4.1 DONE
     // 9.4.2 DONE
-    // 9.4.3
+    // 9.4.3 DONE
     // 9.7.1
     // 9.7.4
 */
@@ -21,25 +21,26 @@
 
 class Date {
 public:
+  class Invalid {};           // exception handling
   Date(int y, int m, int d);  // check for valid dates and initialize
-  void add_day(int n);        // increase Date by n days
-  int month() { return m; }
-  int day() { return d; }
-  int year() { return y; }
+
+  // non-modifying operations
+  int month() const { return m; }
+  int day() const { return d; }
+  int year() const { return y; }
+
+  // modifying operations
+  void add_day(int n);  // increase Date by n days
 
 private:
   int y, m, d;
+  bool is_valid();  // return true if date is valid
 };
 
-Date::Date(int yy, int mm, int dd) {
-  // check that (y,m,d) is valid date
-  // if true, use it to intialize dd
-  if (dd < 1 || dd > 31) error("init_day: Invalid day");
-  if (mm < 1 || mm > 12) error("init_day: Invalid month");
-
-  y = yy;  // year (not checked yet)
-  m = mm;  // month in year
-  d = dd;  // day of month
+Date::Date(int yy, int mm, int dd)  // constructor
+    : y{yy}, m{mm}, d{dd}           // initialize members
+{
+  if (!is_valid()) throw Invalid{};  // valid initialized values
 }
 
 void Date::add_day(int n) {  // add or subtract days from a Date
@@ -63,8 +64,15 @@ void Date::add_day(int n) {  // add or subtract days from a Date
   }
 }
 
+bool Date::is_valid() {  // validates day and month. Year validation not implemented
+  if (d < 1 || d > 31) return false;
+  if (m < 1 || m > 12) return false;
+
+  return true;
+}
+
 ostream& operator<<(ostream& os, const Date& d) {
-  return os << '(' << d.m << '/' << d.d << '/' << d.y << ')';
+  return os << '(' << d.month() << '/' << d.day() << '/' << d.year() << ')';
 }
 
 int main() {
@@ -75,16 +83,20 @@ int main() {
     cout << "Today: " << today << '\n';
     cout << "Tomorrow: " << tomorrow << '\n';
 
-    // Date test1{2004, 13, -5};
-    // cout << "test1: " << test1 << '\n';  // fails due to invalid month and day args
+    Date test1{2004, 13, -5};
+    cout << "test1: " << test1 << '\n';  // fails due to invalid month and day args
 
-    Date test2{2004, 0, 5};
-    cout << "test2: " << test2 << '\n';
+    // Date test2{2004, 0, 5};
+    // cout << "test2: " << test2 << '\n';
 
     keep_window_open("~");
     return 0;
   } catch (exception& e) {
     cerr << e.what() << '\n';
+    keep_window_open("~");
+    return 1;
+  } catch (Date::Invalid) {
+    error("invalid date");
     keep_window_open("~");
     return 1;
   } catch (...) {

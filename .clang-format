@@ -13,7 +13,7 @@ AllowShortFunctionsOnASingleLine : InlineOnly
 AllowShortLoopsOnASingleLine: true
 BinPackParameters: true
 BreakConstructorInitializers: BeforeColon
-ConstructorInitializerAllOnOneLineOrOnePerLine: true
+ConstructorInitializerAllOnOneLineOrOnePerLine: false
 IndentCaseLabels: true
 IncludeBlocks: Preserve
 NamespaceIndentation: All
