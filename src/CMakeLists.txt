@@ -34,3 +34,7 @@ set_property(TARGET Chrono PROPERTY CXX_STANDARD_REQUIRED ON)
 add_executable(Test_output Test_output.cpp std_lib_facilities.h)
 set_property(TARGET Test_output PROPERTY CXX_STANDARD 17)
 set_property(TARGET Test_output PROPERTY CXX_STANDARD_REQUIRED ON)
+
+add_executable(To_lower To_lower.cpp std_lib_facilities.h)
+set_property(TARGET To_lower PROPERTY CXX_STANDARD 17)
+set_property(TARGET To_lower PROPERTY CXX_STANDARD_REQUIRED ON)
