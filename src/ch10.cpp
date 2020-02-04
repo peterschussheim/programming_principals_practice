@@ -14,8 +14,8 @@
         with an ordinary text editor (such as WordPad).
   - [x] Close the ofstream and then open an ifstream for mydata.txt. Read the
         data from mydata.txt and store it in a new vector called processed_points.
-  - [ ] Print the data elements from both vectors.
-  - [ ] Compare the two vectors and print "Something's wrong!" if the number of elements
+  - [x] Print the data elements from both vectors.
+  - [x] Compare the two vectors and print "Something's wrong!" if the number of elements
         or the values of elements differ.
 */
 #include "std_lib_facilities.h"
@@ -43,11 +43,16 @@ ostream& operator<<(ostream& os, const Point& pp) {
   return os << '(' << pp.x << ',' << pp.y << ')';
 }
 
+bool operator==(const Point a, const Point b) { return a.x == b.x && a.y == b.y; }
+
+bool operator!=(const Point a, const Point b) { return !(a == b); }
+
 int main() {
   try {
     cout << "Please enter 7 Points in the format (x,y), seperated by a space\n";
-    vector<Point> original_points;
 
+    // Read from cin and write to a vector
+    vector<Point> original_points;
     for (int count = 0; count < 7; ++count) {
       Point p;
       cin >> p;
@@ -56,17 +61,20 @@ int main() {
 
     string oname = "mypoints.txt";
     cout << "Writing points to mypoints.txt.\n";
-    ofstream ost{oname};  // init an ostream named mypoints.txt
+    ofstream ost{oname};  // init an ofstream named mypoints.txt
     if (!ost) error("can't open output file ", oname);
-    for (Point p : original_points) { ost << p << '\n'; }  // loop and write to a file
+    // loop and write to a file
+    for (Point p : original_points) { ost << p << '\n'; }
+    ost.close();  // close ofstream
 
-    ost.close();          // close ofstream
+    //
     ifstream ist{oname};  // open ifstream for file named mypoints.txt
     vector<Point> processed_points;
     int x, y;
     if (!ist) error("can't open input file ", oname);
     // read from mydata.txt into a vector processed_points
-    while (ist >> x >> y) { processed_points.push_back(Point{x, y}); }
+    Point p;
+    while (ist >> p) { processed_points.push_back(p); }
 
     cout << "original_points: ";
     for (Point p : original_points) { cout << p << ' '; }
@@ -75,6 +83,22 @@ int main() {
     cout << "processed_points: ";
     for (Point pp : processed_points) { cout << pp << ' '; }
     cout << '\n';
+
+    cout << "campare each value from original and processed: \n";
+    // compare values from each vector and output "Something's wrong!" if
+    // any two values do not match.
+    cout << "original_points.size(): " << original_points.size() << '\n';
+    cout << "processed_points.size(): " << processed_points.size() << '\n';
+    string is_equal = (original_points.size() == processed_points.size()) ? "true" : "false";
+    cout << "Are both vectors equal in size?  " << is_equal << '\n';
+
+    for (int i = 0; i < processed_points.size(); ++i) {
+      Point op = original_points[i];
+      Point pp = processed_points[i];
+
+      if (op != pp) { cout << "Something's wrong!\n"; }
+    }
+
     keep_window_open("~");
     return 0;
   } catch (exception& e) {
