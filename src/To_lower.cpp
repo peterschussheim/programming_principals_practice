@@ -12,31 +12,38 @@
 #include "std_lib_facilities.h"
 using namespace std;
 
-// given a reference to a string, iterate over each char
-// and if it is an uppercase char, convert to lowercase.
-void tolower(string& s) {  // note the use of a reference
-  for (char& x : s) {
-    if (isupper(x)) {
-      // read an uppercase ch
-      // write out ch as lowercase
-      x = tolower(x);
-    }
-  }
-}
-
-// read uppers.txt
-// process input text
-// use a vector to store converted text
-// convert to lowercase
-// read converted_vector and write to a new file
-void to_lower() {
-  string if_name = "uppers.txt";
-  ifstream ifs{if_name};
-  for (char ch; cin.get(ch);) { tolower(ch); }
-}
-
 int main() {
-  to_lower();
-  keep_window_open("~");
-  return 0;
+  try {
+    string iname;  // input filename
+    string oname;  // output filename
+    char ch;       // variable to store chars from input file
+
+    cout << "Please enter a filename to open (try uppers.txt): ";
+    cin >> iname;
+    ifstream ifs{iname};  // create ifstream
+    if (!ifs) error("cannot open input file: ", iname);
+
+    cout << "Please enter a filename for the transformed text: ";
+    cin >> oname;
+    ofstream ofs{oname};  // create ofstream
+    if (!ofs) error("cannot open input file: ", oname);
+
+    while (ifs.get(ch)) {
+      if (isalpha(ch)) ch = tolower(ch);
+      ofs << ch;
+    }
+
+    cout << "File written to: " << oname << '\n';
+
+    keep_window_open("~");
+    return 0;
+  } catch (exception& e) {
+    cerr << e.what() << '\n';
+    keep_window_open("~");
+    return 1;
+  } catch (...) {
+    cerr << "unhandled exception\n";
+    keep_window_open("~");
+    return 2;
+  }
 }
