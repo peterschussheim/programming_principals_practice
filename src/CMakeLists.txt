@@ -1,9 +1,7 @@
-include_directories(${programming_principals}/include)
-
 file(GLOB SOURCES "*.cpp")
 
 
-add_executable(main main.cpp std_lib_facilities.h fib.h)
+add_executable(main main.cpp ../include/Split.h std_lib_facilities.h fib.h)
 set_property(TARGET main PROPERTY CXX_STANDARD 17)
 set_property(TARGET main PROPERTY CXX_STANDARD_REQUIRED ON)
 
