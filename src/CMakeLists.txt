@@ -1,9 +1,7 @@
-include_directories(${programming_principals}/include)
-
 file(GLOB SOURCES "*.cpp")
 
 
-add_executable(main main.cpp std_lib_facilities.h fib.h)
+add_executable(main main.cpp ../include/Split.h std_lib_facilities.h fib.h)
 set_property(TARGET main PROPERTY CXX_STANDARD 17)
 set_property(TARGET main PROPERTY CXX_STANDARD_REQUIRED ON)
 
@@ -23,6 +21,22 @@ add_executable(ch10_ex1 ch10_ex1.cpp std_lib_facilities.h)
 set_property(TARGET ch10_ex1 PROPERTY CXX_STANDARD 17)
 set_property(TARGET ch10_ex1 PROPERTY CXX_STANDARD_REQUIRED ON)
 
+add_executable(ch11_ex2 ch11_ex2.cpp std_lib_facilities.h)
+set_property(TARGET ch11_ex2 PROPERTY CXX_STANDARD 17)
+set_property(TARGET ch11_ex2 PROPERTY CXX_STANDARD_REQUIRED ON)
+
+add_executable(ch11_drill ch11.cpp std_lib_facilities.h)
+set_property(TARGET ch11_drill PROPERTY CXX_STANDARD 17)
+set_property(TARGET ch11_drill PROPERTY CXX_STANDARD_REQUIRED ON)
+
 add_executable(Chrono Chrono.cpp Chrono.h std_lib_facilities.h)
 set_property(TARGET Chrono PROPERTY CXX_STANDARD 17)
 set_property(TARGET Chrono PROPERTY CXX_STANDARD_REQUIRED ON)
+
+add_executable(Test_output Test_output.cpp std_lib_facilities.h)
+set_property(TARGET Test_output PROPERTY CXX_STANDARD 17)
+set_property(TARGET Test_output PROPERTY CXX_STANDARD_REQUIRED ON)
+
+add_executable(To_lower To_lower.cpp std_lib_facilities.h)
+set_property(TARGET To_lower PROPERTY CXX_STANDARD 17)
+set_property(TARGET To_lower PROPERTY CXX_STANDARD_REQUIRED ON)
