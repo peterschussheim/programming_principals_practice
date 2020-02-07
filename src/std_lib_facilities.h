@@ -119,9 +119,7 @@ struct String : std::string {
 namespace std {
 
   template<> struct hash<String> {
-    size_t operator()(const String& s) const {
-      return hash<std::string>()(s);
-    }
+    size_t operator()(const String& s) const { return hash<std::string>()(s); }
   };
 
 }  // of namespace std
@@ -131,13 +129,9 @@ struct Exit : runtime_error {
 };
 
 // error() simply disguises throws:
-inline void error(const string& s) {
-  throw runtime_error(s);
-}
+inline void error(const string& s) { throw runtime_error(s); }
 
-inline void error(const string& s, const string& s2) {
-  error(s + s2);
-}
+inline void error(const string& s, const string& s2) { error(s + s2); }
 
 inline void error(const string& s, int i) {
   ostringstream os;
@@ -194,22 +188,22 @@ template<class R, class A> R narrow_cast(const A& a) {
 
 // random number generators. See 24.7.
 
-default_random_engine& get_rand() {
-  static default_random_engine ran;
-  return ran;
-};
-
-void seed_randint(int s) {
-  get_rand().seed(s);
-}
-
-inline int randint(int min, int max) {
-  return uniform_int_distribution<>{min, max}(get_rand());
-}
-
-inline int randint(int max) {
-  return randint(0, max);
-}
+// default_random_engine& get_rand() {
+//  static default_random_engine ran;
+//  return ran;
+//};
+//
+// void seed_randint(int s) {
+//  get_rand().seed(s);
+//}
+//
+// inline int randint(int min, int max) {
+//  return uniform_int_distribution<>{min, max}(get_rand());
+//}
+//
+// inline int randint(int max) {
+//  return randint(0, max);
+//}
 
 // inline double sqrt(int x) { return sqrt(double(x)); }	// to match C++0x
 
