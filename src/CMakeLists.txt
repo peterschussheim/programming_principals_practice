@@ -40,3 +40,12 @@ set_property(TARGET Test_output PROPERTY CXX_STANDARD_REQUIRED ON)
 add_executable(To_lower To_lower.cpp std_lib_facilities.h)
 set_property(TARGET To_lower PROPERTY CXX_STANDARD 17)
 set_property(TARGET To_lower PROPERTY CXX_STANDARD_REQUIRED ON)
+
+# FLTK setup
+find_package(fltk REQUIRED)
+include_directories(${FLTK_INCLUDE_DIR})
+add_executable(ch12_drill ch12_drill.cpp std_lib_facilities.h)
+target_link_libraries(ch12_drill PUBLIC ${FLTK_LIBRARIES})
+target_include_directories(ch12_drill PUBLIC ${FLTK_INCLUDE_DIR})
+set_property(TARGET ch12_drill PROPERTY CXX_STANDARD 17)
+set_property(TARGET ch12_drill PROPERTY CXX_STANDARD_REQUIRED ON)
