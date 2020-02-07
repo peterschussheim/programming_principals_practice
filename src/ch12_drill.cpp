@@ -1,10 +1,10 @@
-#include <FL/Fl.H>
-#include <FL/Fl_Box.h>
-#include <FL/Fl_Window.h>
+#include "Graph.h"
+#include "Simple_window.h"
+
+using namespace Graph_lib;
 
 int main() {
-  Fl_Window window(800, 800, "Window title");
-  Fl_Box box(0, 0, 200, 200, "Hey, I mean, Hello, World!");
-  window.show();
-  return Fl::run();
+  Point tl{100, 100};  // top left
+  Simple_window win(tl, 600, 600, "Canvas");
+  win.wait_for_button();
 }
