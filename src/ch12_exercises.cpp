@@ -59,11 +59,70 @@ void ex3() {
   win.wait_for_button();
 }
 
+/*
+  There are a few ways to draw a tic-tac-toe board.
+  For this exercise, I chose the simplest implementation
+  I could think of; create 9 rectangles each equal in height/width,
+  offset each "square" appropriately, in this case, by 50 pixels.
+  After this, we need to alternate a square's color.
+
+  A more flexible and robust solution would be to seperate creation of
+  squares and the 'laying' out of the squares.  It might be worthwhile to
+  use a proper Matrix class to represent an n*n board.  Ex, create a 3x3 matrix,
+  where each "cell" contains some data structure representing an individual
+  square's properties or even better, store square objects in
+  the matrix: coordinates, color, square status(if we were playing a real game,
+  we'd want to know if a square is marked and if so, with what symbol).
+
+  We can save that for another exercise.
+*/
+void ttt_board() {
+  // draw the board
+  // draw inside the board two horizontal lines and two vertical lines
+  Point tl{100, 100};
+
+  // row 1
+  Graph_lib::Rectangle sq0{Point{100, 100}, 50, 50};
+  sq0.set_fill_color(Color::white);
+  Graph_lib::Rectangle sq1{Point{150, 100}, 50, 50};
+  sq1.set_fill_color(Color::red);
+  Graph_lib::Rectangle sq2{Point{200, 100}, 50, 50};
+  sq2.set_fill_color(Color::white);
+  // row 2
+  Graph_lib::Rectangle sq3{Point{100, 150}, 50, 50};
+  sq3.set_fill_color(Color::red);
+  Graph_lib::Rectangle sq4{Point{150, 150}, 50, 50};
+  sq4.set_fill_color(Color::white);
+  Graph_lib::Rectangle sq5{Point{200, 150}, 50, 50};
+  sq5.set_fill_color(Color::red);
+  // row 3
+  Graph_lib::Rectangle sq6{Point{100, 200}, 50, 50};
+  sq6.set_fill_color(Color::white);
+  Graph_lib::Rectangle sq7{Point{150, 200}, 50, 50};
+  sq7.set_fill_color(Color::red);
+  Graph_lib::Rectangle sq8{Point{200, 200}, 50, 50};
+  sq8.set_fill_color(Color::white);
+
+  Simple_window win{tl, 800, 600, "Tic-Tac-Toe Board"};
+
+  win.attach(sq0);
+  win.attach(sq1);
+  win.attach(sq2);
+  win.attach(sq3);
+  win.attach(sq4);
+  win.attach(sq5);
+  win.attach(sq6);
+  win.attach(sq7);
+  win.attach(sq8);
+  win.wait_for_button();
+}
+
 int main() {
   try {
     // ex1();
     // ex2();
-    ex3();
+    // ex3();
+    ttt_board();
     // keep_window_open("~");
     return 0;
   } catch (exception& e) {
