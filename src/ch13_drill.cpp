@@ -36,7 +36,7 @@ using namespace Graph_lib;
 int main()
 {
   try {
-    Point tl{100, 100};
+    Point tl{0, 0};
     Simple_window win{tl, 1000, 800, "Drill"};
 
     ostringstream oss;
@@ -47,8 +47,6 @@ int main()
 
     int x_size = 800;
     int y_size = 800;
-    /*int x_size = win.x_max();
-    int y_size = win.y_max();*/
     int x_grid = 100;
     int y_grid = 100;
     Lines grid;
@@ -60,7 +58,7 @@ int main()
     for (int y = y_grid; y < y_size; y += y_grid) {
       grid.add(Point{0, y}, Point{x_size, y});  // horizontal line
     }
-
+    // win.wait_for_button();
     /*
       Create a Vector containing references to Rectangle objects,
       specifically, color the 8 rectangles on the top-left to lower-right
@@ -73,10 +71,33 @@ int main()
       win.attach(vr[vr.size() - 1]);
     }
 
-    grid.set_color(Color::black);
     win.attach(grid);
     win.attach(sizes);
+
+    /*
+      Find a 200-by-200-pixel image (JPEG or GIF) and place three copies of it
+      on the grid (each image covering four squares). If you can’t find an image
+      that is exactly 200 by 200, use set_mask() to pick a 200-by-200 section of
+      a larger image. Don’t obscure the red squares.
+    */
+    // Image img{Point{200, 200}, "200x200.jpg", Suffix::jpg};
+    // win.attach(img);
+    // win.wait_for_button();
+    // win.put_on_top(img);
+
+    Image plane1(Point(200, 200), "200x200.jpg");
+    // plane1.set_mask(Point(200, 0), 200, 200);
+    win.attach(plane1);
+    Image plane2(Point(500, 200), "200x200.jpg");
+    // plane2.set_mask(Point(200, 0), 200, 200);
+    win.attach(plane2);
+    Image plane3(Point(100, 500), "200x200.jpg");
+    // plane3.set_mask(Point(200, 0), 200, 200);
+    win.attach(plane3);
+
+    // grid.set_color(Color::black);
     win.wait_for_button();
+
     keep_window_open("~");
     return 0;
   }
