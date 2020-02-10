@@ -15,6 +15,7 @@ BinPackParameters: true
 BreakConstructorInitializers: BeforeColon
 ConstructorInitializerAllOnOneLineOrOnePerLine: false
 IndentCaseLabels: true
+SortIncludes: false
 IncludeBlocks: Preserve
 NamespaceIndentation: All
 PointerAlignment: Left
