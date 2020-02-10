@@ -117,12 +117,54 @@ void ttt_board() {
   win.wait_for_button();
 }
 
+/*
+  Draw a red 1/4 inch frame around a rectangle
+  that is 3/4 the height of my screen and 2/3 the width.
+
+  How do we determine hopw to construct shapes based off screen size?
+
+  Notice that we are asked to draw a red 1/4 INCH frame around the rect.
+  To do this, we need to think about how many pixels are in an inch.
+  Unfortunately, this is dependent on the physical screen's dimensions.
+
+  To calculate this, we use the formula provided at
+  https://en.wikipedia.org/wiki/Pixel_density#Calculation_of_monitor_PPI
+  we can estimate my 27 inch monitor to be have 3840×2160 pixels which
+  when used in the functions describes in the article,
+  give us 163 pixels per inch.  For convenience, let's get 1/4 of 163 and round
+  up to get 41 pixels for our "frame".
+*/
+void ex5() {
+  Point tl{100, 100};
+  Simple_window win{tl, 800, 600, "Exercise #5"};
+
+  const int frame_pixels = 41;                         // pixels per inch for my 27inch monitor
+  const int rect_width = std::round(x_max() * 0.666);  // get width of screen
+  const int rect_height = std::round(y_max() * 0.75);  // get the height of my screen
+
+  Graph_lib::Closed_polyline frame;
+  frame.add(Point{100, 50});
+  frame.add(Point{200, 50});
+  frame.add(Point{200, 100});
+  frame.add(Point{100, 100});
+  frame.set_fill_color(Color::red);
+  win.attach(frame);
+  Graph_lib::Rectangle r{tl, rect_width, rect_height};
+  r.set_fill_color(Color::cyan);
+  r.set_style(Line_style(Line_style::solid, 5));
+  r.set_color(Color::red);
+  win.attach(r);
+
+  win.wait_for_button();
+}
+
 int main() {
   try {
     // ex1();
     // ex2();
     // ex3();
-    ttt_board();
+    // ttt_board();
+    ex5();
     // keep_window_open("~");
     return 0;
   } catch (exception& e) {
