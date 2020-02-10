@@ -26,5 +26,5 @@ Standard: Cpp11
 Cpp11BracedListStyle: true
 AlwaysBreakTemplateDeclarations: false
 FixNamespaceComments: false
-# BreakBeforeBraces: Stroustrup
+BreakBeforeBraces: Stroustrup
 # IndentPPDirectives: AfterHash

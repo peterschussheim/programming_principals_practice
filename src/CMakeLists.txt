@@ -43,7 +43,6 @@ set_property(TARGET To_lower PROPERTY CXX_STANDARD_REQUIRED ON)
 
 # FLTK setup
 find_package(fltk REQUIRED)
-#include_directories(../include ${FLTK_INCLUDE_DIR})
 add_executable(ch12_drill ch12_drill.cpp Graph.cpp Window.cpp GUI.cpp Simple_window.cpp)
 target_link_libraries(ch12_drill PUBLIC ${FLTK_LIBRARIES})
 target_include_directories(ch12_drill PUBLIC ${FLTK_INCLUDE_DIR})
@@ -56,3 +55,10 @@ target_link_libraries(ch12_exercises PUBLIC ${FLTK_LIBRARIES})
 target_include_directories(ch12_exercises PUBLIC ${FLTK_INCLUDE_DIR})
 set_property(TARGET ch12_exercises PROPERTY CXX_STANDARD 11)
 set_property(TARGET ch12_exercises PROPERTY CXX_STANDARD_REQUIRED ON)
+
+find_package(fltk REQUIRED)
+add_executable(ch13_drill ch13_drill.cpp Graph.cpp Window.cpp GUI.cpp Simple_window.cpp)
+target_link_libraries(ch13_drill PUBLIC ${FLTK_LIBRARIES})
+target_include_directories(ch13_drill PUBLIC ${FLTK_INCLUDE_DIR})
+set_property(TARGET ch13_drill PROPERTY CXX_STANDARD 11)
+set_property(TARGET ch13_drill PROPERTY CXX_STANDARD_REQUIRED ON)
