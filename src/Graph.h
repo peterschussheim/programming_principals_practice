@@ -104,19 +104,22 @@ namespace Graph_lib {
   public:
     Vector_ref() {}
 
-    Vector_ref(T* a, T* b = 0, T* c = 0, T* d = 0) {
+    Vector_ref(T* a, T* b = 0, T* c = 0, T* d = 0)
+    {
       if (a) push_back(a);
       if (b) push_back(b);
       if (c) push_back(c);
       if (d) push_back(d);
     }
 
-    ~Vector_ref() {
+    ~Vector_ref()
+    {
       for (int i = 0; i < owned.size(); ++i) delete owned[i];
     }
 
     void push_back(T& s) { v.push_back(&s); }
-    void push_back(T* p) {
+    void push_back(T* p)
+    {
       v.push_back(p);
       owned.push_back(p);
     }
@@ -204,18 +207,21 @@ namespace Graph_lib {
   };
 
   struct Line : Shape {
-    Line(Point p1, Point p2) {
+    Line(Point p1, Point p2)
+    {
       add(p1);
       add(p2);
     }
   };
 
   struct Rectangle : Shape {
-    Rectangle(Point xy, int ww, int hh) : w{ww}, h{hh} {
+    Rectangle(Point xy, int ww, int hh) : w{ww}, h{hh}
+    {
       if (h <= 0 || w <= 0) error("Bad rectangle: non-positive side");
       add(xy);
     }
-    Rectangle(Point x, Point y) : w{y.x - x.x}, h{y.y - x.y} {
+    Rectangle(Point x, Point y) : w{y.x - x.x}, h{y.y - x.y}
+    {
       if (h <= 0 || w <= 0) error("Bad rectangle: first point is not top left");
       add(x);
     }
@@ -256,11 +262,13 @@ namespace Graph_lib {
 
   struct Lines : Shape {  // indepentdent lines
     Lines() {}
-    Lines(initializer_list<Point> lst) : Shape{lst} {
+    Lines(initializer_list<Point> lst) : Shape{lst}
+    {
       if (lst.size() % 2) error("odd number of points for Lines");
     }
     void draw_lines() const;
-    void add(Point p1, Point p2) {
+    void add(Point p1, Point p2)
+    {
       Shape::add(p1);
       Shape::add(p2);
     }
@@ -305,7 +313,8 @@ namespace Graph_lib {
 
   struct Circle : Shape {
     Circle(Point p, int rr)  // center and radius
-        : r{rr} {
+        : r{rr}
+    {
       add(Point{p.x - r, p.y - r});
     }
 
@@ -322,7 +331,8 @@ namespace Graph_lib {
 
   struct Ellipse : Shape {
     Ellipse(Point p, int ww, int hh)  // center, min, and max distance from center
-        : w{ww}, h{hh} {
+        : w{ww}, h{hh}
+    {
       add(Point{p.x - ww, p.y - hh});
     }
 
@@ -391,13 +401,15 @@ namespace Graph_lib {
     Image(Point xy, string s, Suffix::Encoding e = Suffix::none);
     ~Image() { delete p; }
     void draw_lines() const;
-    void set_mask(Point xy, int ww, int hh) {
+    void set_mask(Point xy, int ww, int hh)
+    {
       w = ww;
       h = hh;
       cx = xy.x;
       cy = xy.y;
     }
-    void move(int dx, int dy) {
+    void move(int dx, int dy)
+    {
       Shape::move(dx, dy);
       p->draw(point(0).x, point(0).y);
     }
@@ -406,6 +418,46 @@ namespace Graph_lib {
     int w, h, cx, cy;  // define "masking box" within image relative to position (cx,cy)
     Fl_Image* p;
     Text fn;
+  };
+
+  struct Arc : Shape {
+    Arc(Point p, int ww, int hh, double a1, double a2);
+
+    void draw_lines() const;
+    Point center() const { return Point{point(0).x + w, point(0).y + h}; }
+    int major() const { return w; }
+    int minor() const { return h; }
+
+    void set_major(int ww)
+    {
+      set_point(0, Point{center().x - ww, center().y - h});
+      w = ww;
+    }
+    void set_minor(int hh)
+    {
+      set_point(0, Point{center().x - w, center().y - hh});
+      h = hh;
+    }
+    void set_angle(double d)
+    {
+      if (d >= a2) error("first arc angle cannot be bigger than second angle");
+      a1 = d;
+    }
+    void set_angle2(double d)
+    {
+      if (d <= a1) error("second arc cannot be smaller than first angle");
+      a2 = d;
+    }
+    void set_angles(double d1, double d2)
+    {
+      if (d1 <= d1) error("second arc angle must be bigger than first angle");
+      a1 = d1;
+      a2 = d2;
+    }
+
+  private:
+    int w, h;
+    double a1, a2;
   };
 
 }
