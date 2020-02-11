@@ -3,13 +3,15 @@
 
 namespace Graph_lib {
 
-  void Shape::draw_lines() const {
+  void Shape::draw_lines() const
+  {
     if (color().visibility() && 1 < points.size())  // draw sole pixel?
       for (unsigned int i = 1; i < points.size(); ++i)
         fl_line(points[i - 1].x, points[i - 1].y, points[i].x, points[i].y);
   }
 
-  void Shape::draw() const {
+  void Shape::draw() const
+  {
     Fl_Color oldc = fl_color();
     // there is no good portable way of retrieving the current style
     fl_color(lcolor.as_int());
@@ -21,8 +23,8 @@ namespace Graph_lib {
 
   // does two lines (p1,p2) and (p3,p4) intersect?
   // if se return the distance of the intersect point as distances from p1
-  inline pair<double, double> line_intersect(Point p1, Point p2, Point p3, Point p4,
-                                             bool& parallel) {
+  inline pair<double, double> line_intersect(Point p1, Point p2, Point p3, Point p4, bool& parallel)
+  {
     double x1 = p1.x;
     double x2 = p2.x;
     double x3 = p3.x;
@@ -45,7 +47,8 @@ namespace Graph_lib {
   // intersection between two line segments
   // Returns true if the two segments intersect,
   // in which case intersection is set to the point of intersection
-  bool line_segment_intersect(Point p1, Point p2, Point p3, Point p4, Point& intersection) {
+  bool line_segment_intersect(Point p1, Point p2, Point p3, Point p4, Point& intersection)
+  {
     bool parallel;
     pair<double, double> u = line_intersect(p1, p2, p3, p4, parallel);
     if (parallel || u.first < 0 || u.first > 1 || u.second < 0 || u.second > 1) return false;
@@ -54,7 +57,8 @@ namespace Graph_lib {
     return true;
   }
 
-  void Polygon::add(Point p) {
+  void Polygon::add(Point p)
+  {
     int np = number_of_points();
 
     if (1 < np) {  // check that thenew line isn't parallel to the previous one
@@ -73,12 +77,14 @@ namespace Graph_lib {
     Closed_polyline::add(p);
   }
 
-  void Polygon::draw_lines() const {
+  void Polygon::draw_lines() const
+  {
     if (number_of_points() < 3) error("less than 3 points in a Polygon");
     Closed_polyline::draw_lines();
   }
 
-  void Open_polyline::draw_lines() const {
+  void Open_polyline::draw_lines() const
+  {
     if (fill_color().visibility()) {
       fl_color(fill_color().as_int());
       fl_begin_complex_polygon();
@@ -90,28 +96,33 @@ namespace Graph_lib {
     if (color().visibility()) Shape::draw_lines();
   }
 
-  void Closed_polyline::draw_lines() const {
+  void Closed_polyline::draw_lines() const
+  {
     Open_polyline::draw_lines();
 
     if (color().visibility())  // draw closing line:
       fl_line(point(number_of_points() - 1).x, point(number_of_points() - 1).y, point(0).x,
               point(0).y);
   }
-  void Shape::move(int dx, int dy) {
+  void Shape::move(int dx, int dy)
+  {
     for (unsigned int i = 0; i < points.size(); ++i) {
       points[i].x += dx;
       points[i].y += dy;
     }
   }
 
-  void Lines::draw_lines() const {
-    //	if (number_of_points()%2==1) error("odd number of points in set of lines");
+  void Lines::draw_lines() const
+  {
+    //	if (number_of_points()%2==1) error("odd number of points in set of
+    // lines");
     if (color().visibility())
       for (int i = 1; i < number_of_points(); i += 2)
         fl_line(point(i - 1).x, point(i - 1).y, point(i).x, point(i).y);
   }
 
-  void Text::draw_lines() const {
+  void Text::draw_lines() const
+  {
     int ofnt = fl_font();
     int osz = fl_size();
     fl_font(fnt.as_int(), fnt_sz);
@@ -120,8 +131,8 @@ namespace Graph_lib {
   }
 
   Function::Function(Fct f, double r1, double r2, Point xy, int count, double xscale, double yscale)
-  // graph f(x) for x in [r1:r2) using count line segments with (0,0) displayed at xy
-  // x coordinates are scaled by xscale and y coordinates scaled by yscale
+  // graph f(x) for x in [r1:r2) using count line segments with (0,0) displayed
+  // at xy x coordinates are scaled by xscale and y coordinates scaled by yscale
   {
     if (r2 - r1 <= 0) error("bad graphing range");
     if (count <= 0) error("non-positive graphing count");
@@ -133,7 +144,8 @@ namespace Graph_lib {
     }
   }
 
-  void Rectangle::draw_lines() const {
+  void Rectangle::draw_lines() const
+  {
     if (fill_color().visibility()) {  // fill
       fl_color(fill_color().as_int());
       fl_rectf(point(0).x, point(0).y, w, h);
@@ -146,7 +158,8 @@ namespace Graph_lib {
     }
   }
 
-  Axis::Axis(Orientation d, Point xy, int length, int n, string lab) : label(Point(0, 0), lab) {
+  Axis::Axis(Orientation d, Point xy, int length, int n, string lab) : label(Point(0, 0), lab)
+  {
     if (length < 0) error("bad axis length");
     switch (d) {
       case Axis::x: {
@@ -184,25 +197,29 @@ namespace Graph_lib {
     }
   }
 
-  void Axis::draw_lines() const {
+  void Axis::draw_lines() const
+  {
     Shape::draw_lines();  // the line
     notches.draw();       // the notches may have a different color from the line
     label.draw();         // the label may have a different color from the line
   }
 
-  void Axis::set_color(Color c) {
+  void Axis::set_color(Color c)
+  {
     Shape::set_color(c);
     notches.set_color(c);
     label.set_color(c);
   }
 
-  void Axis::move(int dx, int dy) {
+  void Axis::move(int dx, int dy)
+  {
     Shape::move(dx, dy);
     notches.move(dx, dy);
     label.move(dx, dy);
   }
 
-  void Circle::draw_lines() const {
+  void Circle::draw_lines() const
+  {
     if (fill_color().visibility()) {  // fill
       fl_color(fill_color().as_int());
       fl_pie(point(0).x, point(0).y, r + r - 1, r + r - 1, 0, 360);
@@ -215,7 +232,8 @@ namespace Graph_lib {
     }
   }
 
-  void Ellipse::draw_lines() const {
+  void Ellipse::draw_lines() const
+  {
     if (fill_color().visibility()) {  // fill
       fl_color(fill_color().as_int());
       fl_pie(point(0).x, point(0).y, w + w - 1, h + h - 1, 0, 360);
@@ -228,28 +246,58 @@ namespace Graph_lib {
     }
   }
 
-  void draw_mark(Point xy, char c) {
+  void Box::draw_lines() const
+  {
+    if (fill_color().visibility()) {
+      fl_color(fill_color().as_int());
+
+      // rectangles
+      fl_rectf(point(0).x + rad, point(0).y, w - 2 * rad, rad);
+      fl_rectf(point(0).x, point(0).y + rad, w, h - 2 * rad);
+      fl_rectf(point(0).x + rad, point(0).y + h - rad, w - 2 * rad, rad);
+
+      // corners
+      fl_pie(point(0).x, point(0).y, 2 * rad, 2 * rad, 90, 180);
+      fl_pie(point(0).x + w - 2 * rad, point(0).y, 2 * rad, 2 * rad, 0, 90);
+      fl_pie(point(0).x, point(0).y + h - 2 * rad, 2 * rad, 2 * rad, 180, 270);
+      fl_pie(point(0).x + w - 2 * rad, point(0).y + h - 2 * rad, 2 * rad, 2 * rad, 270, 360);
+
+      fl_color(color().as_int());  // reset color
+    }
+
+    if (color().visibility()) {
+      fl_color(color().as_int());
+      fl_line(point(0).x + rad, point(0).y, point(0).x + w - rad - 1, point(0).y);
+      fl_line(point(0).x, point(0).y + rad, point(0).x, point(0).y + h - rad - 1);
+      fl_line(point(0).x + rad, point(0).y + h - 1, point(0).x + w - rad, point(0).y + h - 1);
+      fl_line(point(0).x + w - 1, point(0).y + rad, point(0).x + w - 1, point(0).y + h - rad);
+
+      // draw arcs
+      fl_arc(point(0).x, point(0).y, 2 * rad, 2 * rad, 90, 180);
+      fl_arc(point(0).x + w - 2 * rad, point(0).y, 2 * rad, 2 * rad, 0, 90);
+      fl_arc(point(0).x, point(0).y + h - 2 * rad, 2 * rad, 2 * rad, 180, 270);
+      fl_arc(point(0).x + w - 2 * rad, point(0).y + h - 2 * rad, 2 * rad, 2 * rad, 270, 360);
+    }
+  }
+
+  void draw_mark(Point xy, char c)
+  {
     static const int dx = 4;
     static const int dy = 4;
     string m(1, c);
     fl_draw(m.c_str(), xy.x - dx, xy.y + dy);
   }
 
-  void Marked_polyline::draw_lines() const {
+  void Marked_polyline::draw_lines() const
+  {
     Open_polyline::draw_lines();
     for (int i = 0; i < number_of_points(); ++i) draw_mark(point(i), mark[i % mark.size()]);
   }
-  /*
-  void Marks::draw_lines() const
-  {
-          for (int i=0; i<number_of_points(); ++i)
-                  fl_draw(mark.c_str(),point(i).x-4,point(i).y+4);
-  }
-  */
 
   std::map<string, Suffix::Encoding> suffix_map;
 
-  int init_suffix_map() {
+  int init_suffix_map()
+  {
     suffix_map["jpg"] = Suffix::jpg;
     suffix_map["JPG"] = Suffix::jpg;
     suffix_map["jpeg"] = Suffix::jpg;
@@ -282,7 +330,8 @@ namespace Graph_lib {
 
   // somewhat overelaborate constructor
   // because errors related to image files can be such a pain to debug
-  Image::Image(Point xy, string s, Suffix::Encoding e) : w(0), h(0), fn(xy, "") {
+  Image::Image(Point xy, string s, Suffix::Encoding e) : w(0), h(0), fn(xy, "")
+  {
     add(xy);
 
     if (!can_open(s)) {
@@ -309,7 +358,8 @@ namespace Graph_lib {
     }
   }
 
-  void Image::draw_lines() const {
+  void Image::draw_lines() const
+  {
     if (fn.label() != "") fn.draw_lines();
 
     if (w && h)

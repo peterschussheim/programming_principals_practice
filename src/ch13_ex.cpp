@@ -9,9 +9,10 @@
 #include "Graph.h"
 
 /*
-  Exercise 1:
+  Exercise 2:
 
-  Define a class Arc, which draws a part of an ellipse. Hint: fl.arc().
+  Draw a box with rounded corners. Define a class Box , consisting of four
+  lines and four arcs.
 */
 
 int main()
@@ -27,11 +28,21 @@ int main()
     Graph_lib::Arc a3{Point{150, 200}, 100, 50, 45, 175};
     a3.set_color(Color::red);
 
-    win.attach(a1);
+    /*win.attach(a1);
     win.attach(a2);
-    win.attach(a3);
-    win.wait_for_button();
+    win.attach(a3);*/
 
+    Box sharp_box{Point{300, 50}, 100, 80};  // regular box with sharp edges
+    sharp_box.set_color(Color::blue);
+
+    Box rounded_box{Point{400, 150}, 200, 200, 25};
+    rounded_box.set_color(Color::red);
+    rounded_box.set_fill_color(Color::blue);
+
+    win.attach(sharp_box);
+    win.attach(rounded_box);
+
+    win.wait_for_button();
     keep_window_open("~");
     return 0;
   }
