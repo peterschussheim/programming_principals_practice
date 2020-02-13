@@ -165,15 +165,6 @@ namespace Graph_lib {
     int number_of_points() const { return int(points.size()); }
 
     virtual ~Shape() {}
-    /*
-    struct Window* attached;
-    Shape(const Shape& a)
-            :attached(a.attached), points(a.points), line_color(a.line_color),
-    ls(a.ls)
-    {
-            if (a.attached)error("attempt to copy attached shape");
-    }
-    */
     Shape(const Shape&) = delete;
     Shape& operator=(const Shape&) = delete;
 
@@ -182,17 +173,12 @@ namespace Graph_lib {
     Color lcolor{fl_color()};
     Line_style ls{0};
     Color fcolor{Color::invisible};
-
-    //	Shape(const Shape&);
-    //	Shape& operator=(const Shape&);
   };
 
   struct Function : Shape {
     // the function parameters are not stored
     Function(Fct f, double r1, double r2, Point orig, int count = 100,
              double xscale = 25, double yscale = 25);
-    // Function(Point orig, Fct f, double r1, double r2, int count, double
-    // xscale = 1, double yscale = 1);
   };
 
   struct Fill {
@@ -228,17 +214,23 @@ namespace Graph_lib {
     }
     void draw_lines() const;
 
-    //	void set_fill_color(Color col) { fcolor = col; }
-    //	Color fill_color() { return fcolor; }
-
     int height() const { return h; }
     int width() const { return w; }
 
   private:
     int h;  // height
     int w;  // width
-    //	Color fcolor;	// fill color; 0 means "no fill"
   };
+
+  Point n(const Rectangle& rect);
+  Point s(const Rectangle& rect);
+  Point e(const Rectangle& rect);
+  Point w(const Rectangle& rect);
+  Point center(const Rectangle& rect);
+  Point ne(const Rectangle& rect);
+  Point se(const Rectangle& rect);
+  Point sw(const Rectangle& rect);
+  Point nw(const Rectangle& rect);
 
   bool intersect(Point p1, Point p2, Point p3, Point p4);
 
@@ -310,8 +302,6 @@ namespace Graph_lib {
 
     Text label;
     Lines notches;
-    //	Orientation orin;
-    //	int notches;
   };
 
   struct Circle : Shape {
@@ -484,12 +474,22 @@ namespace Graph_lib {
     int w, h, rad;  // width, height, radius
   };
 
+  Point n(const Box& box);
+  Point s(const Box& box);
+  Point e(const Box& box);
+  Point w(const Box& box);
+  Point center(const Box& box);
+  Point ne(const Box& box);
+  Point se(const Box& box);
+  Point sw(const Box& box);
+  Point nw(const Box& box);
+
   struct Arrow : Line {
     Arrow(Point p1, Point p2) : Line{p1, p2} {}
     void draw_lines() const;
   };
 
-  //-----------------------------------------------------------------------------------------------
+  //---------------------------------------------------------------------------
 
   Point n(const Rectangle& rect);
   Point s(const Rectangle& rect);
@@ -500,5 +500,20 @@ namespace Graph_lib {
   Point sw(const Rectangle& rect);
   Point ne(const Rectangle& rect);
   Point se(const Rectangle& rect);
+
+  struct Textbox : Box {
+    Textbox(Point xy, int ww, string s)
+        : Box{xy, ww, h_tb}, label(Point{xy.x + 4, xy.y + 17}, s)
+    {
+    }
+    void draw_lines() const;
+    void move(int dx, int dy);
+    void set_color(Color c);
+
+    Text label;
+
+  private:
+    static const int h_tb = 24;
+  };
 }
 #endif

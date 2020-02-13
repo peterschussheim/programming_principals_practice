@@ -138,6 +138,24 @@ namespace Graph_lib {
     fl_font(ofnt, osz);
   }
 
+  void Textbox::draw_lines() const
+  {
+    Box::draw_lines();
+    label.draw();
+  }
+
+  void Textbox::move(int dx, int dy)
+  {
+    Box::move(dx, dy);
+    label.move(dx, dy);
+  }
+
+  void Textbox::set_color(Color c)
+  {
+    Box::set_color(c);
+    label.set_color(c);
+  }
+
   Function::Function(Fct f, double r1, double r2, Point xy, int count,
                      double xscale, double yscale)
   // graph f(x) for x in [r1:r2) using count line segments with (0,0) displayed
@@ -461,5 +479,68 @@ namespace Graph_lib {
     return Point{rect.point(0).x + rect.width(),
                  rect.point(0).y + rect.height()};
   }
+
+  //---------------------------------------------------------------------------
+
+  Point n(const Graph_lib::Box& box)
+  {
+    return Point(box.point(0).x + box.width() / 2, box.point(0).y);
+  }
+
+  //------------------------------------------------------------------------------
+
+  Point s(const Box& box)
+  {
+    return Point(box.point(0).x + box.width() / 2,
+                 box.point(0).y + box.height());
+  }
+
+  //------------------------------------------------------------------------------
+
+  Point e(const Box& box)
+  {
+    return Point(box.point(0).x + box.width(),
+                 box.point(0).y + box.height() / 2);
+  }
+
+  //------------------------------------------------------------------------------
+
+  Point w(const Box& box)
+  {
+    return Point(box.point(0).x, box.point(0).y + box.height() / 2);
+  }
+
+  //------------------------------------------------------------------------------
+
+  Point center(const Box& box)
+  {
+    return Point(box.point(0).x + box.width() / 2,
+                 box.point(0).y + box.height() / 2);
+  }
+
+  //------------------------------------------------------------------------------
+
+  Point ne(const Box& box)
+  {
+    return Point(box.point(0).x + box.width(), box.point(0).y);
+  }
+
+  //------------------------------------------------------------------------------
+
+  Point se(const Box& box)
+  {
+    return Point(box.point(0).x + box.width(), box.point(0).y + box.height());
+  }
+
+  //------------------------------------------------------------------------------
+
+  Point sw(const Box& box)
+  {
+    return Point(box.point(0).x, box.point(0).y + box.height());
+  }
+
+  //------------------------------------------------------------------------------
+
+  Point nw(const Box& box) { return box.point(0); }
 
 }  // Graph
