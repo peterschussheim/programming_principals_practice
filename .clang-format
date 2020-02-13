@@ -3,7 +3,7 @@ BasedOnStyle: Google
 ---
 Language: Cpp
 IndentWidth: 2
-ColumnLimit: 100
+ColumnLimit: 80
 UseTab: Never
 AccessModifierOffset: -2
 AlignTrailingComments: true
@@ -26,5 +26,5 @@ Standard: Cpp11
 Cpp11BracedListStyle: true
 AlwaysBreakTemplateDeclarations: false
 FixNamespaceComments: false
-# BreakBeforeBraces: Stroustrup
+BreakBeforeBraces: Stroustrup
 # IndentPPDirectives: AfterHash

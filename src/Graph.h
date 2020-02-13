@@ -104,19 +104,22 @@ namespace Graph_lib {
   public:
     Vector_ref() {}
 
-    Vector_ref(T* a, T* b = 0, T* c = 0, T* d = 0) {
+    Vector_ref(T* a, T* b = 0, T* c = 0, T* d = 0)
+    {
       if (a) push_back(a);
       if (b) push_back(b);
       if (c) push_back(c);
       if (d) push_back(d);
     }
 
-    ~Vector_ref() {
+    ~Vector_ref()
+    {
       for (int i = 0; i < owned.size(); ++i) delete owned[i];
     }
 
     void push_back(T& s) { v.push_back(&s); }
-    void push_back(T* p) {
+    void push_back(T* p)
+    {
       v.push_back(p);
       owned.push_back(p);
     }
@@ -162,14 +165,6 @@ namespace Graph_lib {
     int number_of_points() const { return int(points.size()); }
 
     virtual ~Shape() {}
-    /*
-    struct Window* attached;
-    Shape(const Shape& a)
-            :attached(a.attached), points(a.points), line_color(a.line_color), ls(a.ls)
-    {
-            if (a.attached)error("attempt to copy attached shape");
-    }
-    */
     Shape(const Shape&) = delete;
     Shape& operator=(const Shape&) = delete;
 
@@ -178,17 +173,12 @@ namespace Graph_lib {
     Color lcolor{fl_color()};
     Line_style ls{0};
     Color fcolor{Color::invisible};
-
-    //	Shape(const Shape&);
-    //	Shape& operator=(const Shape&);
   };
 
   struct Function : Shape {
     // the function parameters are not stored
-    Function(Fct f, double r1, double r2, Point orig, int count = 100, double xscale = 25,
-             double yscale = 25);
-    // Function(Point orig, Fct f, double r1, double r2, int count, double xscale = 1, double yscale
-    // = 1);
+    Function(Fct f, double r1, double r2, Point orig, int count = 100,
+             double xscale = 25, double yscale = 25);
   };
 
   struct Fill {
@@ -204,25 +194,25 @@ namespace Graph_lib {
   };
 
   struct Line : Shape {
-    Line(Point p1, Point p2) {
+    Line(Point p1, Point p2)
+    {
       add(p1);
       add(p2);
     }
   };
 
   struct Rectangle : Shape {
-    Rectangle(Point xy, int ww, int hh) : w{ww}, h{hh} {
+    Rectangle(Point xy, int ww, int hh) : w{ww}, h{hh}
+    {
       if (h <= 0 || w <= 0) error("Bad rectangle: non-positive side");
       add(xy);
     }
-    Rectangle(Point x, Point y) : w{y.x - x.x}, h{y.y - x.y} {
+    Rectangle(Point x, Point y) : w{y.x - x.x}, h{y.y - x.y}
+    {
       if (h <= 0 || w <= 0) error("Bad rectangle: first point is not top left");
       add(x);
     }
     void draw_lines() const;
-
-    //	void set_fill_color(Color col) { fcolor = col; }
-    //	Color fill_color() { return fcolor; }
 
     int height() const { return h; }
     int width() const { return w; }
@@ -230,8 +220,17 @@ namespace Graph_lib {
   private:
     int h;  // height
     int w;  // width
-    //	Color fcolor;	// fill color; 0 means "no fill"
   };
+
+  Point n(const Rectangle& rect);
+  Point s(const Rectangle& rect);
+  Point e(const Rectangle& rect);
+  Point w(const Rectangle& rect);
+  Point center(const Rectangle& rect);
+  Point ne(const Rectangle& rect);
+  Point se(const Rectangle& rect);
+  Point sw(const Rectangle& rect);
+  Point nw(const Rectangle& rect);
 
   bool intersect(Point p1, Point p2, Point p3, Point p4);
 
@@ -248,19 +247,22 @@ namespace Graph_lib {
     //	void add(Point p) { Shape::add(p); }
   };
 
-  struct Polygon : Closed_polyline {  // closed sequence of non-intersecting lines
+  struct Polygon
+      : Closed_polyline {  // closed sequence of non-intersecting lines
     using Closed_polyline::Closed_polyline;
     void add(Point p);
     void draw_lines() const;
   };
 
-  struct Lines : Shape {  // indepentdent lines
+  struct Lines : Shape {  // independent lines
     Lines() {}
-    Lines(initializer_list<Point> lst) : Shape{lst} {
+    Lines(initializer_list<Point> lst) : Shape{lst}
+    {
       if (lst.size() % 2) error("odd number of points for Lines");
     }
     void draw_lines() const;
-    void add(Point p1, Point p2) {
+    void add(Point p1, Point p2)
+    {
       Shape::add(p1);
       Shape::add(p2);
     }
@@ -290,7 +292,8 @@ namespace Graph_lib {
   struct Axis : Shape {
     // representation left public
     enum Orientation { x, y, z };
-    Axis(Orientation d, Point xy, int length, int nummber_of_notches = 0, string label = "");
+    Axis(Orientation d, Point xy, int length, int nummber_of_notches = 0,
+         string label = "");
 
     void draw_lines() const;
     void move(int dx, int dy);
@@ -299,13 +302,12 @@ namespace Graph_lib {
 
     Text label;
     Lines notches;
-    //	Orientation orin;
-    //	int notches;
   };
 
   struct Circle : Shape {
     Circle(Point p, int rr)  // center and radius
-        : r{rr} {
+        : r{rr}
+    {
       add(Point{p.x - r, p.y - r});
     }
 
@@ -321,16 +323,26 @@ namespace Graph_lib {
   };
 
   struct Ellipse : Shape {
-    Ellipse(Point p, int ww, int hh)  // center, min, and max distance from center
-        : w{ww}, h{hh} {
+    Ellipse(Point p, int ww,
+            int hh)  // center, min, and max distance from center
+        : w{ww}, h{hh}
+    {
       add(Point{p.x - ww, p.y - hh});
     }
 
     void draw_lines() const;
 
     Point center() const { return {point(0).x + w, point(0).y + h}; }
-    Point focus1() const { return {center().x + int(sqrt(double(w * w - h * h))), center().y}; }
-    Point focus2() const { return {center().x - int(sqrt(double(w * w - h * h))), center().y}; }
+
+    Point focus1() const
+    {
+      return {center().x + int(sqrt(double(w * w - h * h))), center().y};
+    }
+
+    Point focus2() const
+    {
+      return {center().x - int(sqrt(double(w * w - h * h))), center().y};
+    }
 
     void set_major(int ww) { w = ww; }
     int major() const { return w; }
@@ -341,13 +353,6 @@ namespace Graph_lib {
     int w;
     int h;
   };
-  /*
-  struct Mark : Text {
-          static const int dw = 4;
-          static const int dh = 4;
-          Mark(Point xy, char c) : Text(Point(xy.x-dw, xy.y+dh),string(1,c)) {}
-  };
-  */
 
   struct Marked_polyline : Open_polyline {
     Marked_polyline(const string& m) : mark(m) {}
@@ -358,23 +363,15 @@ namespace Graph_lib {
   };
 
   struct Marks : Marked_polyline {
-    Marks(const string& m) : Marked_polyline(m) { set_color(Color(Color::invisible)); }
+    Marks(const string& m) : Marked_polyline(m)
+    {
+      set_color(Color(Color::invisible));
+    }
   };
 
   struct Mark : Marks {
     Mark(Point xy, char c) : Marks(string(1, c)) { add(xy); }
   };
-
-  /*
-
-  struct Marks : Shape {
-          Marks(char m) : mark(string(1,m)) { }
-          void add(Point p) { Shape::add(p); }
-          void draw_lines() const;
-  private:
-          string mark;
-  };
-  */
 
   struct Bad_image : Fl_Image {
     Bad_image(int h, int w) : Fl_Image(h, w, 0) {}
@@ -391,22 +388,132 @@ namespace Graph_lib {
     Image(Point xy, string s, Suffix::Encoding e = Suffix::none);
     ~Image() { delete p; }
     void draw_lines() const;
-    void set_mask(Point xy, int ww, int hh) {
+    void set_mask(Point xy, int ww, int hh)
+    {
       w = ww;
       h = hh;
       cx = xy.x;
       cy = xy.y;
     }
-    void move(int dx, int dy) {
+    void move(int dx, int dy)
+    {
       Shape::move(dx, dy);
       p->draw(point(0).x, point(0).y);
     }
 
   private:
-    int w, h, cx, cy;  // define "masking box" within image relative to position (cx,cy)
+    int w, h, cx,
+        cy;  // define "masking box" within image relative to position (cx,cy)
     Fl_Image* p;
     Text fn;
   };
 
+  struct Arc : Shape {
+    Arc(Point p, int ww, int hh, double a1, double a2);
+
+    void draw_lines() const;
+    Point center() const { return Point{point(0).x + w, point(0).y + h}; }
+    int major() const { return w; }
+    int minor() const { return h; }
+
+    void set_major(int ww)
+    {
+      set_point(0, Point{center().x - ww, center().y - h});
+      w = ww;
+    }
+    void set_minor(int hh)
+    {
+      set_point(0, Point{center().x - w, center().y - hh});
+      h = hh;
+    }
+    void set_angle(double d)
+    {
+      if (d >= a2) error("first arc angle cannot be bigger than second angle");
+      a1 = d;
+    }
+    void set_angle2(double d)
+    {
+      if (d <= a1) error("second arc cannot be smaller than first angle");
+      a2 = d;
+    }
+    void set_angles(double d1, double d2)
+    {
+      if (d1 <= d1) error("second arc angle must be bigger than first angle");
+      a1 = d1;
+      a2 = d2;
+    }
+
+  private:
+    int w, h;
+    double a1, a2;
+  };
+
+  struct Box : Shape {
+    Box(Point pp, int ww, int hh)  // "normal" Box
+        : w{ww}, h{hh}
+    {
+      if (h <= 0 || w <= 0) error("Height and width must be postive integers.");
+      add(pp);  // add the point
+      rad = w < h ? w / 4 : h / 4;
+    };
+
+    Box(Point pp, int ww, int hh, int rr)  // Box with rounded corners
+        : w{ww}, h{hh}, rad{rr}
+    {
+      if (h <= 0 || w <= 0) error("Height and width must be postive integers.");
+      if (rad > (w > h ? h : w) / 2) error("Radius entered is too large");
+      add(pp);
+    };
+
+    void draw_lines() const;
+
+    int width() const { return w; }
+    int height() const { return h; }
+
+  private:
+    int w, h, rad;  // width, height, radius
+  };
+
+  Point n(const Box& box);
+  Point s(const Box& box);
+  Point e(const Box& box);
+  Point w(const Box& box);
+  Point center(const Box& box);
+  Point ne(const Box& box);
+  Point se(const Box& box);
+  Point sw(const Box& box);
+  Point nw(const Box& box);
+
+  struct Arrow : Line {
+    Arrow(Point p1, Point p2) : Line{p1, p2} {}
+    void draw_lines() const;
+  };
+
+  //---------------------------------------------------------------------------
+
+  Point n(const Rectangle& rect);
+  Point s(const Rectangle& rect);
+  Point e(const Rectangle& rect);
+  Point w(const Rectangle& rect);
+  Point center(const Rectangle& rect);
+  Point nw(const Rectangle& rect);
+  Point sw(const Rectangle& rect);
+  Point ne(const Rectangle& rect);
+  Point se(const Rectangle& rect);
+
+  struct Textbox : Box {
+    Textbox(Point xy, int ww, string s)
+        : Box{xy, ww, h_tb}, label(Point{xy.x + 4, xy.y + 17}, s)
+    {
+    }
+    void draw_lines() const;
+    void move(int dx, int dy);
+    void set_color(Color c);
+
+    Text label;
+
+  private:
+    static const int h_tb = 24;
+  };
 }
 #endif
