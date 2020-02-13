@@ -3,7 +3,7 @@ BasedOnStyle: Google
 ---
 Language: Cpp
 IndentWidth: 2
-ColumnLimit: 100
+ColumnLimit: 80
 UseTab: Never
 AccessModifierOffset: -2
 AlignTrailingComments: true

@@ -85,13 +85,13 @@ int main()
     // win.wait_for_button();
     // win.put_on_top(img);
 
-    Image plane1(Point(200, 200), "200x200.jpg");
+    Image plane1(Point(200, 200), "resources/200x200.jpg");
     // plane1.set_mask(Point(200, 0), 200, 200);
     win.attach(plane1);
-    Image plane2(Point(500, 200), "200x200.jpg");
+    Image plane2(Point(500, 200), "resources/200x200.jpg");
     // plane2.set_mask(Point(200, 0), 200, 200);
     win.attach(plane2);
-    Image plane3(Point(100, 500), "200x200.jpg");
+    Image plane3(Point(100, 500), "resources/200x200.jpg");
     // plane3.set_mask(Point(200, 0), 200, 200);
     win.attach(plane3);
 

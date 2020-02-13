@@ -23,7 +23,8 @@ namespace Graph_lib {
 
   // does two lines (p1,p2) and (p3,p4) intersect?
   // if se return the distance of the intersect point as distances from p1
-  inline pair<double, double> line_intersect(Point p1, Point p2, Point p3, Point p4, bool& parallel)
+  inline pair<double, double> line_intersect(Point p1, Point p2, Point p3,
+                                             Point p4, bool& parallel)
   {
     double x1 = p1.x;
     double x2 = p2.x;
@@ -40,18 +41,21 @@ namespace Graph_lib {
       return pair<double, double>(0, 0);
     }
     parallel = false;
-    return pair<double, double>(((x4 - x3) * (y1 - y3) - (y4 - y3) * (x1 - x3)) / denom,
-                                ((x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3)) / denom);
+    return pair<double, double>(
+        ((x4 - x3) * (y1 - y3) - (y4 - y3) * (x1 - x3)) / denom,
+        ((x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3)) / denom);
   }
 
   // intersection between two line segments
   // Returns true if the two segments intersect,
   // in which case intersection is set to the point of intersection
-  bool line_segment_intersect(Point p1, Point p2, Point p3, Point p4, Point& intersection)
+  bool line_segment_intersect(Point p1, Point p2, Point p3, Point p4,
+                              Point& intersection)
   {
     bool parallel;
     pair<double, double> u = line_intersect(p1, p2, p3, p4, parallel);
-    if (parallel || u.first < 0 || u.first > 1 || u.second < 0 || u.second > 1) return false;
+    if (parallel || u.first < 0 || u.first > 1 || u.second < 0 || u.second > 1)
+      return false;
     intersection.x = p1.x + u.first * (p2.x - p1.x);
     intersection.y = p1.y + u.first * (p2.y - p1.y);
     return true;
@@ -68,9 +72,11 @@ namespace Graph_lib {
       if (parallel) error("two polygon points lie in a straight line");
     }
 
-    for (int i = 1; i < np - 1; ++i) {  // check that new segment doesn't interset and old point
+    for (int i = 1; i < np - 1;
+         ++i) {  // check that new segment doesn't interset and old point
       Point ignore(0, 0);
-      if (line_segment_intersect(point(np - 1), p, point(i - 1), point(i), ignore))
+      if (line_segment_intersect(point(np - 1), p, point(i - 1), point(i),
+                                 ignore))
         error("intersect in polygon");
     }
 
@@ -88,7 +94,9 @@ namespace Graph_lib {
     if (fill_color().visibility()) {
       fl_color(fill_color().as_int());
       fl_begin_complex_polygon();
-      for (int i = 0; i < number_of_points(); ++i) { fl_vertex(point(i).x, point(i).y); }
+      for (int i = 0; i < number_of_points(); ++i) {
+        fl_vertex(point(i).x, point(i).y);
+      }
       fl_end_complex_polygon();
       fl_color(color().as_int());  // reset color
     }
@@ -101,8 +109,8 @@ namespace Graph_lib {
     Open_polyline::draw_lines();
 
     if (color().visibility())  // draw closing line:
-      fl_line(point(number_of_points() - 1).x, point(number_of_points() - 1).y, point(0).x,
-              point(0).y);
+      fl_line(point(number_of_points() - 1).x, point(number_of_points() - 1).y,
+              point(0).x, point(0).y);
   }
   void Shape::move(int dx, int dy)
   {
@@ -130,7 +138,8 @@ namespace Graph_lib {
     fl_font(ofnt, osz);
   }
 
-  Function::Function(Fct f, double r1, double r2, Point xy, int count, double xscale, double yscale)
+  Function::Function(Fct f, double r1, double r2, Point xy, int count,
+                     double xscale, double yscale)
   // graph f(x) for x in [r1:r2) using count line segments with (0,0) displayed
   // at xy x coordinates are scaled by xscale and y coordinates scaled by yscale
   {
@@ -158,7 +167,39 @@ namespace Graph_lib {
     }
   }
 
-  Axis::Axis(Orientation d, Point xy, int length, int n, string lab) : label(Point(0, 0), lab)
+  void Arrow::draw_lines() const
+  {
+    Line::draw_lines();
+
+    // add arrowhead: p2 and two points
+    double line_len =
+        sqrt(double(pow(point(1).x - point(0).x, 2) +
+                    pow(point(1).y - point(0).y, 2)));  // length of p1p2
+
+    // coordinates of the a point on p1p2 with distance 8 from p2
+    double pol_x = 8 / line_len * point(0).x + (1 - 8 / line_len) * point(1).x;
+    double pol_y = 8 / line_len * point(0).y + (1 - 8 / line_len) * point(1).y;
+
+    // pl is 4 away from p1p2 on the "left", pl_pol is orthogonal to p1p2
+    double pl_x = pol_x + 4 / line_len * (point(1).y - point(0).y);
+    double pl_y = pol_y + 4 / line_len * (point(0).x - point(1).x);
+
+    // pr is 4 away from p1p2 on the "right", pr_pol is orthogonal to p1p2
+    double pr_x = pol_x + 4 / line_len * (point(0).y - point(1).y);
+    double pr_y = pol_y + 4 / line_len * (point(1).x - point(0).x);
+
+    // draw arrowhead - is always filled in line color
+    if (color().visibility()) {
+      fl_begin_complex_polygon();
+      fl_vertex(point(1).x, point(1).y);
+      fl_vertex(pl_x, pl_y);
+      fl_vertex(pr_x, pr_y);
+      fl_end_complex_polygon();
+    }
+  }
+
+  Axis::Axis(Orientation d, Point xy, int length, int n, string lab)
+      : label(Point(0, 0), lab)
   {
     if (length < 0) error("bad axis length");
     switch (d) {
@@ -200,8 +241,8 @@ namespace Graph_lib {
   void Axis::draw_lines() const
   {
     Shape::draw_lines();  // the line
-    notches.draw();       // the notches may have a different color from the line
-    label.draw();         // the label may have a different color from the line
+    notches.draw();  // the notches may have a different color from the line
+    label.draw();    // the label may have a different color from the line
   }
 
   void Axis::set_color(Color c)
@@ -260,23 +301,29 @@ namespace Graph_lib {
       fl_pie(point(0).x, point(0).y, 2 * rad, 2 * rad, 90, 180);
       fl_pie(point(0).x + w - 2 * rad, point(0).y, 2 * rad, 2 * rad, 0, 90);
       fl_pie(point(0).x, point(0).y + h - 2 * rad, 2 * rad, 2 * rad, 180, 270);
-      fl_pie(point(0).x + w - 2 * rad, point(0).y + h - 2 * rad, 2 * rad, 2 * rad, 270, 360);
+      fl_pie(point(0).x + w - 2 * rad, point(0).y + h - 2 * rad, 2 * rad,
+             2 * rad, 270, 360);
 
       fl_color(color().as_int());  // reset color
     }
 
     if (color().visibility()) {
       fl_color(color().as_int());
-      fl_line(point(0).x + rad, point(0).y, point(0).x + w - rad - 1, point(0).y);
-      fl_line(point(0).x, point(0).y + rad, point(0).x, point(0).y + h - rad - 1);
-      fl_line(point(0).x + rad, point(0).y + h - 1, point(0).x + w - rad, point(0).y + h - 1);
-      fl_line(point(0).x + w - 1, point(0).y + rad, point(0).x + w - 1, point(0).y + h - rad);
+      fl_line(point(0).x + rad, point(0).y, point(0).x + w - rad - 1,
+              point(0).y);
+      fl_line(point(0).x, point(0).y + rad, point(0).x,
+              point(0).y + h - rad - 1);
+      fl_line(point(0).x + rad, point(0).y + h - 1, point(0).x + w - rad,
+              point(0).y + h - 1);
+      fl_line(point(0).x + w - 1, point(0).y + rad, point(0).x + w - 1,
+              point(0).y + h - rad);
 
       // draw arcs
       fl_arc(point(0).x, point(0).y, 2 * rad, 2 * rad, 90, 180);
       fl_arc(point(0).x + w - 2 * rad, point(0).y, 2 * rad, 2 * rad, 0, 90);
       fl_arc(point(0).x, point(0).y + h - 2 * rad, 2 * rad, 2 * rad, 180, 270);
-      fl_arc(point(0).x + w - 2 * rad, point(0).y + h - 2 * rad, 2 * rad, 2 * rad, 270, 360);
+      fl_arc(point(0).x + w - 2 * rad, point(0).y + h - 2 * rad, 2 * rad,
+             2 * rad, 270, 360);
     }
   }
 
@@ -291,7 +338,8 @@ namespace Graph_lib {
   void Marked_polyline::draw_lines() const
   {
     Open_polyline::draw_lines();
-    for (int i = 0; i < number_of_points(); ++i) draw_mark(point(i), mark[i % mark.size()]);
+    for (int i = 0; i < number_of_points(); ++i)
+      draw_mark(point(i), mark[i % mark.size()]);
   }
 
   std::map<string, Suffix::Encoding> suffix_map;
@@ -366,6 +414,52 @@ namespace Graph_lib {
       p->draw(point(0).x, point(0).y, w, h, cx, cy);
     else
       p->draw(point(0).x, point(0).y);
+  }
+
+  Point n(const Rectangle& rect)
+  {
+    return Point{rect.point(0).x + rect.width() / 2, rect.point(0).y};
+  }
+
+  Point s(const Rectangle& rect)
+  {
+    return Point{rect.point(0).x + rect.width() / 2,
+                 rect.point(0).y + rect.height()};
+  }
+
+  Point e(const Rectangle& rect)
+  {
+    return Point{rect.point(0).x + rect.width(),
+                 rect.point(0).y + rect.height() / 2};
+  }
+
+  Point w(const Rectangle& rect)
+  {
+    return Point{rect.point(0).x, rect.point(0).y + rect.height() / 2};
+  }
+
+  Point center(const Rectangle& rect)
+  {
+    return Point{rect.point(0).x + rect.width() / 2,
+                 rect.point(0).y + rect.height() / 2};
+  }
+
+  Point nw(const Rectangle& rect) { return rect.point(0); }
+
+  Point sw(const Rectangle& rect)
+  {
+    return Point{rect.point(0).x, rect.point(0).y + rect.height()};
+  }
+
+  Point ne(const Rectangle& rect)
+  {
+    return Point{rect.point(0).x + rect.width(), rect.point(0).y};
+  }
+
+  Point se(const Rectangle& rect)
+  {
+    return Point{rect.point(0).x + rect.width(),
+                 rect.point(0).y + rect.height()};
   }
 
 }  // Graph

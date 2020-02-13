@@ -189,8 +189,8 @@ namespace Graph_lib {
 
   struct Function : Shape {
     // the function parameters are not stored
-    Function(Fct f, double r1, double r2, Point orig, int count = 100, double xscale = 25,
-             double yscale = 25);
+    Function(Fct f, double r1, double r2, Point orig, int count = 100,
+             double xscale = 25, double yscale = 25);
     // Function(Point orig, Fct f, double r1, double r2, int count, double
     // xscale = 1, double yscale = 1);
   };
@@ -255,13 +255,14 @@ namespace Graph_lib {
     //	void add(Point p) { Shape::add(p); }
   };
 
-  struct Polygon : Closed_polyline {  // closed sequence of non-intersecting lines
+  struct Polygon
+      : Closed_polyline {  // closed sequence of non-intersecting lines
     using Closed_polyline::Closed_polyline;
     void add(Point p);
     void draw_lines() const;
   };
 
-  struct Lines : Shape {  // indepentdent lines
+  struct Lines : Shape {  // independent lines
     Lines() {}
     Lines(initializer_list<Point> lst) : Shape{lst}
     {
@@ -299,7 +300,8 @@ namespace Graph_lib {
   struct Axis : Shape {
     // representation left public
     enum Orientation { x, y, z };
-    Axis(Orientation d, Point xy, int length, int nummber_of_notches = 0, string label = "");
+    Axis(Orientation d, Point xy, int length, int nummber_of_notches = 0,
+         string label = "");
 
     void draw_lines() const;
     void move(int dx, int dy);
@@ -342,9 +344,15 @@ namespace Graph_lib {
 
     Point center() const { return {point(0).x + w, point(0).y + h}; }
 
-    Point focus1() const { return {center().x + int(sqrt(double(w * w - h * h))), center().y}; }
+    Point focus1() const
+    {
+      return {center().x + int(sqrt(double(w * w - h * h))), center().y};
+    }
 
-    Point focus2() const { return {center().x - int(sqrt(double(w * w - h * h))), center().y}; }
+    Point focus2() const
+    {
+      return {center().x - int(sqrt(double(w * w - h * h))), center().y};
+    }
 
     void set_major(int ww) { w = ww; }
     int major() const { return w; }
@@ -365,7 +373,10 @@ namespace Graph_lib {
   };
 
   struct Marks : Marked_polyline {
-    Marks(const string& m) : Marked_polyline(m) { set_color(Color(Color::invisible)); }
+    Marks(const string& m) : Marked_polyline(m)
+    {
+      set_color(Color(Color::invisible));
+    }
   };
 
   struct Mark : Marks {
@@ -473,5 +484,21 @@ namespace Graph_lib {
     int w, h, rad;  // width, height, radius
   };
 
+  struct Arrow : Line {
+    Arrow(Point p1, Point p2) : Line{p1, p2} {}
+    void draw_lines() const;
+  };
+
+  //-----------------------------------------------------------------------------------------------
+
+  Point n(const Rectangle& rect);
+  Point s(const Rectangle& rect);
+  Point e(const Rectangle& rect);
+  Point w(const Rectangle& rect);
+  Point center(const Rectangle& rect);
+  Point nw(const Rectangle& rect);
+  Point sw(const Rectangle& rect);
+  Point ne(const Rectangle& rect);
+  Point se(const Rectangle& rect);
 }
 #endif
