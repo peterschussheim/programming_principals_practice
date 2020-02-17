@@ -1,5 +1,5 @@
 file(GLOB SOURCES "*.cpp")
-
+add_subdirectory(ch14)
 
 add_executable(main main.cpp ../include/Split.h std_lib_facilities.h fib.h)
 set_property(TARGET main PROPERTY CXX_STANDARD 17)
