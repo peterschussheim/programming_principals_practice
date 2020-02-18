@@ -8,12 +8,13 @@ UseTab: Never
 AccessModifierOffset: -2
 AlignTrailingComments: true
 AllowShortBlocksOnASingleLine: true
+AllowAllConstructorInitializersOnNextLine: false
 AllowShortCaseLabelsOnASingleLine: false
 AllowShortFunctionsOnASingleLine : All
 AllowShortLoopsOnASingleLine: true
 BinPackParameters: true
 BreakConstructorInitializers: BeforeColon
-ConstructorInitializerAllOnOneLineOrOnePerLine: false
+#ConstructorInitializerAllOnOneLineOrOnePerLine: false
 IndentCaseLabels: true
 SortIncludes: false
 IncludeBlocks: Preserve

@@ -434,6 +434,36 @@ namespace Graph_lib {
       p->draw(point(0).x, point(0).y);
   }
 
+  //------------------------------------------------------------------------------
+
+  Arc::Arc(Point p, int ww, int hh, double aa1, double aa2)
+      : w{ww},
+        h{hh},
+        a1{aa1},
+        a2{aa2}
+  {
+    if (aa2 <= aa1) {
+      error("Second angle in arc must be LARGER than first angle");
+    }
+    add(Point{p.x - ww, p.y - hh});
+  }
+
+  void Arc::draw_lines() const
+  {
+    if (fill_color().visibility()) {
+      fl_color(fill_color().as_int());
+      fl_pie(point(0).x, point(0).y, w + w - 1, h + h - 1, a1, a2);
+      fl_color(color().as_int());
+    }
+
+    if (color().visibility()) {
+      fl_color(color().as_int());
+      fl_arc(point(0).x, point(0).y, w + w, h + h, a1, a2);
+    }
+  }
+
+  //------------------------------------------------------------------------------
+
   Point n(const Rectangle& rect)
   {
     return Point{rect.point(0).x + rect.width() / 2, rect.point(0).y};
@@ -542,5 +572,164 @@ namespace Graph_lib {
   //------------------------------------------------------------------------------
 
   Point nw(const Box& box) { return box.point(0); }
+
+  //---------------------------------------------------------------------------
+
+  Face::Face(Point p, int rr)
+      : Circle{p, rr},
+        mouth(p, rr * 0.66, rr * 0.66, 180, 360),  // init a Smile face
+        l_eye(Point{p.x - rr / 5, p.y - rr / 2}, rr / 8, rr / 3),
+        r_eye(Point{p.x + rr / 5, p.y - rr / 2}, rr / 8, rr / 3)
+  {
+    l_eye.set_color(Color::invisible);
+    l_eye.set_fill_color(color());
+    r_eye.set_color(Color::invisible);
+    r_eye.set_fill_color(color());
+  }
+
+  void Face::draw_lines() const
+  {
+    Circle::draw_lines();
+    if (color().visibility()) {
+      l_eye.draw();
+      r_eye.draw();
+      mouth.draw();
+    }
+  }
+
+  void Face::set_color(Color c)
+  {
+    Shape::set_color(c);
+    l_eye.set_fill_color(c);
+    r_eye.set_fill_color(c);
+    mouth.set_fill_color(c);
+  }
+
+  void Face::set_style(Line_style ls)
+  {
+    Circle::set_style(ls);
+    mouth.set_style(ls);
+  }
+
+  void Face::move(int dx, int dy)
+  {
+    Shape::move(dx, dy);
+    l_eye.move(dx, dy);
+    r_eye.move(dx, dy);
+    mouth.move(dx, dy);
+  }
+
+  void Face::set_radius(int rr)
+  {
+    Circle::set_radius(rr);
+    l_eye.set_minor(rr / 3);
+    l_eye.set_major(rr / 8);
+    r_eye.set_minor(rr / 3);
+    r_eye.set_major(rr / 8);
+
+    // reposition eyes
+    int dx = rr / 5 - (r_eye.center().x - center().x);
+    int dy = (center().y - r_eye.center().y) - rr / 2;
+    l_eye.move(-dx, dy);
+    r_eye.move(dx, dy);
+
+    // scale mouth
+    mouth.set_minor(rr * 0.66);
+    mouth.set_major(rr * 0.66);
+  }
+
+  //---------------------------------------------------------------------------
+
+  Smiley::Smiley(Point p, int rr)  // default constructor
+      : Face(p, rr)
+  {
+  }
+
+  //---------------------------------------------------------------------------
+
+  Hat_smiley::Hat_smiley(Point p, int rr)  // default constructor
+      : Smiley(p, rr)
+  {
+    hat.add(Point(p.x - 0.8 * rr, p.y - 0.8 * rr));
+    hat.add(Point(p.x - 0.8 * rr, p.y - 0.9 * rr));
+    hat.add(Point(p.x - 0.6 * rr, p.y - 0.9 * rr));
+    hat.add(Point(p.x - 0.6 * rr, p.y - 1.9 * rr));
+    hat.add(Point(p.x + 0.6 * rr, p.y - 1.9 * rr));
+    hat.add(Point(p.x + 0.6 * rr, p.y - 0.9 * rr));
+    hat.add(Point(p.x + 0.8 * rr, p.y - 0.9 * rr));
+    hat.add(Point(p.x + 0.8 * rr, p.y - 0.8 * rr));
+    hat.set_fill_color(color());
+  }
+
+  void Hat_smiley::draw_lines() const
+  {
+    Smiley::draw_lines();
+    if (color().visibility()) hat.draw();
+  }
+
+  void Hat_smiley::move(int dx, int dy)
+  {
+    Smiley::move(dy, dy);
+    hat.move(dx, dy);
+  }
+
+  void Hat_smiley::set_color(Color c)
+  {
+    Smiley::set_color(c);
+    hat.set_color(c);
+    hat.set_fill_color(c);
+  }
+
+  //---------------------------------------------------------------------------
+
+  Frowny::Frowny(Point p, int rr)  // default constructor
+      : Face{p, rr}
+  {
+    // rotate mouth around
+    mouth.set_angles(0, 180);
+    mouth.move(0, 0.66 * rr);
+  }
+
+  //---------------------------------------------------------------------------
+
+  Hat_frowny::Hat_frowny(Point p, int rr)
+      : Frowny{p, rr},
+        brim{Point(p.x - 0.8 * rr, p.y - 0.9 * rr),
+             Point(p.x + 0.8 * rr, p.y - 0.8 * rr)},
+        bowl(Point(p.x, p.y - 0.9 * rr), 0.6 * rr, 0.6 * rr, 0, 180)
+  {
+    // set hat colors
+    brim.set_color(Color::invisible);
+    brim.set_fill_color(color());
+    bowl.set_color(Color::invisible);
+    bowl.set_fill_color(color());
+  }
+
+  void Hat_frowny::draw_lines() const
+  {
+    Frowny::draw_lines();
+    if (color().visibility()) {
+      brim.draw();
+      bowl.draw();
+    }
+  }
+
+  void Hat_frowny::move(int dx, int dy)
+  {
+    Frowny::move(dy, dy);
+    brim.move(dx, dy);
+    bowl.move(dx, dy);
+  }
+
+  void Hat_frowny::set_color(Color c)
+  {
+    Frowny::set_color(c);
+    brim.set_fill_color(c);
+    bowl.set_fill_color(c);
+  }
+  //---------------------------------------------------------------------------
+  //---------------------------------------------------------------------------
+  //---------------------------------------------------------------------------
+  //---------------------------------------------------------------------------
 
 }  // Graph
