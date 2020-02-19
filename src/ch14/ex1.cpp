@@ -27,6 +27,12 @@ int main()
     Hat_frowny hf{Point{400, 100}, 50};
     hf.set_color(Color::dark_green);
 
+    /*
+    Exercise #2: try to copy a shape
+    compiler error due to Shape's copy constructor being deleted
+    Hat_frowny hf_copy = hf;
+    */
+
     win.attach(sm);
     win.attach(fr);
     win.attach(hf);
