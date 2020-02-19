@@ -138,10 +138,6 @@ namespace Graph_lib {
     Shape() {}
     Shape(initializer_list<Point> lst);  // add() the Points to this Shape
 
-    //	Shape() : lcolor(fl_color()),
-    //		ls(0),
-    //		fcolor(Color::invisible) { }
-
     void add(Point p) { points.push_back(p); }
     void set_point(int i, Point p) { points[i] = p; }
 
@@ -312,15 +308,27 @@ namespace Graph_lib {
     }
 
     void draw_lines() const;
-
     Point center() const { return {point(0).x + r, point(0).y + r}; }
-
     void set_radius(int rr) { r = rr; }
     int radius() const { return r; }
 
   private:
     int r;
   };
+
+  //---------------------------------------------------------------------------
+
+  class Immobile_circle : public Circle {
+  public:
+    using Circle::Circle;  // use Circle's constructors
+    void draw_lines() const;
+
+  private:
+    using Circle::move;  // instruct compiler that Circle::move is not to be
+                         // used by Immobile_class
+  };
+
+  //---------------------------------------------------------------------------
 
   struct Ellipse : Shape {
     Ellipse(Point p, int ww,
@@ -594,5 +602,6 @@ namespace Graph_lib {
     Rectangle brim;
     Arc bowl;
   };
+
 }
 #endif

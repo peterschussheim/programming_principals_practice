@@ -112,6 +112,7 @@ namespace Graph_lib {
       fl_line(point(number_of_points() - 1).x, point(number_of_points() - 1).y,
               point(0).x, point(0).y);
   }
+
   void Shape::move(int dx, int dy)
   {
     for (unsigned int i = 0; i < points.size(); ++i) {
@@ -290,6 +291,8 @@ namespace Graph_lib {
       fl_arc(point(0).x, point(0).y, r + r, r + r, 0, 360);
     }
   }
+
+  void Immobile_circle::draw_lines() const { Circle::draw_lines(); }
 
   void Ellipse::draw_lines() const
   {
