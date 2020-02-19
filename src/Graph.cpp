@@ -730,9 +730,66 @@ namespace Graph_lib {
     brim.set_fill_color(c);
     bowl.set_fill_color(c);
   }
+
   //---------------------------------------------------------------------------
+
+  Binary_tree::Binary_tree(Point xy, int levels) : lvls(levels)
+  {
+    // check if levels is < 0
+    if (levels < 0) error("levels must but a positive integer!", levels);
+
+    // if levels == 0, return
+    if (levels == 0) return;
+
+    // add a level
+    add(xy);
+    int constexpr dx = 35;   // distance between nodes on the lowest level
+    int constexpr dy = 100;  // spacing between each level
+
+    for (int i = 2; i <= levels; ++i) {
+      // TODO: explain the calculation here
+      int level_max = pow(2, i - 1);
+      for (int j = 0; j < level_max; ++j) {
+        // scale x and y
+        int x = xy.x - (pow(2, i - 1) - 1 / 2 - j) * pow(2, levels - i) * dx;
+        int y = xy.y + (i - 1) * dy;
+        add(Point{x, y});
+      }
+    }
+
+    // add normal lines
+    for (int i = 0; i < number_of_points() / 2; ++i) {
+      edges.push_back(new Line(point(i), point(2 * i + 1)));
+      edges.push_back(new Line(point(i), point(2 * i + 2)));
+    }
+  }
+
   //---------------------------------------------------------------------------
+
+  void Binary_tree::draw_lines() const
+  {
+    if (color().visibility()) {
+      for (int i = 0; i < edges.size(); ++i) { edges[i].draw(); }
+
+      // draw labels: not yet defined
+
+      int constexpr r = 12;
+      Fl_Color default_color = fl_rgb_color(192, 192, 192);
+      fl_color(default_color);
+      for (int i = 0; i < number_of_points(); ++i) {
+        fl_pie(point(i).x - r, point(i).y - r, r + r - 1, r + r - 1, 0, 360);
+      }
+      fl_color(color().as_int());  // reset color
+      for (int i = 0; i < number_of_points(); ++i)
+        fl_arc(point(i).x - r, point(i).y - r, r + r, r + r, 0, 360);
+    }
+  }
+
   //---------------------------------------------------------------------------
+
+  // TODO: define Binary_tree::move
+  // TODO: define Binary_tree::set_node_label
+
   //---------------------------------------------------------------------------
 
 }  // Graph

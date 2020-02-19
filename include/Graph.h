@@ -603,5 +603,30 @@ namespace Graph_lib {
     Arc bowl;
   };
 
+  // TODO: do this
+  /*
+    EX 11: Derive a Binary_tree class from a Shape.
+
+    Design Considerations:
+      - class should accept an int representing the number of levels in the tree
+      - should we create an abstract class to be used as the base
+        of a Binary_tree/N_ary_tree?
+          - ex: create a Node class and a Tree class, both abstract
+            - derive a Binary_tree from Node and Tree?
+  */
+  class Binary_tree : public Shape {
+  public:
+    Binary_tree(Point xy, int levels);
+    void draw_lines() const;
+    void move(int dx, int dy);
+    int levels() const { return lvls; }
+
+  protected:
+    Vector_ref<Shape> edges;
+    Vector_ref<Text> labels;
+
+  private:
+    int lvls;  // represents the number of levels of this tree
+  };
 }
 #endif
