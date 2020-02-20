@@ -733,63 +733,165 @@ namespace Graph_lib {
 
   //---------------------------------------------------------------------------
 
-  Binary_tree::Binary_tree(Point xy, int levels) : lvls(levels)
+  Binary_tree::Binary_tree(Point xy, int levels, string edge_style)
+      : lvls(levels)
   {
-    // check if levels is < 0
-    if (levels < 0) error("levels must but a positive integer!", levels);
-
-    // if levels == 0, return
-    if (levels == 0) return;
-
-    // add a level
-    add(xy);
-    int constexpr dx = 35;   // distance between nodes on the lowest level
-    int constexpr dy = 100;  // spacing between each level
-
+    if (levels < 0) error("Binary_tree: levels must be at least zero");
+    if (levels == 0) return;  // tree ist empty
+    add(xy);                  // if levels==1, only root is added
+    int dx = 35;              // distance between nodes on lowest level
+    int dy = 100;             // distance between levels
     for (int i = 2; i <= levels; ++i) {
-      // TODO: explain the calculation here
-      int level_max = pow(2, i - 1);
-      for (int j = 0; j < level_max; ++j) {
-        // scale x and y
-        int x = xy.x - (pow(2, i - 1) - 1 / 2 - j) * pow(2, levels - i) * dx;
+      for (int j = 0; j < pow(2, i - 1); ++j) {
+        int x = xy.x - ((pow(2, i - 1) - 1) / 2 - j) * pow(2, levels - i) * dx;
         int y = xy.y + (i - 1) * dy;
-        add(Point{x, y});
+        add(Point(x, y));
       }
     }
 
-    // add normal lines
     for (int i = 0; i < number_of_points() / 2; ++i) {
-      edges.push_back(new Line(point(i), point(2 * i + 1)));
-      edges.push_back(new Line(point(i), point(2 * i + 2)));
+      if (edge_style == "ad") {  // arrow down
+        // QUESTION: why do we need to use the new keyword?
+        // is this because we want to dynamically allocate memory?
+        edges.push_back(new Arrow(
+            point(i), Point(point(2 * i + 1).x, point(2 * i + 1).y - 12)));
+        edges.push_back(new Arrow(
+            point(i), Point(point(2 * i + 2).x, point(2 * i + 2).y - 12)));
+      }
+      else if (edge_style == "au") {  // arrow up
+        edges.push_back(
+            new Arrow(point(2 * i + 1), Point(point(i).x, point(i).y + 12)));
+        edges.push_back(
+            new Arrow(point(2 * i + 2), Point(point(i).x, point(i).y + 12)));
+      }
+      else {  // normal line
+        edges.push_back(new Line(point(i), point(2 * i + 1)));
+        edges.push_back(new Line(point(i), point(2 * i + 2)));
+      }
     }
+
+    // add label - empty for the moment
+    for (int i = 0; i < number_of_points(); ++i)
+      labels.push_back(new Text(Point(point(i).x + 13, point(i).y - 13), ""));
   }
+
+  /*
+  Binary_tree::Binary_tree(Point xy, int levels) : lvls(levels)
+ {
+   // check if levels is < 0
+   if (levels < 0) error("levels must but a positive integer!", levels);
+
+   // if levels == 0, return
+   if (levels == 0) return;
+
+   // add a level
+   add(xy);
+   int constexpr dx = 35;   // distance between nodes on the lowest level
+   int constexpr dy = 100;  // spacing between each level
+
+   for (int i = 2; i <= levels; ++i) {
+     // TODO: explain the calculation here
+     int level_max = pow(2, i - 1);
+     for (int j = 0; j < level_max; ++j) {
+       // scale x and y
+       int x = xy.x - (pow(2, i - 1) - 1 / 2 - j) * pow(2, levels - i) * dx;
+       int y = xy.y + (i - 1) * dy;
+       add(Point{x, y});
+     }
+   }
+
+   // add normal lines
+   for (int i = 0; i < number_of_points() / 2; ++i) {
+     edges.push_back(new Line(point(i), point(2 * i + 1)));
+     edges.push_back(new Line(point(i), point(2 * i + 2)));
+   }
+ }
+ */
 
   //---------------------------------------------------------------------------
 
   void Binary_tree::draw_lines() const
   {
     if (color().visibility()) {
+      // Shape::draw_lines();
+      fl_color(Color::black);
       for (int i = 0; i < edges.size(); ++i) { edges[i].draw(); }
+      for (int i = 0; i < labels.size(); ++i) { labels[i].draw(); }
 
-      // draw labels: not yet defined
+      // Fl_Color default_color = fl_rgb_color(192, 192, 192);
 
       int constexpr r = 12;
-      Fl_Color default_color = fl_rgb_color(192, 192, 192);
-      fl_color(default_color);
       for (int i = 0; i < number_of_points(); ++i) {
+        fl_color(Color::white);
         fl_pie(point(i).x - r, point(i).y - r, r + r - 1, r + r - 1, 0, 360);
       }
       fl_color(color().as_int());  // reset color
-      for (int i = 0; i < number_of_points(); ++i)
+      for (int i = 0; i < number_of_points(); ++i) {
+        fl_color(Color::red);
         fl_arc(point(i).x - r, point(i).y - r, r + r, r + r, 0, 360);
+      }
     }
   }
 
   //---------------------------------------------------------------------------
 
-  // TODO: define Binary_tree::move
-  // TODO: define Binary_tree::set_node_label
+  void Binary_tree::set_color(Color c)
+  {
+    Shape::set_color(c);
+    // Shape::set_fill_color(Color::Transparency::invisible);
+  }
 
   //---------------------------------------------------------------------------
+
+  void Binary_tree::move(int dx, int dy)
+  {
+    Shape::move(dx, dy);
+    for (int i = 0; i < edges.size(); ++i) {
+      edges[i].move(dx, dy);  // move each edge in our Vector_ref
+    }
+
+    for (int i = 0; i < labels.size(); ++i) {
+      labels[i].move(dx, dy);  // move each leabel in the label Vector_ref
+    }
+  }
+
+  //---------------------------------------------------------------------------
+
+  // set label of node specified by string n to lbl. n is a sequence of l and r
+  // for navigating left and right in the tree
+  void Binary_tree::set_node_label(string n, string lbl)
+  {
+    if (n.size() < 1 || n.size() > lvls)
+      error("set_node_label: illegal node string ", n);
+    istringstream iss(n);
+    char ch;
+    iss.get(ch);  // look at first character
+    if (n.size() == 1) {
+      switch (ch) {
+        case 'l':
+        case 'r':
+          labels[0].set_label(lbl);
+          return;
+        default:
+          error("set_node_label: illegal character in node string: ",
+                string(1, ch));
+      }
+    }
+    int n_idx = 0;  // node index in point list
+    while (iss.get(ch)) {
+      switch (ch) {
+        case 'l':
+          n_idx = 2 * n_idx + 1;
+          break;
+        case 'r':
+          n_idx = 2 * n_idx + 2;
+          break;
+        default:
+          error("set_node_label: illegal character in node string: ",
+                string(1, ch));
+      }
+    }
+    labels[n_idx].set_label(lbl);
+  }
 
 }  // Graph

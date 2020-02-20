@@ -603,7 +603,6 @@ namespace Graph_lib {
     Arc bowl;
   };
 
-  // TODO: do this
   /*
     EX 11: Derive a Binary_tree class from a Shape.
 
@@ -616,9 +615,11 @@ namespace Graph_lib {
   */
   class Binary_tree : public Shape {
   public:
-    Binary_tree(Point xy, int levels);
+    Binary_tree(Point xy, int levels, string edge_style);
     void draw_lines() const;
     void move(int dx, int dy);
+    void set_color(Color c);
+    void set_node_label(string n, string lbl);
     int levels() const { return lvls; }
 
   protected:
