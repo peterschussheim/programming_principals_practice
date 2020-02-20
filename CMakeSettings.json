@@ -17,7 +17,8 @@
           "type": "FILEPATH"
         }
       ],
-      "enableClangTidyCodeAnalysis": true
+      "enableClangTidyCodeAnalysis": true,
+      "intelliSenseMode": "windows-msvc-x64"
     }
   ]
 }

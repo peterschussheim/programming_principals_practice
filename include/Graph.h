@@ -4,8 +4,8 @@
 
 #include "Point.h"
 #include <vector>
-//#include<string>
-//#include<cmath>
+//#include <string>
+//#include <cmath>
 #include "fltk.h"
 #include "std_lib_facilities.h"
 
@@ -137,10 +137,6 @@ namespace Graph_lib {
   protected:
     Shape() {}
     Shape(initializer_list<Point> lst);  // add() the Points to this Shape
-
-    //	Shape() : lcolor(fl_color()),
-    //		ls(0),
-    //		fcolor(Color::invisible) { }
 
     void add(Point p) { points.push_back(p); }
     void set_point(int i, Point p) { points[i] = p; }
@@ -312,9 +308,7 @@ namespace Graph_lib {
     }
 
     void draw_lines() const;
-
     Point center() const { return {point(0).x + r, point(0).y + r}; }
-
     void set_radius(int rr) { r = rr; }
     int radius() const { return r; }
 
@@ -322,10 +316,25 @@ namespace Graph_lib {
     int r;
   };
 
+  //---------------------------------------------------------------------------
+
+  class Immobile_circle : public Circle {
+  public:
+    using Circle::Circle;  // use Circle's constructors
+    void draw_lines() const;
+
+  private:
+    using Circle::move;  // instruct compiler that Circle::move is not to be
+                         // used by Immobile_class
+  };
+
+  //---------------------------------------------------------------------------
+
   struct Ellipse : Shape {
     Ellipse(Point p, int ww,
             int hh)  // center, min, and max distance from center
-        : w{ww}, h{hh}
+        : w{ww},
+          h{hh}
     {
       add(Point{p.x - ww, p.y - hh});
     }
@@ -408,6 +417,8 @@ namespace Graph_lib {
     Text fn;
   };
 
+  //---------------------------------------------------------------------------
+
   struct Arc : Shape {
     Arc(Point p, int ww, int hh, double a1, double a2);
 
@@ -421,24 +432,28 @@ namespace Graph_lib {
       set_point(0, Point{center().x - ww, center().y - h});
       w = ww;
     }
+
     void set_minor(int hh)
     {
       set_point(0, Point{center().x - w, center().y - hh});
       h = hh;
     }
-    void set_angle(double d)
+
+    void set_angle1(double d)
     {
       if (d >= a2) error("first arc angle cannot be bigger than second angle");
       a1 = d;
     }
+
     void set_angle2(double d)
     {
       if (d <= a1) error("second arc cannot be smaller than first angle");
       a2 = d;
     }
+
     void set_angles(double d1, double d2)
     {
-      if (d1 <= d1) error("second arc angle must be bigger than first angle");
+      if (d2 <= d1) error("second arc angle must be bigger than first angle");
       a1 = d1;
       a2 = d2;
     }
@@ -448,9 +463,12 @@ namespace Graph_lib {
     double a1, a2;
   };
 
+  //---------------------------------------------------------------------------
+
   struct Box : Shape {
     Box(Point pp, int ww, int hh)  // "normal" Box
-        : w{ww}, h{hh}
+        : w{ww},
+          h{hh}
     {
       if (h <= 0 || w <= 0) error("Height and width must be postive integers.");
       add(pp);  // add the point
@@ -458,7 +476,9 @@ namespace Graph_lib {
     };
 
     Box(Point pp, int ww, int hh, int rr)  // Box with rounded corners
-        : w{ww}, h{hh}, rad{rr}
+        : w{ww},
+          h{hh},
+          rad{rr}
     {
       if (h <= 0 || w <= 0) error("Height and width must be postive integers.");
       if (rad > (w > h ? h : w) / 2) error("Radius entered is too large");
@@ -473,6 +493,8 @@ namespace Graph_lib {
   private:
     int w, h, rad;  // width, height, radius
   };
+
+  //---------------------------------------------------------------------------
 
   Point n(const Box& box);
   Point s(const Box& box);
@@ -503,7 +525,8 @@ namespace Graph_lib {
 
   struct Textbox : Box {
     Textbox(Point xy, int ww, string s)
-        : Box{xy, ww, h_tb}, label(Point{xy.x + 4, xy.y + 17}, s)
+        : Box{xy, ww, h_tb},
+          label(Point{xy.x + 4, xy.y + 17}, s)
     {
     }
     void draw_lines() const;
@@ -514,6 +537,97 @@ namespace Graph_lib {
 
   private:
     static const int h_tb = 24;
+  };
+
+  //---------------------------------------------------------------------------
+
+  class Face : public Circle {
+  public:
+    void draw_lines() const;
+    void move(int dx, int dy);
+    void set_color(Color c);
+    void set_style(Line_style ls);
+    void set_radius(int rr);
+
+  protected:
+    Face(Point p, int rr);
+    Arc mouth;
+
+  private:
+    Ellipse l_eye;
+    Ellipse r_eye;
+  };
+
+  //---------------------------------------------------------------------------
+
+  class Smiley : public Face {
+  public:
+    Smiley(Point p, int rr);
+  };
+
+  //---------------------------------------------------------------------------
+
+  class Frowny : public Face {
+  public:
+    Frowny(Point p, int rr);
+
+  private:
+    using Face::set_radius;
+  };
+
+  //---------------------------------------------------------------------------
+
+  class Hat_smiley : public Smiley {
+  public:
+    Hat_smiley(Point p, int rr);
+
+    void draw_lines() const;
+    void move(int dx, int dy);
+    void set_color(Color c);
+
+  private:
+    Polygon hat;
+    // Smiley::set_radius;
+  };
+
+  class Hat_frowny : public Frowny {
+  public:
+    Hat_frowny(Point p, int rr);
+
+    void draw_lines() const;
+    void move(int dx, int dy);
+    void set_color(Color c);
+
+  private:
+    Rectangle brim;
+    Arc bowl;
+  };
+
+  /*
+    EX 11: Derive a Binary_tree class from a Shape.
+
+    Design Considerations:
+      - class should accept an int representing the number of levels in the tree
+      - should we create an abstract class to be used as the base
+        of a Binary_tree/N_ary_tree?
+          - ex: create a Node class and a Tree class, both abstract
+            - derive a Binary_tree from Node and Tree?
+  */
+  class Binary_tree : public Shape {
+  public:
+    Binary_tree(Point xy, int levels, string edge_style);
+    void draw_lines() const;
+    void move(int dx, int dy);
+    void set_color(Color c);
+    void set_node_label(string n, string lbl);
+    int levels() const { return lvls; }
+
+  protected:
+    Vector_ref<Shape> edges;
+    Vector_ref<Text> labels;
+
+  private:
+    int lvls;  // represents the number of levels of this tree
   };
 }
 #endif

@@ -112,6 +112,7 @@ namespace Graph_lib {
       fl_line(point(number_of_points() - 1).x, point(number_of_points() - 1).y,
               point(0).x, point(0).y);
   }
+
   void Shape::move(int dx, int dy)
   {
     for (unsigned int i = 0; i < points.size(); ++i) {
@@ -291,6 +292,8 @@ namespace Graph_lib {
     }
   }
 
+  void Immobile_circle::draw_lines() const { Circle::draw_lines(); }
+
   void Ellipse::draw_lines() const
   {
     if (fill_color().visibility()) {  // fill
@@ -434,6 +437,36 @@ namespace Graph_lib {
       p->draw(point(0).x, point(0).y);
   }
 
+  //------------------------------------------------------------------------------
+
+  Arc::Arc(Point p, int ww, int hh, double aa1, double aa2)
+      : w{ww},
+        h{hh},
+        a1{aa1},
+        a2{aa2}
+  {
+    if (aa2 <= aa1) {
+      error("Second angle in arc must be LARGER than first angle");
+    }
+    add(Point{p.x - ww, p.y - hh});
+  }
+
+  void Arc::draw_lines() const
+  {
+    if (fill_color().visibility()) {
+      fl_color(fill_color().as_int());
+      fl_pie(point(0).x, point(0).y, w + w - 1, h + h - 1, a1, a2);
+      fl_color(color().as_int());
+    }
+
+    if (color().visibility()) {
+      fl_color(color().as_int());
+      fl_arc(point(0).x, point(0).y, w + w, h + h, a1, a2);
+    }
+  }
+
+  //------------------------------------------------------------------------------
+
   Point n(const Rectangle& rect)
   {
     return Point{rect.point(0).x + rect.width() / 2, rect.point(0).y};
@@ -542,5 +575,323 @@ namespace Graph_lib {
   //------------------------------------------------------------------------------
 
   Point nw(const Box& box) { return box.point(0); }
+
+  //---------------------------------------------------------------------------
+
+  Face::Face(Point p, int rr)
+      : Circle{p, rr},
+        mouth(p, rr * 0.66, rr * 0.66, 180, 360),  // init a Smile face
+        l_eye(Point{p.x - rr / 5, p.y - rr / 2}, rr / 8, rr / 3),
+        r_eye(Point{p.x + rr / 5, p.y - rr / 2}, rr / 8, rr / 3)
+  {
+    l_eye.set_color(Color::invisible);
+    l_eye.set_fill_color(color());
+    r_eye.set_color(Color::invisible);
+    r_eye.set_fill_color(color());
+  }
+
+  void Face::draw_lines() const
+  {
+    Circle::draw_lines();
+    if (color().visibility()) {
+      l_eye.draw();
+      r_eye.draw();
+      mouth.draw();
+    }
+  }
+
+  void Face::set_color(Color c)
+  {
+    Shape::set_color(c);
+    l_eye.set_fill_color(c);
+    r_eye.set_fill_color(c);
+    mouth.set_fill_color(c);
+  }
+
+  void Face::set_style(Line_style ls)
+  {
+    Circle::set_style(ls);
+    mouth.set_style(ls);
+  }
+
+  void Face::move(int dx, int dy)
+  {
+    Shape::move(dx, dy);
+    l_eye.move(dx, dy);
+    r_eye.move(dx, dy);
+    mouth.move(dx, dy);
+  }
+
+  void Face::set_radius(int rr)
+  {
+    Circle::set_radius(rr);
+    l_eye.set_minor(rr / 3);
+    l_eye.set_major(rr / 8);
+    r_eye.set_minor(rr / 3);
+    r_eye.set_major(rr / 8);
+
+    // reposition eyes
+    int dx = rr / 5 - (r_eye.center().x - center().x);
+    int dy = (center().y - r_eye.center().y) - rr / 2;
+    l_eye.move(-dx, dy);
+    r_eye.move(dx, dy);
+
+    // scale mouth
+    mouth.set_minor(rr * 0.66);
+    mouth.set_major(rr * 0.66);
+  }
+
+  //---------------------------------------------------------------------------
+
+  Smiley::Smiley(Point p, int rr)  // default constructor
+      : Face(p, rr)
+  {
+  }
+
+  //---------------------------------------------------------------------------
+
+  Hat_smiley::Hat_smiley(Point p, int rr)  // default constructor
+      : Smiley(p, rr)
+  {
+    hat.add(Point(p.x - 0.8 * rr, p.y - 0.8 * rr));
+    hat.add(Point(p.x - 0.8 * rr, p.y - 0.9 * rr));
+    hat.add(Point(p.x - 0.6 * rr, p.y - 0.9 * rr));
+    hat.add(Point(p.x - 0.6 * rr, p.y - 1.9 * rr));
+    hat.add(Point(p.x + 0.6 * rr, p.y - 1.9 * rr));
+    hat.add(Point(p.x + 0.6 * rr, p.y - 0.9 * rr));
+    hat.add(Point(p.x + 0.8 * rr, p.y - 0.9 * rr));
+    hat.add(Point(p.x + 0.8 * rr, p.y - 0.8 * rr));
+    hat.set_fill_color(color());
+  }
+
+  void Hat_smiley::draw_lines() const
+  {
+    Smiley::draw_lines();
+    if (color().visibility()) hat.draw();
+  }
+
+  void Hat_smiley::move(int dx, int dy)
+  {
+    Smiley::move(dy, dy);
+    hat.move(dx, dy);
+  }
+
+  void Hat_smiley::set_color(Color c)
+  {
+    Smiley::set_color(c);
+    hat.set_color(c);
+    hat.set_fill_color(c);
+  }
+
+  //---------------------------------------------------------------------------
+
+  Frowny::Frowny(Point p, int rr)  // default constructor
+      : Face{p, rr}
+  {
+    // rotate mouth around
+    mouth.set_angles(0, 180);
+    mouth.move(0, 0.66 * rr);
+  }
+
+  //---------------------------------------------------------------------------
+
+  Hat_frowny::Hat_frowny(Point p, int rr)
+      : Frowny{p, rr},
+        brim{Point(p.x - 0.8 * rr, p.y - 0.9 * rr),
+             Point(p.x + 0.8 * rr, p.y - 0.8 * rr)},
+        bowl(Point(p.x, p.y - 0.9 * rr), 0.6 * rr, 0.6 * rr, 0, 180)
+  {
+    // set hat colors
+    brim.set_color(Color::invisible);
+    brim.set_fill_color(color());
+    bowl.set_color(Color::invisible);
+    bowl.set_fill_color(color());
+  }
+
+  void Hat_frowny::draw_lines() const
+  {
+    Frowny::draw_lines();
+    if (color().visibility()) {
+      brim.draw();
+      bowl.draw();
+    }
+  }
+
+  void Hat_frowny::move(int dx, int dy)
+  {
+    Frowny::move(dy, dy);
+    brim.move(dx, dy);
+    bowl.move(dx, dy);
+  }
+
+  void Hat_frowny::set_color(Color c)
+  {
+    Frowny::set_color(c);
+    brim.set_fill_color(c);
+    bowl.set_fill_color(c);
+  }
+
+  //---------------------------------------------------------------------------
+
+  Binary_tree::Binary_tree(Point xy, int levels, string edge_style)
+      : lvls(levels)
+  {
+    if (levels < 0) error("Binary_tree: levels must be at least zero");
+    if (levels == 0) return;  // tree ist empty
+    add(xy);                  // if levels==1, only root is added
+    int dx = 35;              // distance between nodes on lowest level
+    int dy = 100;             // distance between levels
+    for (int i = 2; i <= levels; ++i) {
+      for (int j = 0; j < pow(2, i - 1); ++j) {
+        int x = xy.x - ((pow(2, i - 1) - 1) / 2 - j) * pow(2, levels - i) * dx;
+        int y = xy.y + (i - 1) * dy;
+        add(Point(x, y));
+      }
+    }
+
+    for (int i = 0; i < number_of_points() / 2; ++i) {
+      if (edge_style == "ad") {  // arrow down
+        // QUESTION: why do we need to use the new keyword?
+        // is this because we want to dynamically allocate memory?
+        edges.push_back(new Arrow(
+            point(i), Point(point(2 * i + 1).x, point(2 * i + 1).y - 12)));
+        edges.push_back(new Arrow(
+            point(i), Point(point(2 * i + 2).x, point(2 * i + 2).y - 12)));
+      }
+      else if (edge_style == "au") {  // arrow up
+        edges.push_back(
+            new Arrow(point(2 * i + 1), Point(point(i).x, point(i).y + 12)));
+        edges.push_back(
+            new Arrow(point(2 * i + 2), Point(point(i).x, point(i).y + 12)));
+      }
+      else {  // normal line
+        edges.push_back(new Line(point(i), point(2 * i + 1)));
+        edges.push_back(new Line(point(i), point(2 * i + 2)));
+      }
+    }
+
+    // add label - empty for the moment
+    for (int i = 0; i < number_of_points(); ++i)
+      labels.push_back(new Text(Point(point(i).x + 13, point(i).y - 13), ""));
+  }
+
+  /*
+  Binary_tree::Binary_tree(Point xy, int levels) : lvls(levels)
+ {
+   // check if levels is < 0
+   if (levels < 0) error("levels must but a positive integer!", levels);
+
+   // if levels == 0, return
+   if (levels == 0) return;
+
+   // add a level
+   add(xy);
+   int constexpr dx = 35;   // distance between nodes on the lowest level
+   int constexpr dy = 100;  // spacing between each level
+
+   for (int i = 2; i <= levels; ++i) {
+     // TODO: explain the calculation here
+     int level_max = pow(2, i - 1);
+     for (int j = 0; j < level_max; ++j) {
+       // scale x and y
+       int x = xy.x - (pow(2, i - 1) - 1 / 2 - j) * pow(2, levels - i) * dx;
+       int y = xy.y + (i - 1) * dy;
+       add(Point{x, y});
+     }
+   }
+
+   // add normal lines
+   for (int i = 0; i < number_of_points() / 2; ++i) {
+     edges.push_back(new Line(point(i), point(2 * i + 1)));
+     edges.push_back(new Line(point(i), point(2 * i + 2)));
+   }
+ }
+ */
+
+  //---------------------------------------------------------------------------
+
+  void Binary_tree::draw_lines() const
+  {
+    if (color().visibility()) {
+      // Shape::draw_lines();
+      fl_color(Color::black);
+      for (int i = 0; i < edges.size(); ++i) { edges[i].draw(); }
+      for (int i = 0; i < labels.size(); ++i) { labels[i].draw(); }
+
+      // Fl_Color default_color = fl_rgb_color(192, 192, 192);
+
+      int constexpr r = 12;
+      for (int i = 0; i < number_of_points(); ++i) {
+        fl_color(Color::white);
+        fl_pie(point(i).x - r, point(i).y - r, r + r - 1, r + r - 1, 0, 360);
+      }
+      fl_color(color().as_int());  // reset color
+      for (int i = 0; i < number_of_points(); ++i) {
+        fl_color(Color::red);
+        fl_arc(point(i).x - r, point(i).y - r, r + r, r + r, 0, 360);
+      }
+    }
+  }
+
+  //---------------------------------------------------------------------------
+
+  void Binary_tree::set_color(Color c)
+  {
+    Shape::set_color(c);
+    // Shape::set_fill_color(Color::Transparency::invisible);
+  }
+
+  //---------------------------------------------------------------------------
+
+  void Binary_tree::move(int dx, int dy)
+  {
+    Shape::move(dx, dy);
+    for (int i = 0; i < edges.size(); ++i) {
+      edges[i].move(dx, dy);  // move each edge in our Vector_ref
+    }
+
+    for (int i = 0; i < labels.size(); ++i) {
+      labels[i].move(dx, dy);  // move each leabel in the label Vector_ref
+    }
+  }
+
+  //---------------------------------------------------------------------------
+
+  // set label of node specified by string n to lbl. n is a sequence of l and r
+  // for navigating left and right in the tree
+  void Binary_tree::set_node_label(string n, string lbl)
+  {
+    if (n.size() < 1 || n.size() > lvls)
+      error("set_node_label: illegal node string ", n);
+    istringstream iss(n);
+    char ch;
+    iss.get(ch);  // look at first character
+    if (n.size() == 1) {
+      switch (ch) {
+        case 'l':
+        case 'r':
+          labels[0].set_label(lbl);
+          return;
+        default:
+          error("set_node_label: illegal character in node string: ",
+                string(1, ch));
+      }
+    }
+    int n_idx = 0;  // node index in point list
+    while (iss.get(ch)) {
+      switch (ch) {
+        case 'l':
+          n_idx = 2 * n_idx + 1;
+          break;
+        case 'r':
+          n_idx = 2 * n_idx + 2;
+          break;
+        default:
+          error("set_node_label: illegal character in node string: ",
+                string(1, ch));
+      }
+    }
+    labels[n_idx].set_label(lbl);
+  }
 
 }  // Graph
