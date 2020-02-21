@@ -1,0 +1,5 @@
+# ignore everything
+*
+
+# whitelist markdown files
+!*.md
