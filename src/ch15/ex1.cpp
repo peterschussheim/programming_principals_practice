@@ -16,6 +16,8 @@
   the factorial of 0, 1, 2, 3, 4, up until and including 20. Which
   implementation of fac() do you prefer, and why?
 
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
   So, both implementations produce identical and correct results, up to and
   including 19.  When either implementation calculates the 20th factorial,
   the result is -2102132736 which is the int type's min value possible.
