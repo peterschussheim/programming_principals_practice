@@ -140,6 +140,7 @@ namespace Graph_lib {
 
     void add(Point p) { points.push_back(p); }
     void set_point(int i, Point p) { points[i] = p; }
+    void clear_points() { points.clear(); }
 
   public:
     void draw() const;  // deal with color and draw_lines
@@ -173,8 +174,29 @@ namespace Graph_lib {
 
   struct Function : Shape {
     // the function parameters are not stored
-    Function(Fct f, double r1, double r2, Point orig, int count = 100,
+    Function(Fct f, double r1, double r2, Point origin, int count = 100,
              double xscale = 25, double yscale = 25);
+  };
+
+  struct Func : Function {
+    Func(Fct f, double r1, double r2, Point orig, int count, double xscale,
+         double yscale, double prec = 1.0);
+    void reset_fct(Fct f);
+    void reset_range(double r1, double r2);
+    void reset_origin(Point origin);
+    void reset_count(int count);
+    void reset_xscale(double xscale);
+    void reset_yscale(double yscale);
+    void reset_precision(double prec);
+    void reset();
+
+  private:
+    Fct* fct;
+    double range1, range2;
+    Point origin;  // function origin
+    int c;
+    double xsc, ysc;  // xscale. yscale
+    double precision;
   };
 
   struct Fill {

@@ -12,6 +12,13 @@ target_include_directories(ch_15_ex1 PUBLIC ${FLTK_INCLUDE_DIR})
 set_property(TARGET ch_15_ex1 PROPERTY CXX_STANDARD 11)
 set_property(TARGET ch_15_ex1 PROPERTY CXX_STANDARD_REQUIRED ON)
 
+find_package(fltk REQUIRED)
+add_executable(ch_15_ex2 ex2.cpp ../Graph.cpp ../Window.cpp ../GUI.cpp ../Simple_window.cpp)
+target_link_libraries(ch_15_ex2 PUBLIC ${FLTK_LIBRARIES})
+target_include_directories(ch_15_ex2 PUBLIC ${FLTK_INCLUDE_DIR})
+set_property(TARGET ch_15_ex2 PROPERTY CXX_STANDARD 11)
+set_property(TARGET ch_15_ex2 PROPERTY CXX_STANDARD_REQUIRED ON)
+
 
 #find_package(fltk REQUIRED)
 #add_executable(ch_14_binary_tree binary_tree.cpp ../Graph.cpp ../Window.cpp ../GUI.cpp ../Simple_window.cpp)

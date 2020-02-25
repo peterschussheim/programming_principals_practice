@@ -172,6 +172,81 @@ namespace Graph_lib {
     }
   }
 
+  Func::Func(Fct f, double rr1, double rr2, Point orig, int count, double xs,
+             double ys, double prec)
+      : Function{f, rr1, rr2, orig, count, xs, ys},
+        fct{f},
+        range1{rr2},
+        range2{rr2},
+        origin{orig},
+        c{count},
+        xsc{xs},
+        ysc{ys},
+        precision{prec}
+  {
+    // reset();
+  }
+
+  void Func::reset()
+  {
+    double dist = (range2 - range1) / c;
+    double r = range1;
+    clear_points();
+    for (int i = 0; i < c; ++i) {
+      int x = origin.x + int(int(r * xsc) / precision) * precision;
+      int y = origin.y - int(int(fct(r) * ysc) / precision) * precision;
+      add(Point{x, y});
+      r += dist;
+    }
+  }
+
+  void Func::reset_fct(Fct f)
+  {
+    fct = f;
+    reset();
+  }
+
+  void Func::reset_range(double r1, double r2)
+  {
+    if (r2 - r1 <= 0) error("bad graphing range");
+    range1 = r1;
+    range2 = r2;
+    reset();
+  }
+
+  void Func::reset_origin(Point orig)
+  {
+    origin = orig;
+    reset();
+  }
+
+  void Func::reset_count(int count)
+  {
+    if (count <= 0) error("non-positive graphing count");
+    c = count;
+    reset();
+  }
+
+  void Func::reset_xscale(double xscale)
+  {
+    if (xscale == 0) error("xscale must not be zero");
+    xsc = xscale;
+    reset();
+  }
+
+  void Func::reset_yscale(double yscale)
+  {
+    if (yscale == 0) error("yscale must not be zero");
+    ysc = yscale;
+    reset();
+  }
+
+  void Func::reset_precision(double prec)
+  {
+    precision = prec;
+    reset();
+  }
+
   void Rectangle::draw_lines() const
   {
     if (fill_color().visibility()) {  // fill
