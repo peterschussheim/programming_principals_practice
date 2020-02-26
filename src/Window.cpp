@@ -4,68 +4,105 @@
 
 namespace Graph_lib {
 
-Window::Window(int ww, int hh, const string& title)
-:Fl_Window(ww,hh,title.c_str()),w(ww),h(hh)
-{
-	init();
-}
+  Window::Window(int ww, int hh, const string& title)
+      : Fl_Window(ww, hh, title.c_str()),
+        w(ww),
+        h(hh)
+  {
+    init();
+  }
 
-Window::Window(Point xy, int ww, int hh, const string& title)
-:Fl_Window(xy.x,xy.y,ww,hh,title.c_str()),w(ww),h(hh)
-{ 
-	init();
-}
+  Window::Window(Point xy, int ww, int hh, const string& title)
+      : Fl_Window(xy.x, xy.y, ww, hh, title.c_str()),
+        w(ww),
+        h(hh)
+  {
+    init();
+  }
 
-void Window::init()
-{
-   resizable(this);
-   show();
-} 
+  void Window::init()
+  {
+    resizable(this);
+    show();
+  }
 
-//---------------------------------------------------- 
+  //----------------------------------------------------
 
-void Window::draw()
-{
-	Fl_Window::draw();
-	for (unsigned int i=0; i<shapes.size(); ++i) shapes[i]->draw();
-}
+  void Window::draw()
+  {
+    Fl_Window::draw();
+    for (unsigned int i = 0; i < shapes.size(); ++i) shapes[i]->draw();
+  }
 
-void Window::attach(Widget& w)
-{
-	begin();			// FTLK: begin attaching new Fl_Wigets to this window
-		w.attach(*this);	// let the Widget create its Fl_Wigits
-	end();				// FTLK: stop attaching new Fl_Wigets to this window
-}
+  void Window::attach(Widget& w)
+  {
+    begin();          // FTLK: begin attaching new Fl_Wigets to this window
+    w.attach(*this);  // let the Widget create its Fl_Wigits
+    end();            // FTLK: stop attaching new Fl_Wigets to this window
+  }
 
-void Window::detach(Widget& b)
-{
-	  b.hide();
-}
+  void Window::detach(Widget& b) { b.hide(); }
 
-void Window::attach(Shape& s)
-{
-		shapes.push_back(&s);
-//		s.attached = this;
-}
-void Window::detach(Shape& s)
-{
-		for (unsigned int i = shapes.size(); 0<i; --i)	// guess last attached will be first released
-			if (shapes[i-1]==&s)
-				shapes.erase(shapes.begin()+(i-1));//&shapes[i-1]);
-}
+  void Window::attach(Shape& s)
+  {
+    shapes.push_back(&s);
+    //		s.attached = this;
+  }
+  void Window::detach(Shape& s)
+  {
+    for (unsigned int i = shapes.size(); 0 < i;
+         --i)  // guess last attached will be first released
+      if (shapes[i - 1] == &s)
+        shapes.erase(shapes.begin() + (i - 1));  //&shapes[i-1]);
+  }
 
+  void Window::put_on_top(Shape& p)
+  {
+    for (int i = 0; i < shapes.size(); ++i) {
+      if (&p == shapes[i]) {
+        for (++i; i < shapes.size(); ++i) shapes[i - 1] = shapes[i];
+        shapes[shapes.size() - 1] = &p;
+        return;
+      }
+    }
+  }
 
-void Window::put_on_top(Shape& p) {
-	for (int i=0; i<shapes.size(); ++i) {
-		if (&p==shapes[i]) {
-			for (++i; i<shapes.size(); ++i)
-				shapes[i-1] = shapes[i];
-			shapes[shapes.size()-1] = &p;
-			return;
-		}
-	}
-}
+  int gui_main() { return Fl::run(); }
 
-int gui_main() { return Fl::run(); }
+  Lines_window::Lines_window(Point xy, int w, int h, const string& title)
+      : Window{xy, w, h, title},
+        next_button{
+            Point{x_max() - 150, 0}, 70, 20, "Next point",
+            [](Address, Address pw) { reference_to<Lines_window>(pw).next(); }},
+        quit_button{
+            Point{x_max() - 70, 0}, 70, 20, "Quit",
+            [](Address, Address pw) { reference_to<Lines_window>(pw).quit(); }},
+        next_x{Point{x_max() - 310, 0}, 50, 20, "next x:"},
+        next_y{Point{x_max() - 210, 0}, 50, 20, "next y:"},
+        xy_out{Point{100, 0}, 100, 20, "current (x,y):"}
+  {
+    attach(next_button);
+    attach(quit_button);
+    attach(next_x);
+    attach(next_y);
+    attach(xy_out);
+    attach(lines);
+  }
 
-} // Graph
+  void Lines_window::quit() { hide(); }
+
+  void Lines_window::next()
+  {
+    int x = next_x.get_int();
+    int y = next_y.get_int();
+
+    lines.add(Point{x, y});
+
+    // update current pos readout
+    ostringstream ss;
+    ss << '(' << x << ',' << y << ')';
+    xy_out.put(ss.str());
+    redraw();
+  }
+
+}  // Graph
