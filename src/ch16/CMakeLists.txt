@@ -1,0 +1,6 @@
+find_package(fltk REQUIRED)
+add_executable(ch_16_drill drill.cpp ../Graph.cpp ../Window.cpp ../GUI.cpp ../Simple_window.cpp)
+target_link_libraries(ch_16_drill PUBLIC ${FLTK_LIBRARIES})
+target_include_directories(ch_16_drill PUBLIC ${FLTK_INCLUDE_DIR})
+set_property(TARGET ch_16_drill PROPERTY CXX_STANDARD 17)
+set_property(TARGET ch_16_drill PROPERTY CXX_STANDARD_REQUIRED ON)
