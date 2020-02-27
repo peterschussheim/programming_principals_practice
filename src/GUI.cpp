@@ -51,10 +51,12 @@ void Out_box::attach(Graph_lib::Window& win)
   own = &win;
 }
 
-// Menu::Menu(Point xy, int w, int h, Kind kk, const string& s)
-//:Widget(xy,w,h,s,0), k(kk), offset(0)
-//{
-//}
+Menu::Menu(Point xy, int w, int h, Kind kk, const string& s)
+    : Widget(xy, w, h, s, 0),
+      k(kk),
+      offset(0)
+{
+}
 
 int Menu::attach(Button& b)
 {
