@@ -20,16 +20,26 @@ private:
   In_box next_x;
   In_box next_y;
   Out_box xy_out;
-  Menu color_menu;
-  Button menu_button;  // toggles visibility of color_menu
+  Menu color_menu;     // menu with quick color buttons
+  Menu style_menu;     // menu with quick line style buttons
+  Button menu_button;  // toggles visibility of all menus
 
-  void change(Color c) { lines.set_color(c); }
+  void change(Color c);           // changes the line color
+  void change_ls(Line_style ls);  // changes the line style
+
   void hide_menu();
 
   // actions
   void red_pressed();
   void blue_pressed();
   void black_pressed();
+
+  void solid_pressed();
+  void dash_pressed();
+  void dot_pressed();
+  void dashdot_pressed();
+  void dashdotdot_pressed();
+
   void menu_pressed();
   void next();
   void quit();
@@ -38,6 +48,14 @@ private:
   static void cb_red(Address, Address);
   static void cb_blue(Address, Address);
   static void cb_black(Address, Address);
+
+  // Callbacks for buttons that set line style
+  static void cb_solid(Address, Address);
+  static void cb_dash(Address, Address);
+  static void cb_dot(Address, Address);
+  static void cb_dashdot(Address, Address);
+  static void cb_dashdotdot(Address, Address);
+
   static void cb_menu(Address, Address);
   static void cb_next(Address, Address);  // cb for next_button
   static void cb_quit(Address, Address);  // cb for quit_button
