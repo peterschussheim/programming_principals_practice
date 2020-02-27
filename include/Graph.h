@@ -43,8 +43,8 @@ namespace Graph_lib {
     void set_visibility(Transparency vv) { v = vv; }
 
   private:
-    unsigned char v;  // 0 or 1 for now
     Fl_Color c;
+    unsigned char v;  // 0 or 1 for now
   };
 
   struct Line_style {
@@ -236,8 +236,8 @@ namespace Graph_lib {
     int width() const { return w; }
 
   private:
-    int h;  // height
     int w;  // width
+    int h;  // height
   };
 
   Point n(const Rectangle& rect);
