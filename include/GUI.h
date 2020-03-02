@@ -74,7 +74,6 @@ namespace Graph_lib {
         : Widget(xy, w, h, label, cb)
     {
     }
-
     void attach(Window&);
   };
 
