@@ -2,25 +2,6 @@
 #include <map>
 
 namespace Graph_lib {
-
-  void Shape::draw_lines() const
-  {
-    if (color().visibility() && 1 < points.size())  // draw sole pixel?
-      for (unsigned int i = 1; i < points.size(); ++i)
-        fl_line(points[i - 1].x, points[i - 1].y, points[i].x, points[i].y);
-  }
-
-  void Shape::draw() const
-  {
-    Fl_Color oldc = fl_color();
-    // there is no good portable way of retrieving the current style
-    fl_color(lcolor.as_int());
-    fl_line_style(ls.style(), ls.width());
-    draw_lines();
-    fl_color(oldc);  // reset color (to pevious) and style (to default)
-    fl_line_style(0);
-  }
-
   // does two lines (p1,p2) and (p3,p4) intersect?
   // if se return the distance of the intersect point as distances from p1
   inline pair<double, double> line_intersect(Point p1, Point p2, Point p3,
@@ -46,6 +27,8 @@ namespace Graph_lib {
         ((x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3)) / denom);
   }
 
+  //---------------------------------------------------------------------------
+
   // intersection between two line segments
   // Returns true if the two segments intersect,
   // in which case intersection is set to the point of intersection
@@ -60,6 +43,59 @@ namespace Graph_lib {
     intersection.y = p1.y + u.first * (p2.y - p1.y);
     return true;
   }
+
+  //---------------------------------------------------------------------------
+
+  Shape::Shape() : lcolor(fl_color()), ls(0), fcolor(Color::invisible) {}
+
+  //---------------------------------------------------------------------------
+
+  void Shape::add(Point p)  // protected
+  {
+    points.push_back(p);
+  }
+
+  //---------------------------------------------------------------------------
+
+  void Shape::set_point(int i, Point p) { points[i] = p; }
+
+  //---------------------------------------------------------------------------
+
+  void Shape::draw_lines() const
+  {
+    if (color().visibility() && 1 < points.size())  // draw sole pixel?
+      for (unsigned int i = 1; i < points.size(); ++i)
+        fl_line(points[i - 1].x, points[i - 1].y, points[i].x, points[i].y);
+  }
+
+  //---------------------------------------------------------------------------
+
+  void Shape::draw() const
+  {
+    Fl_Color oldc = fl_color();
+    // there is no good portable way of retrieving the current style
+    fl_color(lcolor.as_int());
+    fl_line_style(ls.style(), ls.width());
+    draw_lines();
+    fl_color(oldc);  // reset color (to pevious) and style (to default)
+    fl_line_style(0);
+  }
+
+  //---------------------------------------------------------------------------
+
+  void Shape::move(int dx, int dy)
+  {
+    for (unsigned int i = 0; i < points.size(); ++i) {
+      points[i].x += dx;
+      points[i].y += dy;
+    }
+  }
+
+  //---------------------------------------------------------------------------
+
+  void Shape::clear_points() { points.clear(); }
+
+  //---------------------------------------------------------------------------
 
   void Polygon::add(Point p)
   {
@@ -83,11 +119,15 @@ namespace Graph_lib {
     Closed_polyline::add(p);
   }
 
+  //---------------------------------------------------------------------------
+
   void Polygon::draw_lines() const
   {
     if (number_of_points() < 3) error("less than 3 points in a Polygon");
     Closed_polyline::draw_lines();
   }
+
+  //---------------------------------------------------------------------------
 
   void Open_polyline::draw_lines() const
   {
@@ -104,6 +144,8 @@ namespace Graph_lib {
     if (color().visibility()) Shape::draw_lines();
   }
 
+  //---------------------------------------------------------------------------
+
   void Closed_polyline::draw_lines() const
   {
     Open_polyline::draw_lines();
@@ -113,13 +155,8 @@ namespace Graph_lib {
               point(0).x, point(0).y);
   }
 
-  void Shape::move(int dx, int dy)
-  {
-    for (unsigned int i = 0; i < points.size(); ++i) {
-      points[i].x += dx;
-      points[i].y += dy;
-    }
-  }
+  //---------------------------------------------------------------------------
+  //---------------------------------------------------------------------------
 
   void Lines::draw_lines() const
   {
@@ -129,6 +166,8 @@ namespace Graph_lib {
       for (int i = 1; i < number_of_points(); i += 2)
         fl_line(point(i - 1).x, point(i - 1).y, point(i).x, point(i).y);
   }
+
+  //---------------------------------------------------------------------------
 
   void Text::draw_lines() const
   {
@@ -808,6 +847,110 @@ namespace Graph_lib {
 
   //---------------------------------------------------------------------------
 
+  Clock::Clock(Point p, int rr) : Circle{p, rr}, hh{0}, mm{0}, ss{0}
+  {
+    set_style(Line_style(Line_style::solid, 4));
+    set_color(Color::black);
+    // calculate ticks
+    double inner_radius = 0.8 * r;  // radius of inner end of ticks
+    for (int i = 0; i < 12; ++i) {
+      double angle = i * pi / 6;
+      int tanx1 = p.x + inner_radius * cos(pi / 2 - angle);
+      int tanx2 = p.x + r * cos(pi / 2 - angle);
+      int tany1 = p.y + inner_radius * sin(pi / 2 - angle);
+      int tany2 = p.y + r * sin(pi / 2 - angle);
+
+      markers.add(Point{tanx1, tany1}, Point{tanx2, tany2});
+      markers.set_style(Line_style(Line_style::solid, 1));
+    }
+
+    // get system time
+    time_t t = time(0);
+    struct tm* now = localtime(&t);
+    hh = now->tm_hour % 12;
+    mm = now->tm_min;
+    ss = now->tm_sec;
+
+    // calc angles and set hands to proper position
+    // angle is zero at 12:00, increases clockwise
+
+    double phi = (hh + mm / 60.0) / 6.0 * phi;
+    int hx = round(p.x + 0.6 * r * cos(pi / 2 - phi));   // hour.x
+    int hy = round(p.y + 0.6 * r * sin(-pi / 2 + phi));  // hour.y
+    hands.push_back(new Line(p, Point(hx, hy)));
+    hands[0].set_style(Line_style(Line_style::solid, 3));
+
+    phi = mm / 30.0 * pi;
+    hx = round(p.x + 0.9 * r * cos(pi / 2 - phi));   // minute.x
+    hy = round(p.y + 0.9 * r * sin(-pi / 2 + phi));  // minute.y
+    hands.push_back(new Line(p, Point(hx, hy)));
+    hands[1].set_style(Line_style(Line_style::solid, 3));
+
+    phi = ss / 30.0 * pi;
+    hx = round(p.x + 0.9 * r * cos(pi / 2 - phi));   // second.x
+    hy = round(p.y + 0.9 * r * sin(-pi / 2 + phi));  // second.y
+    hands.push_back(new Line(p, Point(hx, hy)));
+    hands[2].set_style(Line_style(Line_style::solid, 2));
+    hands[2].set_color(Color::red);
+  }
+
+  //---------------------------------------------------------------------------
+
+  void Clock::Clock::draw_lines() const
+  {
+    Circle::draw_lines();  // call Circle's constructor
+    markers.draw();
+    for (int i = i; i < 3; ++i) { hands[i].draw(); }
+  }
+
+  //---------------------------------------------------------------------------
+
+  void Clock::increase_time()
+  {
+    ++ss;
+    if (ss == 60) {
+      ss = 0;  // if we are at 60 seconds, reset to zero
+      if (mm == 60) {
+        ++hh;  // handle minute overflow
+        mm = 0;
+        if (hh == 12) {
+          hh = 0;  // handle hour overflow
+        }
+      }
+    }
+  }
+
+  //---------------------------------------------------------------------------
+
+  void Clock::update_hands()
+  {
+    // move the points at the ENDS of each hand
+
+    // handle hour hand first
+    double phi = (hh + mm / 60.0) / 6.0 * pi;
+    int hx = round(center().x + 0.6 * r * cos(pi / 2 - phi));   // calc hour.x
+    int hy = round(center().y + 0.9 * r * sin(-pi / 2 + phi));  // calc hour.y
+    hands[0].set_point(1, Point{hx, hy});
+
+    // update minutes
+    phi = mm / 30.0 * phi;
+    hx = round(center().x + 0.9 * r * cos(pi / 2 - phi));
+    hy = round(center().y + 0.9 * r * sin(-pi / 2 + phi));
+    hands[1].set_point(1, Point{hx, hy});
+
+    // update seconds
+    phi = ss / 30.0 * phi;
+    hx = round(center().x + 0.9 * r * cos(pi / 2 - phi));
+    hy = round(center().y + 0.9 * r * sin(-pi / 2 + phi));
+    hands[2].set_point(1, Point{hx, hy});
+  }
+
+  //---------------------------------------------------------------------------
+  //---------------------------------------------------------------------------
+  //---------------------------------------------------------------------------
+  //---------------------------------------------------------------------------
+  //---------------------------------------------------------------------------
+
   Binary_tree::Binary_tree(Point xy, int levels, string edge_style)
       : lvls(levels)
   {
@@ -852,7 +995,7 @@ namespace Graph_lib {
 
   /*
   Binary_tree::Binary_tree(Point xy, int levels) : lvls(levels)
- {
+  {
    // check if levels is < 0
    if (levels < 0) error("levels must but a positive integer!", levels);
 
@@ -880,8 +1023,8 @@ namespace Graph_lib {
      edges.push_back(new Line(point(i), point(2 * i + 1)));
      edges.push_back(new Line(point(i), point(2 * i + 2)));
    }
- }
- */
+  }
+  */
 
   //---------------------------------------------------------------------------
 

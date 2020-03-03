@@ -167,15 +167,15 @@ int main()
 {
   try {
     // drill_part_1();
-    // drill_part_2();
+    drill_part_2();
     // drill_part_3();
 
-    vector<Person> p;  // read in from cin to p
-    cout << "Enter your first and last name and age, seperated by spaces\n";
-    Person s;
-    while (cin >> s) { p.push_back(s); }
-    cout << '\n';
-    for (Person per : p) { cout << per; }
+    // vector<Person> p;  // read in from cin to p
+    // cout << "Enter your first and last name and age, seperated by spaces\n";
+    // Person s;
+    // while (cin >> s) { p.push_back(s); }
+    // cout << '\n';
+    // for (Person per : p) { cout << per; }
 
     keep_window_open("~");
     return 0;

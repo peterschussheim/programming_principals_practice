@@ -14,6 +14,12 @@ namespace Graph_lib {
 #undef major
 #undef minor
 
+  //---------------------------------------------------------------------------
+
+  const double pi = 3.1415926;
+
+  //---------------------------------------------------------------------------
+
   struct Color {
     enum Color_type {
       red = FL_RED,
@@ -134,42 +140,38 @@ namespace Graph_lib {
   typedef double Fct(double);
 
   class Shape {  // deals with color and style, and holds sequence of lines
-  protected:
-    Shape() {}
-    Shape(initializer_list<Point> lst);  // add() the Points to this Shape
-
-    void add(Point p) { points.push_back(p); }
-    void set_point(int i, Point p) { points[i] = p; }
-    void clear_points() { points.clear(); }
-
   public:
-    void draw() const;  // deal with color and draw_lines
-  protected:
-    virtual void draw_lines() const;  // simply draw the appropriate lines
-  public:
+    void draw() const;                  // deal with color and draw_lines
     virtual void move(int dx, int dy);  // move the shape +=dx and +=dy
 
     void set_color(Color col) { lcolor = col; }
-    Color color() const { return lcolor; }
-
     void set_style(Line_style sty) { ls = sty; }
-    Line_style style() const { return ls; }
-
     void set_fill_color(Color col) { fcolor = col; }
-    Color fill_color() const { return fcolor; }
-
-    Point point(int i) const { return points[i]; }
     int number_of_points() const { return int(points.size()); }
 
+    Color color() const { return lcolor; }
+    Line_style style() const { return ls; }
+    Color fill_color() const { return fcolor; }
+    Point point(int i) const { return points[i]; }
+
+    void set_point(int i, Point p);
     virtual ~Shape() {}
-    Shape(const Shape&) = delete;
-    Shape& operator=(const Shape&) = delete;
+
+  protected:
+    Shape();
+    Shape(initializer_list<Point> lst);  // add() the Points to this Shape
+    virtual void draw_lines() const;     // simply draw the appropriate lines
+    void add(Point p);
+    void clear_points();
 
   private:
     vector<Point> points;  // not used by all shapes
-    Color lcolor{fl_color()};
-    Line_style ls{0};
-    Color fcolor{Color::invisible};
+    Color lcolor;
+    Line_style ls;
+    Color fcolor;
+
+    Shape(const Shape&) = delete;  // prevent copying
+    Shape& operator=(const Shape&) = delete;
   };
 
   struct Function : Shape {
@@ -258,6 +260,8 @@ namespace Graph_lib {
     void draw_lines() const;
   };
 
+  //---------------------------------------------------------------------------
+
   struct Closed_polyline : Open_polyline {  // closed sequence of lines
     using Open_polyline::Open_polyline;
     void draw_lines() const;
@@ -265,12 +269,16 @@ namespace Graph_lib {
     //	void add(Point p) { Shape::add(p); }
   };
 
+  //---------------------------------------------------------------------------
+
   struct Polygon
       : Closed_polyline {  // closed sequence of non-intersecting lines
     using Closed_polyline::Closed_polyline;
     void add(Point p);
     void draw_lines() const;
   };
+
+  //---------------------------------------------------------------------------
 
   struct Lines : Shape {  // independent lines
     Lines() {}
@@ -285,6 +293,8 @@ namespace Graph_lib {
       Shape::add(p2);
     }
   };
+
+  //---------------------------------------------------------------------------
 
   struct Text : Shape {
     // the point is the bottom left of the first letter
@@ -307,6 +317,8 @@ namespace Graph_lib {
     int fnt_sz{(14 < fl_size()) ? fl_size() : 14};  // at least 14 point
   };
 
+  //---------------------------------------------------------------------------
+
   struct Axis : Shape {
     // representation left public
     enum Orientation { x, y, z };
@@ -322,6 +334,8 @@ namespace Graph_lib {
     Lines notches;
   };
 
+  //---------------------------------------------------------------------------
+
   struct Circle : Shape {
     Circle(Point p, int rr)  // center and radius
         : r{rr}
@@ -334,7 +348,7 @@ namespace Graph_lib {
     void set_radius(int rr) { r = rr; }
     int radius() const { return r; }
 
-  private:
+  protected:
     int r;
   };
 
@@ -385,6 +399,7 @@ namespace Graph_lib {
     int h;
   };
 
+  //---------------------------------------------------------------------------
   struct Marked_polyline : Open_polyline {
     Marked_polyline(const string& m) : mark(m) {}
     void draw_lines() const;
@@ -393,6 +408,8 @@ namespace Graph_lib {
     string mark;
   };
 
+  //---------------------------------------------------------------------------
+
   struct Marks : Marked_polyline {
     Marks(const string& m) : Marked_polyline(m)
     {
@@ -400,18 +417,26 @@ namespace Graph_lib {
     }
   };
 
+  //---------------------------------------------------------------------------
+
   struct Mark : Marks {
     Mark(Point xy, char c) : Marks(string(1, c)) { add(xy); }
   };
+
+  //---------------------------------------------------------------------------
 
   struct Bad_image : Fl_Image {
     Bad_image(int h, int w) : Fl_Image(h, w, 0) {}
     void draw(int x, int y, int, int, int, int) { draw_empty(x, y); }
   };
 
+  //---------------------------------------------------------------------------
+
   struct Suffix {
     enum Encoding { none, jpg, gif, bmp };
   };
+
+  //---------------------------------------------------------------------------
 
   Suffix::Encoding get_encoding(const string& s);
 
@@ -527,6 +552,8 @@ namespace Graph_lib {
   Point se(const Box& box);
   Point sw(const Box& box);
   Point nw(const Box& box);
+
+  //---------------------------------------------------------------------------
 
   struct Arrow : Line {
     Arrow(Point p1, Point p2) : Line{p1, p2} {}
@@ -650,6 +677,18 @@ namespace Graph_lib {
 
   private:
     int lvls;  // represents the number of levels of this tree
+  };
+
+  struct Clock : Circle {
+    Clock(Point xy, int rr);
+    void draw_lines() const;
+    void increase_time();
+    void update_hands();
+
+  private:
+    Lines markers;
+    Vector_ref<Line> hands;
+    int hh, mm, ss;
   };
 }
 #endif
