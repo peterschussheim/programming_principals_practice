@@ -14,13 +14,13 @@ namespace Graph_lib {
 
   //------------------------------------------------------------------------------
 
-  typedef void* Address;                       // Address is a synonym for void*
-  typedef void (*Callback)(Address, Address);  // FLTK's required function type for all callbacks
+  typedef void* Address;  // Address is a synonym for void*
+  typedef void (*Callback)(
+      Address, Address);  // FLTK's required function type for all callbacks
 
   //------------------------------------------------------------------------------
 
-  template<class W>
-  W& reference_to(Address pw)
+  template<class W> W& reference_to(Address pw)
   // treat an address as a reference to a W
   {
     return *static_cast<W*>(pw);
@@ -33,9 +33,16 @@ namespace Graph_lib {
     // We try to keep our interface classes at arm's length from FLTK
   public:
     Widget(Point xy, int w, int h, const string& s, Callback cb)
-        : loc(xy), width(w), height(h), label(s), do_it(cb) {}
+        : loc(xy),
+          width(w),
+          height(h),
+          label(s),
+          do_it(cb)
+    {
+    }
 
-    virtual void move(int dx, int dy) {
+    virtual void move(int dx, int dy)
+    {
       hide();
       pw->position(loc.x += dx, loc.y += dy);
       show();
@@ -64,8 +71,9 @@ namespace Graph_lib {
 
   struct Button : Widget {
     Button(Point xy, int w, int h, const string& label, Callback cb)
-        : Widget(xy, w, h, label, cb) {}
-
+        : Widget(xy, w, h, label, cb)
+    {
+    }
     void attach(Window&);
   };
 
@@ -113,7 +121,8 @@ namespace Graph_lib {
     }
     void move(int dx, int dy)  // move all buttons
     {
-      for (unsigned int i = 0; i < selection.size(); ++i) selection[i].move(dx, dy);
+      for (unsigned int i = 0; i < selection.size(); ++i)
+        selection[i].move(dx, dy);
     }
 
     void attach(Window& win)  // attach all buttons
