@@ -23,3 +23,15 @@ inline void keep_window_open(std::string s)
     return;
   }
 }
+
+/*
+  Prints size in kilobytes of built in types.
+*/
+void print_type_sizes()
+{
+  std::cout << "size of int: " << sizeof(int) << "kb\n";
+  std::cout << "size of double: " << sizeof(double) << "kb\n";
+  std::cout << "size of float: " << sizeof(float) << "kb\n";
+  std::cout << "size of string: " << sizeof(std::string) << "kb\n";
+  std::cout << "size of char: " << sizeof(char) << "kb\n";
+}
