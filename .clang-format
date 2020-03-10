@@ -14,7 +14,9 @@ AllowShortFunctionsOnASingleLine : All
 AllowShortLoopsOnASingleLine: true
 BinPackParameters: true
 BreakConstructorInitializers: BeforeColon
-#ConstructorInitializerAllOnOneLineOrOnePerLine: false
+BreakBeforeBraces: Stroustrup
+BraceWrapping:
+  BeforeElse: false
 IndentCaseLabels: true
 SortIncludes: false
 IncludeBlocks: Preserve
@@ -27,5 +29,3 @@ Standard: Cpp11
 Cpp11BracedListStyle: true
 AlwaysBreakTemplateDeclarations: false
 FixNamespaceComments: false
-BreakBeforeBraces: Stroustrup
-# IndentPPDirectives: AfterHash
