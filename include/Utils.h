@@ -1,6 +1,25 @@
 #pragma once
 #include <iostream>
 
+int string_length(const char* p)
+{
+  int count = 0;
+  while (*p) {  // dereference p and check for 0 (falsey)
+    ++count;
+    ++p;  // since we dereferenced p, we can mutate it
+  }
+
+  return count;
+}
+
+int string_length(const char a[])
+{
+  int count = 0;
+  while (a[count]) { ++count; }
+
+  return count;
+}
+
 inline void keep_window_open()
 {
   std::cin.clear();
