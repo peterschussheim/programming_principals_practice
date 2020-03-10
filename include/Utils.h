@@ -3,6 +3,7 @@
 
 int string_length(const char* p)
 {
+  if (p == 0) return 0;
   int count = 0;
   while (*p) {  // dereference p and check for 0 (falsey)
     ++count;
@@ -12,13 +13,13 @@ int string_length(const char* p)
   return count;
 }
 
-int string_length(const char a[])
-{
-  int count = 0;
-  while (a[count]) { ++count; }
-
-  return count;
-}
+// int string_length(const char a[])
+//{
+//  int count = 0;
+//  while (a[count]) { ++count; }
+//
+//  return count;
+//}
 
 inline void keep_window_open()
 {
