@@ -12,19 +12,23 @@ using namespace std;
 */
 
 /*
-  Accepts as the first argument a const char pointer to the base 'array' we are
-  expanding as we get chars from cin and the second argument is a const char
-  pointer of the char we want to 'add' to arr.
+  Accepts ptr to a n-sized char array where n is the number of elements
+  and returns a pointer to a new block of memory equal to n + 1.  In reality,
+  the new block is n + 2 since we need to terminate the array with 0.
 
   Usage:
-  int main()
-  {
-    char* a = new char; // base array which will we add to
-    char ch;            // read into from cin
-    while(cin.get(ch) && ch != '!') {
-      a = add_and_expand_arr(a, ch);
+
+    int main()
+    {
+      char* my_array = new char[1];  // allocate our array on the heap
+      *my_array = 0;  // to make a c-style string, terminate with a 0
+      char ch = 0;
+      while (cin.get(ch) && ch != '!') {
+        my_array = resize_arr(my_array);
+        int n = string_length(my_array);
+        my_array[n] = ch;
+        my_array[n + 1] = 0;
     }
-  }
 
   */
 char* resize_arr(char* arr)
