@@ -8,7 +8,7 @@ UseTab: Never
 AccessModifierOffset: -2
 AlignTrailingComments: true
 AllowShortBlocksOnASingleLine: true
-AllowAllConstructorInitializersOnNextLine: false
+AllowAllConstructorInitializersOnNextLine: true
 AllowShortCaseLabelsOnASingleLine: false
 AllowShortFunctionsOnASingleLine : All
 AllowShortLoopsOnASingleLine: true

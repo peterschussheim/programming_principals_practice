@@ -34,3 +34,10 @@ add_executable(ch_17_ex9 ex9.cpp)
 set_property(TARGET ch_17_ex9 PROPERTY CXX_STANDARD 14)
 set_property(TARGET ch_17_ex9 PROPERTY CXX_STANDARD_REQUIRED ON)
 
+add_executable(ch_17_ex11 ex11.cpp)
+set_property(TARGET ch_17_ex11 PROPERTY CXX_STANDARD 14)
+set_property(TARGET ch_17_ex11 PROPERTY CXX_STANDARD_REQUIRED ON)
+
+add_executable(ch_17_ex13 ex13.cpp)
+set_property(TARGET ch_17_ex13 PROPERTY CXX_STANDARD 14)
+set_property(TARGET ch_17_ex13 PROPERTY CXX_STANDARD_REQUIRED ON)
