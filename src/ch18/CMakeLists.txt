@@ -1,3 +1,7 @@
+add_executable(ch18_try_this try_this.cpp)
+set_property(TARGET ch18_try_this PROPERTY CXX_STANDARD 14)
+set_property(TARGET ch18_try_this PROPERTY CXX_STANDARD_REQUIRED ON)
+
 add_executable(ch18_drill drill.cpp)
 set_property(TARGET ch18_drill PROPERTY CXX_STANDARD 14)
 set_property(TARGET ch18_drill PROPERTY CXX_STANDARD_REQUIRED ON)
