@@ -1,6 +1,7 @@
 #include "Utils.h"
 #include "Link.h"
 #include <iostream>
+#include <vector>
 
 /*
   Modify the Link class from §17.10.1 to hold a value of a struct God.
@@ -8,32 +9,49 @@
   weapon. For example, God{"Zeus", "Greek", "", "lightning"} and God{"Odin",
   "Norse", "Eight-legged flying horse called Sleipner", "Spear called Gungnir"}.
 
-  - Write a print_all() function that lists gods with their attributes one per
-    line.
+  - [x] Write a print_all() function that lists gods with their attributes one
+        per line.
 
-  - Add a member function add_ordered() that places its new element in its
-    correct lexicographical position.
+  - [ ] Add a member function add_ordered() that places its new element in its
+        correct lexicographical position.
 
-  - Using the Links with the values of type God, make a list of gods from three
-    mythologies; then move the elements (gods) from that list to three
-    lexicographi-cally ordered lists — one for each mythology.
+  - [ ] Using the Links with the values of type God, make a list of gods from
+        three mythologies; then move the elements (gods) from that list to
+        three lexicographi-cally ordered lists — one for each mythology.
 */
 
-/*
-  TODO: complete print_all with better formatting
-*/
+ostream& operator<<(ostream& os, const God& g)
+{
+  os << g.name << ", " << g.mythology << ", " << g.weapon << ", " << g.vehicle;
+
+  return os;
+}
+
 void print_all(Link* p)
 {
-  cout << "{ ";
+  cout << "{\n";
   while (p) {
-    cout << p->value.name << '\n';
-    cout << '\t' << p->value.mythology << '\n';
-    cout << '\t' << p->value.vehicle << '\n';
-    cout << '\t' << p->value.weapon;
-    if (p = p->next()) cout << ", ";
+    cout << "  " << p->value << '\n';
+
+    if (p = p->next()) cout;
   }
 
-  cout << " }";
+  cout << "}\n";
+}
+
+Link* extract(Link* l, string s)
+{
+  Link* p = l->find(s);
+  if (p) {
+    if (p == l && p->next())
+      l = p->next();
+    else {
+      l = nullptr;
+    }
+    p->erase();
+    return p;
+  }
+  return nullptr;  // s not found
 }
 
 int main()
@@ -68,29 +86,41 @@ int main()
     print_all(greek_gods);
     cout << '\n';
 */
-    Link* norse_gods = new Link{God{"Odin", "Norse",
-                                    "Eight-legged flying horse called Sleipner",
-                                    "Spear called Gungnir"}};
-    norse_gods =
-        norse_gods->insert(new Link{God{"Zeus", "Greek", "", "lightning"}});
-    norse_gods = norse_gods->insert(
-        new Link{God{"Freia", "Norse", "Chariot pulled by two cats", ""}});
+    // build a linked list of gods (norse and greek)
+    Link* gods = new Link{"Odin", "Norse", "Sleipner", "Gungnir"};
+    gods = gods->insert(new Link{"Zeus", "Greek", "", "lightning"});
+    gods = gods->insert(new Link{"Freia", "Norse", "Chariot", ""});
+    gods = gods->insert(new Link{"Hera", "Greek", "Chariot", "Pomegranate"});
+    gods =
+        gods->insert(new Link{"Tyr", "Norse", "chariot", "spear of justice"});
+    gods = gods->insert(new Link{"Athena", "Greek", "", "Spear"});
+    gods = gods->insert(
+        new Link{"Mars", "Greek", "Chariot", "Spear, sword and shield"});
+    gods = gods->insert(new Link{"Poseidon", "Greek", "Chariot", "Trident"});
+    gods = gods->insert(new Link{"Ares", "Greek", "chariot", "random spear"});
 
-    //--------------------------------------------------------------------------
-
-    Link* greek_gods = new Link{
-        God{"Hera", "Greek", "Chariot pulled by peacocks", "Pomegranate"}};
-    greek_gods =
-        greek_gods->insert(new Link{God{"Athena", "Greek", "", "Spear"}});
-    greek_gods = greek_gods->insert(
-        new Link{God{"Mars", "Greek", "Chariot", "Spear, sword and shield"}});
-    greek_gods = greek_gods->insert(
-        new Link{God{"Poseidon", "Greek",
-                     "chariot that was pulled by a hippocampus", "Trident"}});
-
-    print_all(norse_gods);
+    print_all(gods);
     cout << '\n';
-    print_all(greek_gods);
+
+    // init two new list heads to build lists ordered lexicographically by name
+    // and split between mythology
+
+    Link* ordered_norse = nullptr;
+    Link* ordered_greek = nullptr;
+
+    ordered_norse = ordered_norse->add_ordered(extract(gods, "Odin"));
+    ordered_norse = ordered_norse->add_ordered(extract(gods, "Thor"));
+    ordered_norse = ordered_norse->add_ordered(extract(gods, "Freia"));
+
+    ordered_greek = ordered_greek->add_ordered(extract(gods, "Hera"));
+    ordered_greek = ordered_greek->add_ordered(extract(gods, "Athena"));
+    ordered_greek = ordered_greek->add_ordered(extract(gods, "Poseidon"));
+    ordered_greek = ordered_greek->add_ordered(extract(gods, "Zeus"));
+    ordered_greek = ordered_greek->add_ordered(extract(gods, "Ares"));
+
+    print_all(ordered_norse);
+    cout << '\n';
+    print_all(ordered_greek);
     cout << '\n';
     cout << '\n';
 
