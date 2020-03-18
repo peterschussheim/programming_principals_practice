@@ -10,6 +10,10 @@ add_executable(ch18_ex1 ex1.cpp)
 set_property(TARGET ch18_ex1 PROPERTY CXX_STANDARD 14)
 set_property(TARGET ch18_ex1 PROPERTY CXX_STANDARD_REQUIRED ON)
 
+add_executable(ch18_ex2 ex2.cpp)
+set_property(TARGET ch18_ex2 PROPERTY CXX_STANDARD 14)
+set_property(TARGET ch18_ex2 PROPERTY CXX_STANDARD_REQUIRED ON)
+
 add_executable(ch18_ex3 ex3.cpp)
 set_property(TARGET ch18_ex3 PROPERTY CXX_STANDARD 14)
 set_property(TARGET ch18_ex3 PROPERTY CXX_STANDARD_REQUIRED ON)
