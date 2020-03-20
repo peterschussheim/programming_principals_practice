@@ -26,7 +26,7 @@ char* strduplicate(const char* s)
 
   char* copy = new char[n + 1];  // n+1 memory for terminating 0
 
-  char* p_copy = copy;  // get a pointer to th enew block of memory
+  char* p_copy = copy;  // get a pointer to thenew block of memory
   while (*s) {          // while s isn't null
     *p_copy++ = *s++;
   }
@@ -60,6 +60,20 @@ int main()
     char* ch_cpy = strduplicate(ch);
     print_str(ch_cpy);
     delete[] ch_cpy;
+
+    // ex4: call strdup with a NON-C-style string.
+    // what is a non-C-style string?
+    // get a char* to a non-zero terminated array of chars
+    char bad_cstring[] = {'b', 'a', 'd'};
+    char* bad_cstring_free = new char[3];
+    bad_cstring_free[0] = 'b';
+    bad_cstring_free[1] = 'a';
+    bad_cstring_free[2] = 'd';
+
+    cout << "bad_cstring_dup: ";
+    char* bad_cstring_dup = strduplicate(bad_cstring_free);
+    print_str(bad_cstring_dup);
+    delete[] bad_cstring_dup;
 
     keep_window_open();
     return 0;

@@ -15,9 +15,9 @@ using namespace std;
   compares two C-style strings at a time using lexicographic ordering.
 
   Returns:
-    -1 if s1 < s2
+    -1 if s1 < s2 OR s2 longer than s1
     0 if s1 == s2
-    1 if s1 > s2
+    1 if s1 > s2 OR s2 shorter than s1
 */
 int strcmp(const char* s1, const char* s2)
 {
