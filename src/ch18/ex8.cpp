@@ -1,7 +1,12 @@
 #include <iostream>
 #include "Utils.h"
 
-using namespace std;
+/*
+  Rewrite all the functions in §18.7 to use the approach of making a back-
+  ward copy of the string and then comparing; for example, take "home" ,
+  generate "emoh" , and compare those two strings to see that they are
+  different, so home isn’t a palindrome.
+*/
 
 int main()
 {
@@ -10,12 +15,12 @@ int main()
     return 0;
   }
   catch (const std::exception& e) {
-    cerr << e.what() << endl;
+    std::cerr << e.what() << std::endl;
     keep_window_open("~");
     return 1;
   }
   catch (...) {
-    cerr << "unhandled exception\n";
+    std::cerr << "unhandled exception\n";
     keep_window_open("~");
     return 2;
   }
