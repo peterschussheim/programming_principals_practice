@@ -13,7 +13,18 @@ using namespace std;
   exercises 5 and 6
 */
 
-char* cat_dot(const char* s1, const char* s2, char sep = '/.')
+/*
+  So, if we compare the version of cat_dot below and the version from ex5 and 6,
+  it is immediately obvious that the version implemented using std::string is
+  far simpler, just by counting how many lines of code (11 compared to 4).
+
+  The C-String implementation of cat_dot is almost 3 times longer!
+  Additionally, when operating with C-style strings, we MUST terminate the new
+  C-style string with a zero, and deallocate any memory that was allocated on
+  the free store using the new operator.
+*/
+
+char* cat_dot(const char* s1, const char* s2, char sep = '.')
 {
   // get length of s1 and s2 to allocate new memory on freestore
   int len_s1 = string_length(s1);
@@ -46,7 +57,7 @@ int main()
     cout << "default separator: " << test_1 << '\n';
     delete[] test_1;
 
-    char* test_2 = cat_dot("Niels", "Bohr", '/*');
+    char* test_2 = cat_dot("Niels", "Bohr", '*');
     cout << "user-defined separator: " << test_2 << '\n';
     delete[] test_2;
 
