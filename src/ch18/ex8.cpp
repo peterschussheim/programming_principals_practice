@@ -13,10 +13,10 @@ std::istream& read_word(std::istream& is, char* buffer, int max)
 }
 
 /*
-  Rewrite all the functions in §18.7 to use the approach of making a back-
+  Rewrite all the functions in 18.7 to use the approach of making a back-
   ward copy of the string and then comparing; for example, take "home" ,
   generate "emoh" , and compare those two strings to see that they are
-  different, so home isn’t a palindrome.
+  different, so home isn't a palindrome.
 */
 
 bool is_palindrome(const std::string& s)
