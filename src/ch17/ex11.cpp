@@ -3,7 +3,7 @@
 #include "Link.h"
 
 /*
-  Complete the “list of gods” example from §17.10.1 and run it.
+  Complete the "list of gods" example from 17.10.1 and run it.
 
   Which do I prefer, having list operations as freestanding helper functions
   or as member functions?  At this point in learning c++ and proper OO design,

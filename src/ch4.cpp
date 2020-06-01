@@ -1,10 +1,12 @@
 #include "std_lib_facilities.h"
 
-void print_value(double distance, string unit) {
+void print_value(double distance, string unit)
+{
   cout << "You entered: " << distance << " and a unit of: " << unit << "\n";
 }
 
-void chapter_4() {
+int main()
+{
   double dist;
   string unit;       // "cm" || "m" || "in" || "ft"
   double sum = 0.0;  // running sum of values in meters
@@ -24,56 +26,44 @@ void chapter_4() {
   while (cin >> dist >> unit) {
     if (unit == "cm") {
       double converted = dist * cm_to_meter;
-      if (converted < smallest) {
-        smallest = converted;
-      }
+      if (converted < smallest) { smallest = converted; }
 
-      if (converted > largest) {
-        largest = converted;
-      }
+      if (converted > largest) { largest = converted; }
       values.push_back(converted);
       sum += converted;
       ++count;
       print_value(dist, unit);
-    } else if (unit == "m") {
-      if (dist < smallest) {
-        smallest = dist;
-      }
+    }
+    else if (unit == "m") {
+      if (dist < smallest) { smallest = dist; }
 
-      if (dist > largest) {
-        largest = dist;
-      }
+      if (dist > largest) { largest = dist; }
       values.push_back(dist);
       sum += dist;
       ++count;
       print_value(dist, unit);
-    } else if (unit == "in") {
+    }
+    else if (unit == "in") {
       double converted = dist * in_to_meter;
-      if (converted < smallest) {
-        smallest = converted;
-      }
+      if (converted < smallest) { smallest = converted; }
 
-      if (converted > largest) {
-        largest = converted;
-      }
+      if (converted > largest) { largest = converted; }
       values.push_back(converted);
       sum += converted;
       ++count;
       print_value(dist, unit);
-    } else if (unit == "ft") {
+    }
+    else if (unit == "ft") {
       double converted = dist * ft_to_meter;
-      if (converted < smallest) {
-        smallest = converted;
-      }
+      if (converted < smallest) { smallest = converted; }
 
-      if (converted > largest) {
-        largest = converted;
-      }
+      if (converted > largest) { largest = converted; }
       values.push_back(converted);
       sum += converted;
       ++count;
       print_value(dist, unit);
-    } else {
+    }
+    else {
       // Reject any unit not explicitly checked above
       cout << "You entered an illegal unit format: " << unit << "\n";
     }
@@ -85,9 +75,8 @@ void chapter_4() {
   cout << "sum: " << sum << "m\n";
 
   sort(values.begin(), values.end());
-  for (double x : values) {
-    cout << x << "\n";
-  }
+  for (double x : values) { cout << x << "\n"; }
 
   keep_window_open("|");
+  return 0;
 }
