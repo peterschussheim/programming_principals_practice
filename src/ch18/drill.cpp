@@ -1,6 +1,6 @@
 #include <iostream>
 #include <vector>
-#include "Utils.h"
+//#include "Utils.h"
 
 using namespace std;
 
@@ -75,17 +75,16 @@ int main()
     cout << "f(vv):\n";
     f(vv);
 
-    keep_window_open();
     return 0;
   }
   catch (const std::exception& e) {
     cerr << e.what() << endl;
-    keep_window_open("~");
+
     return 1;
   }
   catch (...) {
     cerr << "unhandled exception\n";
-    keep_window_open("~");
+
     return 2;
   }
 }

@@ -9,6 +9,15 @@
   elements with higher indices allocated at higher or lower addresses?
 */
 
+/*
+  start by implementing the same idea from chapter 17 ex 9 except use an array
+*/
+
+// void analyze_mem(int )
+//{
+//
+//}
+
 int main()
 {
   try {

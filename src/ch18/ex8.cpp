@@ -1,8 +1,6 @@
 #include <iostream>
 #include <algorithm>
-#include <cstring>
-#include <iterator>
-#include "Utils.h"
+#include <string>
 
 std::istream& read_word(std::istream& is, char* buffer, int max)
 {
@@ -94,17 +92,16 @@ int main()
       std::cout << " a palindrome\n";
     }
 
-    keep_window_open();
     return 0;
   }
   catch (const std::exception& e) {
     std::cerr << e.what() << std::endl;
-    keep_window_open("~");
+
     return 1;
   }
   catch (...) {
     std::cerr << "unhandled exception\n";
-    keep_window_open("~");
+
     return 2;
   }
 }

@@ -18,7 +18,7 @@
         }
       ],
       "enableClangTidyCodeAnalysis": true,
-      "intelliSenseMode": "windows-msvc-x64"
+      "intelliSenseMode": "windows-clang-x64"
     }
   ]
 }
