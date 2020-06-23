@@ -3,10 +3,15 @@ add_subdirectory(ch14)
 add_subdirectory(ch15)
 add_subdirectory(ch16)
 add_subdirectory(ch17)
+add_subdirectory(ch18)
 
 add_executable(main main.cpp)
 set_property(TARGET main PROPERTY CXX_STANDARD 17)
 set_property(TARGET main PROPERTY CXX_STANDARD_REQUIRED ON)
+
+add_executable(ch4_drill ch4.cpp)
+set_property(TARGET ch4_drill PROPERTY CXX_STANDARD 17)
+set_property(TARGET ch4_drill PROPERTY CXX_STANDARD_REQUIRED ON)
 
 add_executable(ch8_drill use.cpp my.cpp my.h)
 set_property(TARGET ch8_drill PROPERTY CXX_STANDARD 17)
