@@ -36,7 +36,7 @@ template<class T> void read_val(T& v)  // read from cin to v
   std::cin >> v;
 }
 
-template<class T> std::istream& operator<<(std::ostream& os, std::vector<T>& v)
+template<class T> std::ostream& operator<<(std::ostream& os, std::vector<T>& v)
 {
   os << "{ ";
   for (int i = 0; i < v.size(); ++i) {
@@ -46,10 +46,10 @@ template<class T> std::istream& operator<<(std::ostream& os, std::vector<T>& v)
   }
 
   os << " }";
-  return os
+  return os;
 }
 
-template<class T> std::istream& operator>>(std::istream is, std::vector<T>& v)
+template<class T> std::istream& operator>>(std::istream& is, std::vector<T>& v)
 {
   char ch1, ch2;
   T temp;
@@ -58,12 +58,12 @@ template<class T> std::istream& operator>>(std::istream is, std::vector<T>& v)
   if (!is) return is;
 
   if (ch1 != '{') {
-    is.clear(ios_base::failbit);
+    is.clear(std::ios_base::failbit);
     return is;
   }
-  while (cin >> temp >> ch2 && ch2 == ',') { v_temp.push_back(temp); }
+  while (std::cin >> temp >> ch2 && ch2 == ',') { v_temp.push_back(temp); }
   if (ch2 != '}') {
-    is.clear(ios_base::failbit);
+    is.clear(std::ios_base::failbit);
     return is;
   }
 
@@ -100,20 +100,20 @@ int main()
   s_str = "Bye, world!";
   s_v = {10, 9, 8, 7, 6};*/
 
-  std::cout << "\nenter a new int: ";
-  read_val(s_int);
-  std::cout << "\nenter a new char: ";
-  read_val(s_char);
-  std::cout << "\nenter a new double: ";
-  read_val(s_double);
-  std::cout << "\nenter a new string: ";
-  read_val(s_str);
-  std::cout << "Modified values:\n";
-  std::cout << s_int.get() << '\n';
-  std::cout << s_char.get() << '\n';
-  std::cout << s_double.get() << '\n';
-  std::cout << s_str.get() << '\n';
-  std::cout << '\n';
+  // std::cout << "\nenter a new int: ";
+  // read_val(s_int);
+  // std::cout << "\nenter a new char: ";
+  // read_val(s_char);
+  // std::cout << "\nenter a new double: ";
+  // read_val(s_double);
+  // std::cout << "\nenter a new string: ";
+  // read_val(s_str);
+  // std::cout << "Modified values:\n";
+  // std::cout << s_int.get() << '\n';
+  // std::cout << s_char.get() << '\n';
+  // std::cout << s_double.get() << '\n';
+  // std::cout << s_str.get() << '\n';
+  // std::cout << '\n';
 
   read_val(s_v);
   std::cout << s_v.get() << '\n';
