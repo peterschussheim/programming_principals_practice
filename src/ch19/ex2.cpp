@@ -5,31 +5,49 @@
 
 #include <iostream>
 #include <vector>
+#include <type_traits>
 #include "Utils.h"
 
 using namespace std;
 
-template<class T, class U> T f(vector<T>& vt, vector<U>& vu)
+template<class T, class U>
+typename common_type<T, U>::type f(vector<T>& vt, vector<U>& vu)
 {
-  T sum = 0;  // FIX THIS!
-  // handle unequal sizes of vt, vu
+  // Need to understand how common_type works.
+  typename common_type<T, U>::type sum = 0;
+
   int limit = (vt.size() < vu.size()) ? vt.size() : vu.size();
   for (int i = 0; i < limit; ++i) { sum += vt[i] * vu[i]; }
 
   return sum;
 }
 
+template<class T> ostream& operator<<(ostream& os, const vector<T>& v)
+{
+  os << "{";
+  for (int i = 0; i < v.size() - 1; ++i) { os << ' ' << v[i] << ','; }
+
+  os << ' ' << v[v.size() - 1] << " }";
+  return os;
+}
+
 int main()
 {
   try {
     vector<int> v_int{1, 2, 3, 4, 3, 2, 1};
-    vector<double> v_dbl{0.2, 1.2, 3.3, 99.08, 3.3, 4094.4};
+    vector<double> v_dbl;
+    for (int i = 0; i < v_int.size(); ++i) { v_dbl.push_back(v_int[i] * 0.25); }
 
-    int s = f(v_int, v_dbl);
-    cout << "Result: " << s;
+    double s = f(v_int, v_dbl);
+    int int_sum = f(v_int, v_dbl);
+    cout << "v_int: " << v_int << '\n';
+    cout << "v_dbl: " << v_dbl << '\n';
+
+    cout << "double f(v_int, v_dbl): " << s << '\n';
+    cout << "int f(v_int, v_dbl): " << int_sum << '\n';
 
     cout << '\n';
-    keep_window_open();
+
     return 0;
   }
   catch (const std::exception& e) {
