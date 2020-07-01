@@ -25,6 +25,7 @@ public:
   void set_value(string key, double val);  // modify value of an existing key
   bool is_declared(string key);            // does this key already exist?
   double define_name(string key, double value);  // create new entry in table
+  void print();                                  // print each row of table
 private:
   vector<Pair<string, double>> table;
 };
@@ -63,23 +64,36 @@ bool Symbol_table::is_declared(string key)  // check if key is already defined
 }
 
 //------------------------------------------------------------------------------
-double Symbol_table::define_name(string key, double value)
+double Symbol_table::define_name(string key, double value)  // add new Pair
 {
   if (is_declared(key)) std::cerr << key << " declared twice\n";
   table.push_back(Pair<string, double>{key, value});
   return value;
 }
 
+//------------------------------------------------------------------------------
+
+void Symbol_table::print()
+{
+  cout << "Key\tValue\t\n";
+  for (int i = 0; i < table.size(); ++i) {
+    cout << table[i].key << '\t' << table[i].value << '\n';
+  }
+}
+
 int main()
 {
   try {
-    // Pair<string, double> p_1{"rate", 0.9};
-    // double n = define_name(Pair{"timeout", 0.9});
     Symbol_table s_table;
     double pi = s_table.define_name("pi", 3.1415926535);
     double my_e = s_table.define_name("e", 2.7182818284);
-    cout << "pi: " << pi << '\n';
-    cout << "my_e: " << my_e << '\n';
+    s_table.print();
+    cout << "\n\n";
+    cout << "is 'pi' defined?\t"
+         << (s_table.is_declared("pi") == 1 ? "true" : "false") << '\n';
+    cout << "is 'golden' defined?\t"
+         << (s_table.is_declared("golden") == 1 ? "true" : "false") << '\n';
+
     return 0;
   }
   catch (const std::exception& e) {
