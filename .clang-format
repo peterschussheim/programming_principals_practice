@@ -27,5 +27,5 @@ SpaceBeforeParens: ControlStatements
 SpaceAfterTemplateKeyword: false
 Standard: Cpp11
 Cpp11BracedListStyle: true
-AlwaysBreakTemplateDeclarations: false
+AlwaysBreakTemplateDeclarations: true
 FixNamespaceComments: false
