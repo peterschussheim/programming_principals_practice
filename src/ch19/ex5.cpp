@@ -12,22 +12,28 @@ class Int {
   int value;
 
 public:
-  Int() : value{0} {}
-  Int(int n) : value{n} {}
-  Int& get();
-  const Int& get() const;
+  Int() : value{0} {}       // default constructor
+  Int(int n) : value{n} {}  // initialize member
+
+  Int(const Int&);               // copy constructor
   Int& operator=(const Int& i);  // copy assignment
-  Int& operator=(Int&& i);       // move assignment
-  Int& operator+(const Int& rhs);
+
+  Int(Int&&);               // move constructor
+  Int& operator=(Int&& i);  // move assignment
+
+  Int operator+(const Int& rhs);
+  Int operator-(const Int& rhs);
+  Int operator*(const Int& rhs);
+  Int operator/(const Int& rhs);
+
+  const int get() const;
 
   friend std::ostream& operator<<(std::ostream& os, Int& i);
 };
 
-Int& Int::get() { return Int{value}; }
-
 //------------------------------------------------------------------------------
 
-const Int& Int::get() const { return Int{value}; }
+const int Int::get() const { return value; }
 
 //------------------------------------------------------------------------------
 
@@ -42,12 +48,19 @@ Int& Int::operator=(const Int& i)
 
 Int& Int::operator=(Int&& i)
 {
-  // TODO: insert return statement here
+  value = i.get();  // copy i's value to this->value
+  return *this;
 }
 
 //------------------------------------------------------------------------------
 
-Int& Int::operator+(const Int& rhs) { return Int{value + rhs.value}; }
+Int Int::operator+(const Int& rhs) { return {value + rhs.get()}; }
+
+Int Int::operator-(const Int& rhs) { return {value - rhs.get()}; }
+
+Int Int::operator*(const Int& rhs) { return {value * rhs.get()}; }
+
+Int Int::operator/(const Int& rhs) { return {value / rhs.get()}; }
 
 //------------------------------------------------------------------------------
 
@@ -62,9 +75,20 @@ int main()
   try {
     Int my_int{100};
     Int my_default_int;
+    Int sum = my_int + Int{99};
+    Int sub = sum - Int{3};
+    Int multiply = sub * Int{10};
+    Int div = Int{1000} / Int{5};
+    Int large{99999999};
+    Int move_test = large;  // TODO: figure out why this fails
 
-    std::cout << my_int << '\n';
-    std::cout << my_default_int << '\n';
+    std::cout << "my_int\t\t" << my_int << '\n';
+    std::cout << "default\t\t" << my_default_int << '\n';
+    std::cout << "sum\t\t" << sum << '\n';
+    std::cout << "sub\t\t" << sub << '\n';
+    std::cout << "mult\t\t" << multiply << '\n';
+    std::cout << "div\t\t" << div << '\n';
+    std::cout << "move\t\t" << move_test << '\n';
 
     return 0;
   }
