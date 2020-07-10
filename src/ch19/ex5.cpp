@@ -15,11 +15,11 @@ public:
   Int() : value{0} {}       // default constructor
   Int(int n) : value{n} {}  // initialize member
 
-  Int(const Int&);               // copy constructor
+  // Int(const Int&);               // copy constructor
   Int& operator=(const Int& i);  // copy assignment
 
-  Int(Int&&);               // move constructor
-  Int& operator=(Int&& i);  // move assignment
+  // Int(Int&&);               // move constructor
+  // Int& operator=(Int&& i);  // move assignment
 
   Int operator+(const Int& rhs);
   Int operator-(const Int& rhs);
@@ -46,11 +46,11 @@ Int& Int::operator=(const Int& i)
 
 //------------------------------------------------------------------------------
 
-Int& Int::operator=(Int&& i)
-{
-  value = i.get();  // copy i's value to this->value
-  return *this;
-}
+// Int& Int::operator=(Int&& i)
+//{
+//  value = i.get();  // copy i's value to this->value
+//  return *this;
+//}
 
 //------------------------------------------------------------------------------
 
@@ -80,7 +80,7 @@ int main()
     Int multiply = sub * Int{10};
     Int div = Int{1000} / Int{5};
     Int large{99999999};
-    Int move_test = large;  // TODO: figure out why this fails
+    Int assignment_test = large;
 
     std::cout << "my_int\t\t" << my_int << '\n';
     std::cout << "default\t\t" << my_default_int << '\n';
@@ -88,7 +88,7 @@ int main()
     std::cout << "sub\t\t" << sub << '\n';
     std::cout << "mult\t\t" << multiply << '\n';
     std::cout << "div\t\t" << div << '\n';
-    std::cout << "move\t\t" << move_test << '\n';
+    std::cout << "assignment_test\t\t" << assignment_test << '\n';
 
     return 0;
   }
