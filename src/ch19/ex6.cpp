@@ -21,10 +21,10 @@ public:
   // Number(const Number&);               // copy constructor
   Number& operator=(const Number<T>& i);  // copy assignment
 
-  Number<T> operator+(const Number<T>& rhs);
-  Number operator-(const Number& rhs);
-  Number operator*(const Number& rhs);
-  Number operator/(const Number& rhs);
+  Number operator+(const Number<T>& rhs);
+  Number operator-(const Number<T>& rhs);
+  Number operator*(const Number<T>& rhs);
+  Number operator/(const Number<T>& rhs);
 
   const Number<T> get() const;
 
