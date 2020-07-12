@@ -7,9 +7,6 @@
 #include <iostream>
 #include <stdexcept>
 
-// TODO: fix Number<T> class to correctly make template specializations.
-// check how if I am using the correct syntax
-
 template<class T>
 class Number {
   T value;
@@ -18,23 +15,19 @@ public:
   Number() : value{0} {}     // default constructor
   Number(T n) : value{n} {}  // initialize member
 
-  // Number(const Number&);               // copy constructor
-  Number& operator=(const Number<T>& i);  // copy assignment
+  Number& operator=(const T& v)  // copy assignment
+  {
+    v = value;
+    return *this;
+  }
 
-  Number operator+(const Number<T>& rhs);
-  Number operator-(const Number<T>& rhs);
-  Number operator*(const Number<T>& rhs);
-  Number operator/(const Number<T>& rhs);
-
-  const Number<T> get() const;
-
-  friend std::ostream& operator<<(std::ostream& os, Number& i);
+  const T get() const;
 };
 
 //------------------------------------------------------------------------------
 
 template<class T>
-const Number<T> Number<T>::get() const
+const T Number<T>::get() const
 {
   return value;
 }
@@ -42,45 +35,47 @@ const Number<T> Number<T>::get() const
 //------------------------------------------------------------------------------
 
 template<class T>
-Number<T>& Number<T>::operator=(const Number<T>& i)
+Number<T> operator+(const Number<T>& lhs, const Number<T>& rhs)
 {
-  if (value == i.value) return *this;  // check if same object
-  value = i.value;
-  return *this;
+  return {lhs.get() + rhs.get()};
 }
 
 //------------------------------------------------------------------------------
 
 template<class T>
-Number<T> Number<T>::operator+(const Number<T>& rhs)
+Number<T> operator-(const Number<T>& lhs, const Number<T>& rhs)
 {
-  return {value + rhs.get()};
-}
-
-template<class T>
-Number<T> Number<T>::operator-(const Number<T>& rhs)
-{
-  return {value - rhs.get()};
-}
-
-template<class T>
-Number<T> Number<T>::operator*(const Number<T>& rhs)
-{
-  return {value * rhs.get()};
-}
-
-template<class T>
-Number<T> Number<T>::operator/(const Number<T>& rhs)
-{
-  return {value / rhs.get()};
+  return {lhs.get() - rhs.get()};
 }
 
 //------------------------------------------------------------------------------
+
+template<class T>
+Number<T> operator*(const Number<T>& lhs, const Number<T>& rhs)
+{
+  return {lhs.get() * rhs.get()};
+}
+
+//------------------------------------------------------------------------------
+
+template<class T>
+Number<T> operator/(const Number<T>& lhs, const Number<T>& rhs)
+{
+  return {lhs.get() / rhs.get()};
+}
+
+//------------------------------------------------------------------------------
+
+template<class T>
+Number<T> operator%(const Number<T>& lhs, const Number<T>& rhs)
+{
+  return {lhs.get() % rhs.get()};
+}
 
 template<class T>
 std::ostream& operator<<(std::ostream& os, Number<T>& i)
 {
-  os << i.value;
+  os << i.get();
   return os;
 }
 
@@ -93,8 +88,17 @@ int main()
     Number<int> sub = sum - Number<int>{3};
     Number<int> multiply = sub * Number<int>{10};
     Number<int> div = Number<int>{1000} / Number<int>{5};
-    Number<int> large{99999999};
-    Number<int> assignment_test = large;
+    Number<double> large{984.3};
+    Number<double> assignment_test = large;
+
+    Number<int> mod_1{1699};
+    Number<int> ten{10};
+    Number<int> res = mod_1 % ten;
+
+    Number<double> mod_2{1.97};
+    Number<int> mod_3{9};
+    // This fails as the question suggested.  FIX IT!
+    Number<double> res_2 = mod_2 % mod_3;
 
     std::cout << "my_int\t\t" << my_int << '\n';
     std::cout << "default\t\t" << my_default_int << '\n';
@@ -102,7 +106,8 @@ int main()
     std::cout << "sub\t\t" << sub << '\n';
     std::cout << "mult\t\t" << multiply << '\n';
     std::cout << "div\t\t" << div << '\n';
-    std::cout << "assignment_test\t\t" << assignment_test << '\n';
+    std::cout << "double\t\t" << assignment_test << '\n';
+    std::cout << "1000 mod 10\t\t" << res << '\n';
 
     return 0;
   }
