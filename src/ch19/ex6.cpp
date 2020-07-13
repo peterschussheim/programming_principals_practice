@@ -4,8 +4,72 @@
   you try to use % for Number<double> and Number<int>
 */
 
+/*
+  Notes:
+
+  Choosing between member or nonmember implementation
+
+  Here are a few rules of thumb (from C++ Primer) to help decide if it is
+  preferable to define overloads (specifically, operator overloads) as members
+  vs nonmembers:
+
+    Must be implemented as member:
+      - assignment=
+      - subscript[]
+      - call()
+      - member access arrow->
+
+    Should be implemented as member:
+      - compound assignments should be members but it is not required
+      - operations which mutate their object's state should be members (inc,
+        decrement, dereference)
+
+     Should be nonmember:
+      - symmetric operators, for example:
+        - conversions between operands of different types (equality, relational,
+          bitwise, arithmetic)
+
+          int num = 4;
+          double num_dbl = 44.03;
+
+          // MyNumber is expected to support this usage, regardless of order
+          // of the operands.
+          MyNumber sum = num + num_dbl;
+*/
+
 #include <iostream>
 #include <stdexcept>
+#include <string>
+#include <sstream>
+#include <cmath>
+
+// error() simply disguises throws:
+inline void error(const std::string& s) { throw std::runtime_error(s); }
+
+inline void error(const std::string& s, const std::string& s2)
+{
+  error(s + s2);
+}
+
+inline void error(const std::string& s, int i)
+{
+  std::ostringstream os;
+  os << s << ": " << i;
+  error(os.str());
+}
+
+//------------------------------------------------------------------------------
+
+// run-time checked narrowing cast (from PPP)
+template<class R, class A>
+R narrow_cast(const A& a)
+{
+  R r = R(a);
+  if (A(r) != a) error(std::string("info loss"));
+  return r;
+}
+
+//------------------------------------------------------------------------------
 
 template<class T>
 class Number {
@@ -66,11 +130,29 @@ Number<T> operator/(const Number<T>& lhs, const Number<T>& rhs)
 
 //------------------------------------------------------------------------------
 
-template<class T>
-Number<T> operator%(const Number<T>& lhs, const Number<T>& rhs)
+// template<class T>
+// Number<T> operator%(const Number<T>& lhs, const Number<T>& rhs)
+//{
+//  int lhs_int = narrow_cast<int>(lhs.get());
+//  int rhs_int = narrow_cast<int>(rhs.get());
+//  if (rhs_int == 0) error("%: divide by zero");
+//
+//  return {lhs_int % rhs_int};
+//}
+
+// I don't think this is the right idea to solve narrowing of different types
+template<class T, class U>
+Number<T> operator%(const Number<T>& lhs, const Number<U>& rhs)
 {
-  return {lhs.get() % rhs.get()};
+  int lhs_int = narrow_cast<int>(lhs.get());
+  int rhs_int = narrow_cast<int>(rhs.get());
+  if (rhs_int == 0) error("%: divide by zero");
+
+  Number<T> remainder = lhs_int % rhs_int;
+  return remainder;
 }
+
+//------------------------------------------------------------------------------
 
 template<class T>
 std::ostream& operator<<(std::ostream& os, Number<T>& i)
