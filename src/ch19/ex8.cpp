@@ -8,6 +8,12 @@
   complete C++ reference.
 */
 
+/*
+  EX 9:
+    Re-implement vector::operator=() (§19.2.5) using an allocator (§19.3.7)
+    for memory management.
+*/
+
 #include <iostream>
 #include <sstream>
 #include <stdexcept>
@@ -129,6 +135,8 @@ vector<T, A>::vector(const vector& a)
 
 //------------------------------------------------------------------------------
 
+// EX 9: Re-implement vector::operator=() (§19.2.5) using an allocator (§19.3.7)
+// for memory management.
 template<class T, class A>
 vector<T, A>& vector<T, A>::operator=(const vector<T, A>& a)
 {
