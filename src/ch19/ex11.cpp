@@ -24,6 +24,7 @@
 */
 
 #include <iostream>
+#include <vector>
 
 // holds a pointer to an object of type T and a pointer to an int containing a
 // shared count of the number pointers to the same object of type T.
@@ -32,12 +33,20 @@ template<class T> class counted_ptr {
   int* use_count;  // # of shared_ptr objects pointing to the same managed obj
 
 public:
-  // marking as explicit prevents the compiler from creating unneeded objects
-  explicit counted_ptr(T* d) : data{d}, use_count{new int{1}} {}
+  explicit counted_ptr(T* d)
+      : data{d}, use_count{new (std::nothrow) int{1}}  // prevent exceptions
+  {
+    if (use_count == nullptr)  // ensure pointer was allocated properly
+    {
+      delete data;             // delete pointer on failure
+      throw std::bad_alloc();  // manually throw the exception
+    }
+  }
+
   ~counted_ptr()
   {
     --(*use_count);
-    if (*count == 0) { delete data; }
+    if (*use_count == 0) { delete data; }
   }
 
   counted_ptr(counted_ptr const& copy)  // copy constructor
@@ -45,24 +54,17 @@ public:
   {
     ++(*count);
   }
+
   counted_ptr& operator=(counted_ptr const& rhs)  // assignment operator
   {
-    // retrain copy of old data
-    T* old_data = data;
-    int* old_use_count = use_count;
+    // copy and swap idiom used here
+    // note: this can be simplified further by passing rhs by value instead
+    // of by reference and then calling swap on *this object.
+    counted_ptr temp{rhs};
+    std::swap(data, temp.data);
+    std::swap(count, temp.count);
 
-    // exception safe transfer
-    data = rhs.data;
-    use_count = rhs.use_count;
-
-    // update both counters
-    ++(*use_count);
-    ++(*old_use_count);
-
-    if (*old_use_count == 0)  // delete old ptr when appropriate
-    {
-      delete old_data;
-    }
+    return *this;  // after this method completes, temp's destructor is called
   }
 
   T* operator->() const { return data; }
@@ -73,9 +75,24 @@ public:
   explicit operator bool() const { return data; }
 };
 
+struct Base {
+  Base() { std::cout << "Base::Base()\n"; }
+  ~Base() { std::cout << "Base::~Base()\n"; }
+};
+
+// TODO:
+// - [ ] write reasonably comprehensive tests
+// - [ ] read related article about common problems implementing shared-ptr
+//       constructors
+
 int main()
 {
   try {
+    Base b_1;
+    // Base* ptr_to_base = &b_1;
+
+    counted_ptr<Base> ptr{&b_1};
+
     std::cout << "\n";
     return 0;
   }
