@@ -41,3 +41,7 @@ set_property(TARGET ch19_ex8 PROPERTY CXX_STANDARD_REQUIRED ON)
 add_executable(ch19_ex10 ex10.cpp)
 set_property(TARGET ch19_ex10 PROPERTY CXX_STANDARD 14)
 set_property(TARGET ch19_ex10 PROPERTY CXX_STANDARD_REQUIRED ON)
+
+add_executable(ch19_ex11 ex11.cpp)
+set_property(TARGET ch19_ex11 PROPERTY CXX_STANDARD 14)
+set_property(TARGET ch19_ex11 PROPERTY CXX_STANDARD_REQUIRED ON)
