@@ -24,7 +24,25 @@
 */
 
 #include <iostream>
-#include <vector>
+//#include <vector>
+#include "std_lib_facilities.h"
+
+struct Tracer {
+  Tracer() : val(0) { cout << "Def ctor\n"; }
+  Tracer(int n) : val(n) { cout << "Arg ctor " << n << "\n"; }
+  Tracer(const Tracer& t) : val(t.val) { cout << "Cpy ctor " << val << "\n"; }
+  Tracer& operator=(const Tracer& t)
+  {
+    val = t.val;
+    cout << "Copy assgn: " << val << "\n";
+
+    return *this;
+  }
+  ~Tracer() { cout << "Destroyed: " << val << "\n"; }
+  int val;
+};
+
+//------------------------------------------------------------------------------
 
 // holds a pointer to an object of type T and a pointer to an int containing a
 // shared count of the number pointers to the same object of type T.
@@ -33,20 +51,35 @@ template<class T> class counted_ptr {
   int* use_count;  // # of shared_ptr objects pointing to the same managed obj
 
 public:
+  // explicit counted_ptr(T* d)
+  //    : data{d}, use_count{new (std::nothrow) int{1}}  // prevent exceptions
+  //{
+  //  if (use_count == nullptr)  // ensure pointer was allocated properly
+  //  {
+  //    delete data;  // delete pointer on failure
+  //    delete use_count;
+  //    throw std::bad_alloc();  // manually throw the exception
+  //  }
+  //}
+  // clang-format off
   explicit counted_ptr(T* d)
-      : data{d}, use_count{new (std::nothrow) int{1}}  // prevent exceptions
+  try 
+    : data {d}
+    , use_count{new int(1)}
+  {}
+  // clang-format on
+  catch (...)
   {
-    if (use_count == nullptr)  // ensure pointer was allocated properly
-    {
-      delete data;             // delete pointer on failure
-      throw std::bad_alloc();  // manually throw the exception
-    }
+    delete data;
+    throw;
   }
-
   ~counted_ptr()
   {
     --(*use_count);
-    if (*use_count == 0) { delete data; }
+    if (*use_count == 0) {
+      delete data;
+      // delete use_count;
+    }
   }
 
   counted_ptr(counted_ptr const& copy)  // copy constructor
@@ -67,6 +100,12 @@ public:
     return *this;  // after this method completes, temp's destructor is called
   }
 
+  void swap(counted_ptr& other) noexcept
+  {
+    std::swap(data, other.data);
+    std::swap(count, other.count);
+  }
+
   T* operator->() const { return data; }
   T& operator*() const { return *data; }
 
@@ -75,25 +114,68 @@ public:
   explicit operator bool() const { return data; }
 };
 
-struct Base {
-  Base() { std::cout << "Base::Base()\n"; }
-  ~Base() { std::cout << "Base::~Base()\n"; }
-};
+//------------------------------------------------------------------------------
 
-// TODO:
-// - [ ] write reasonably comprehensive tests
-// - [ ] read related article about common problems implementing shared-ptr
-//       constructors
+template<class T> void test_3(const counted_ptr<T>& ptr_2)
+{
+  counted_ptr<Tracer> test_1_ptr{Tracer{0}};
+  test_1_ptr = ptr_2;
+  std::cout << "test_1_ptr->data: " << test_1_ptr->val
+            << '\n';  // test arrow operator
+
+  std::cout << "test_1_ptr.get(): " << test_1_ptr.get()
+            << '\n';  // test get access
+
+  std::cout << "test_1_ptr->use_count: " << test_1_ptr->use_count
+            << '\n';  // test arrow operator
+
+  std::cout << "ptr_2->use_count: " << ptr_2->use_count << '\n';
+}
+
+//------------------------------------------------------------------------------
+
+template<class T> void test_2(const counted_ptr<T>& ptr_1)
+{
+  counted_ptr<T> test_2_ptr{ptr_1};
+  std::cout << "test_2_ptr->data: " << test_2_ptr->data << '\n';
+  std::cout << "test_2_ptr.get(): " << test_2_ptr.get() << '\n';
+  std::cout << "test_2_ptr->use_count: " << test_2_ptr->use_count << '\n';
+  test_3(test_2_ptr);
+  std::cout << "test_2_ptr->use_count: " << test_2_ptr->use_count << '\n';
+}
+
+//------------------------------------------------------------------------------
+
+void test()
+{
+  Tracer t{99};
+  counted_ptr<Tracer> p{&t};
+  // std::cout << "p->data: " << p->data << '\n';
+  // std::cout << "p.get(): " << p.get() << '\n';
+  // std::cout << "p->use_count: " << p->use_count << '\n';
+  // test_2(p);
+  // std::cout << "p->use_count: " << p->use_count << '\n';
+}
+
+//------------------------------------------------------------------------------
+
+/*
+  todo:
+
+  - [ ] figure out what I am doing to throw
+        "Invalid address specified to RtlValidateHeap".
+
+  - [ ] finish this!
+*/
 
 int main()
 {
   try {
-    Base b_1;
-    // Base* ptr_to_base = &b_1;
-
-    counted_ptr<Base> ptr{&b_1};
-
+    // test for destruction when fn scope ends
+    // counted_ptr specialization with vector
+    test();
     std::cout << "\n";
+    keep_window_open("");
     return 0;
   }
   catch (const std::exception& e) {
