@@ -38,6 +38,7 @@
 #include <iostream>
 #include <vector>
 #include <list>
+#include <algorithm>
 
 void print_array(std::ostream& os, int* a)
 {
@@ -72,9 +73,29 @@ template<class Iterator> void increase(Iterator first, Iterator last, int n)
 
 template<typename Iter1, typename Iter2>
 // requires Input_iterator<Iter1>() && Output_iterator<Iter2>()
-Iter2 copy(Iter1 f1, Iter1 e1, Iter2 f2)
+Iter2 my_copy(Iter1 f1, Iter1 e1, Iter2 f2)
 {
+  // copy [f1, e1) to [f2, f2 + (e1 - f1))
+  while (f1 != e1) { *f2++ = *f1++; }
+  return f2;
+  // if sequence is empty (f1==e1), do what?
+  // return f2 + (e1 - f1)
 }
+
+//------------------------------------------------------------------------------
+// does not work
+// template<class Iterator, class C, class T>
+// void print_find(Iterator find_result, C source_cont, T target)
+//{
+//  if (find_result != source_cont.end()) {
+//    std::cout << "v_int_cpy contains: " << target << "\n";
+//  }
+//  else {
+//    std::cout << "v_int_cpy does not contain: " << target << "\n";
+//  }
+//}
+
+//------------------------------------------------------------------------------
 
 int main()
 {
@@ -93,9 +114,11 @@ int main()
 
   std::cout << "\n";
   int a_ints_cpy[10]{};
+
   std::copy(std::begin(a_ints), std::end(a_ints), std::begin(a_ints_cpy));
   std::vector<int> v_int_cpy = v_int;
   std::list<int> int_list_cpy = int_list;
+
   std::cout << "a_ints_cpy[]:\t";
   print_array(std::cout, &a_ints_cpy[0]);
   std::cout << "v_int_cpy[]:\t";
@@ -104,7 +127,6 @@ int main()
   print_iter(int_list_cpy.begin(), int_list_cpy.end());
 
   std::cout << "\n";
-
   for (int i = 0; i < 10; ++i) a_ints_cpy[i] += 2;  // increase array by 2
   increase(v_int_cpy.begin(), v_int_cpy.end(), 3);
   increase(int_list_cpy.begin(), int_list_cpy.end(), 5);
@@ -119,9 +141,35 @@ int main()
 
   std::cout << "\n";
 
-  // write copy()
-  // use copy() to copy array into vector and list into array
-  // use std::find()...
+  // use copy() to copy array into vector
+  my_copy(std::begin(a_ints), std::end(a_ints), std::begin(v_int_cpy));
+  std::cout << "copy array into vector:\t";
+  print(v_int_cpy);
+  // and list into array
+  my_copy(int_list_cpy.begin(), int_list_cpy.end(), std::begin(a_ints_cpy));
+  std::cout << "copy list into array\t";
+  print_array(std::cout, &a_ints_cpy[0]);
 
+  std::cout << "\n";
+  int v_target = 3;
+  int l_target = 27;
+  std::vector<int>::iterator vector_find =
+      std::find(v_int_cpy.begin(), v_int_cpy.end(), v_target);
+  // print_find(vector_find, v_int_cpy, v_target);
+  if (vector_find != v_int_cpy.end()) {
+    std::cout << "v_int_cpy contains: " << v_target << "\n";
+  }
+  else {
+    std::cout << "v_int_cpy does not contain: " << v_target << "\n";
+  }
+
+  std::list<int>::iterator list_find =
+      std::find(int_list_cpy.begin(), int_list_cpy.end(), l_target);
+  if (list_find != int_list_cpy.end()) {
+    std::cout << "int_list_cpy contains: " << l_target << "\n";
+  }
+  else {
+    std::cout << "int_list_cpy does not contain: " << l_target << "\n";
+  }
   return 0;
 }
