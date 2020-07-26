@@ -15,6 +15,11 @@
           "name": "CMAKE_TOOLCHAIN_FILE",
           "value": "C:/Users/peter/source/repos/vcpkg/scripts/buildsystems/vcpkg.cmake",
           "type": "FILEPATH"
+        },
+        {
+          "name": "CMAKE_CXX_FLAGS",
+          "value": "-m64 -fexceptions -fdiagnostics-absolute-paths  /DWIN32 /D_WINDOWS /W3 /GR /EHsc",
+          "type": "STRING"
         }
       ],
       "enableClangTidyCodeAnalysis": true,
