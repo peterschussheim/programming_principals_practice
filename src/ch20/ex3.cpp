@@ -6,7 +6,7 @@
 #include "std_lib_facilities.h"
 
 //------------------------------------------------------------------------------
-
+// TODO: this is a reminder to myself that this excercise hasn't been completed
 // jack puts doubles into an array and returns the number of elements in *count
 double* get_from_jack(int* count)
 {
@@ -57,7 +57,7 @@ double* high_arr(double arr[], int n)
   while (first < last) {
     if (h < arr[first]) {
       highest = arr[first];
-      h =
+      // h =
     }
   }
 
