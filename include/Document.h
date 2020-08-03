@@ -5,7 +5,8 @@ using Line = std::vector<char>;  // a line is a vector of chars
 
 //------------------------------------------------------------------------------
 
-class Text_iterator {  // maintain location of line and char pos within a line
+class Text_iterator {  // maintain location of line and char pos
+                       // within a line
   std::list<Line>::iterator ln;
   Line::iterator pos;
 
