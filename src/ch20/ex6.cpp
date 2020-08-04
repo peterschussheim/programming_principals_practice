@@ -2,18 +2,31 @@
   Write a find-and-replace operation for Document s based on §20.6.2.
 */
 
-//#include "std_lib_facilities.h"
+/*
+ the following notes were taken from:
+ https://github.com/bewuethr/stroustrup-ppp/blob/master/chapter20/chapter20_ex06.cpp
+
+  Design:
+  - if target string is not found or is empty, do nothing
+  - iff both the target and replacement strings do not contain a newline symbol
+    perform the replacement in the same line.
+  - if target contains a newline and the replacement doesn't, merge
+    with next line
+  - if target string doesn't contain newline and repl does, insert '\n' then
+    begin a new line after.
+
+  For example, after a search and replace operation, every line ends with '\n'
+  and '\n' is ALWAYS at the end of a line.
+
+*/
+
 #include "Document.h"
 #include <iostream>
 #include <fstream>
 #include <string>
 
-// TODO: Write replace function
-// TODO: combine find and replace to make a find and replace method
-// TODO: write tests for find and replace functionality
-// TODO: replace std::find with my own simple implementation
-
-bool match(Text_iterator first, Text_iterator last, const std::string& s)
+template<class Iterator>
+bool match(Iterator first, Iterator last, const std::string& s)
 {
   std::string::const_iterator p;
   for (p = s.begin(); p != s.end() && first != last && *p == *first;
@@ -22,13 +35,24 @@ bool match(Text_iterator first, Text_iterator last, const std::string& s)
   return p == s.end();
 }
 
-Text_iterator find_txt(Text_iterator first, Text_iterator last,
-                       const std::string& s)
+template<class Iterator, class T>
+Iterator find(Iterator first, Iterator last, const T& val)
+{
+  Iterator p = first;
+  while (p != last) {
+    if (*p == val) return p;
+    ++p;
+  }
+  return p;
+}
+
+template<class Iterator>
+Iterator find_txt(Iterator first, Iterator last, const std::string& s)
 {
   if (s.size() == 0) return last;  // cannot find an empty string
   char first_char = s[0];
   while (true) {
-    auto p = std::find(first, last, first_char);
+    auto p = find(first, last, first_char);
     if (p == last || match(p, last, s)) return p;
     first = ++p;  // look at the next character
   }
