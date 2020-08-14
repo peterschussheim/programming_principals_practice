@@ -73,10 +73,8 @@ std::istream& operator>>(std::istream& is, Document& d)
   return is;
 }
 
-void print(Document& d)
-{
-  for (auto p : d) std::cout << p;
-}
+void print(Document& d);
+void print_find_result(Text_iterator result, Document source);
 
 int main()
 {
@@ -87,24 +85,14 @@ int main()
     f_stream >> sample_doc;
     // print(sample_doc);
     // std::cout << '\n';
-    // Text_iterator p = find_txt(sample_doc.begin(), sample_doc.end(),
-    //                           "The quick brown fox jumps over the lazy
-    //                           dog.");
-    // if (p == sample_doc.end()) {
-    //  std::cout << "Target text not found in document.\n";
-    //}
-    // else {
-    //  std::cout << "found target\n";
-    //}
+
+    Text_iterator p = find_txt(sample_doc.begin(), sample_doc.end(), target);
+    print_find_result(p, sample_doc);
 
     Text_iterator p_2 =
         find_txt(sample_doc.begin(), sample_doc.end(), "secret\nhomestead");
-    if (p_2 == sample_doc.end()) {
-      std::cout << "Target text not found in document.\n";
-    }
-    else {
-      std::cout << "found target: " << *p_2 << '\n';
-    }
+    print_find_result(p_2, sample_doc);
+
     // replace_txt(10, 5, "red");
     // std::cout << str << '\n';
     // replace_txt(str.begin(), str.begin() + 3, 1, "A");
@@ -125,5 +113,20 @@ int main()
   catch (...) {
     std::cerr << "unhandled exception\n";
     return 2;
+  }
+}
+
+void print(Document& d)
+{
+  for (auto p : d) std::cout << p;
+}
+
+void print_find_result(Text_iterator result, Document source)
+{
+  if (result == source.end()) {
+    std::cout << "Target text not found in document.\n";
+  }
+  else {
+    std::cout << "found target: " << *result << '\n';
   }
 }
