@@ -6,6 +6,7 @@ add_subdirectory(ch17)
 add_subdirectory(ch18)
 add_subdirectory(ch19)
 add_subdirectory(ch20)
+add_subdirectory(ch21)
 
 add_executable(main main.cpp)
 set_property(TARGET main PROPERTY CXX_STANDARD 17)
