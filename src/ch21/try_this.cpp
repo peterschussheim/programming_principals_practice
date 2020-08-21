@@ -138,14 +138,14 @@ int main()
     print_stocks(dow_price_un, dow_name_un);
 
     std::cout << "\n";
-    // std::cout << "Quick 'n dirty dictionary:\n";
+    std::cout << "Quick 'n dirty dictionary:\n";
     // bad_dictionary(19999);
-    // dictionary();
+    dictionary();
     std::cout << "\n";
 
-    std::cout << "\n";
-    std::cout << "Dictionary using std::set :\n";
-    dictionary_set();
+    /*  std::cout << "\n";
+      std::cout << "Dictionary using std::set :\n";
+      dictionary_set();*/
     return 0;
   }
   catch (const std::exception& e) {
