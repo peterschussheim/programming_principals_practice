@@ -30,7 +30,7 @@ struct Item {
 
 std::istream& operator>>(std::istream& is, Item& i)
 {
-  // Item format from file: string, int, double
+  // Item format from file: string int double
   std::string n;
   int id;
   double v;
@@ -48,7 +48,8 @@ std::ostream& operator<<(std::ostream& os, Item& i)
   return os << i.name << "\t" << i.iid << "\t" << i.value << '\n';
 }
 
-struct by_name {
+class by_name {
+public:
   bool operator()(Item& a, Item& b) const { return a.name < b.name; }
 };
 
@@ -141,7 +142,48 @@ int main()
   print_container(li);
   std::cout << '\n';
 
-  // TODO: complete using std::list
+  // sort li by name
+  li.sort([](Item& a, Item& b) { return a.name < b.name; });
+  print_container(li);
+  std::cout << '\n';
+
+  // sort li by iid
+  li.sort(by_iid{});
+  print_container(li);
+  std::cout << '\n';
+
+  // sort li by value and print in order of decreasing value
+  li.sort([](Item& a, Item& b) { return a.value < b.value; });
+  std::cout << "Name"
+            << "\t"
+            << "ID"
+            << "\t"
+            << "Value\n\n";
+  for (auto p = li.crbegin(); p != li.crend(); ++p) {
+    std::cout << (*p).name << '\t' << (*p).iid << '\t' << (*p).value << '\n';
+  }
+  std::cout << '\n';
+
+  // Insert Item("horse shoe",99,12.34) and Item("Canon S400", 9988,499.95).
+  temp = {"horse shoe", 99, 12.34};
+  li.insert(std::find_if(li.begin(), li.end(), Smaller_than{temp}), temp);
+  temp = {"Canon S400", 9988, 499.95};
+  li.insert(std::find_if(li.begin(), li.end(), Smaller_than{temp}), temp);
+  print_container(li);
+
+  std::cout << '\n';
+
+  // Remove (erase) two Items identified by name from li.
+  li.remove_if([](Item& i) { return i.name == "horse shoe"; });
+  li.remove_if([](Item& i) { return i.name == "Canon S400"; });
+  print_container(li);
+  std::cout << '\n';
+
+  // Remove (erase) two Items identified by iid from li.
+  li.remove_if([](Item& i) { return i.iid == 3651548; });
+  li.remove_if([](Item& i) { return i.iid == 19928; });
+  print_container(li);
+
   return 0;
 }
 
