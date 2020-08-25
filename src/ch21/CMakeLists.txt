@@ -6,6 +6,10 @@ add_executable(ch21_drill drill.cpp)
 set_property(TARGET ch21_drill PROPERTY CXX_STANDARD 20)
 set_property(TARGET ch21_drill PROPERTY CXX_STANDARD_REQUIRED ON)
 
+add_executable(ch21_drill_map drill_map.cpp)
+set_property(TARGET ch21_drill_map PROPERTY CXX_STANDARD 20)
+set_property(TARGET ch21_drill_map PROPERTY CXX_STANDARD_REQUIRED ON)
+
 add_executable(ch21_ex1 ex1.cpp)
 set_property(TARGET ch21_ex1 PROPERTY CXX_STANDARD 20)
 set_property(TARGET ch21_ex1 PROPERTY CXX_STANDARD_REQUIRED ON)
