@@ -1,0 +1,10 @@
+test 69
+homework 79
+exam 14
+extrahelp 321
+project 8
+quiz 23
+fail 13
+retake 9
+drop 32
+flunk 3

@@ -1,3 +1,4 @@
+
 add_executable(ch21_try_this try_this.cpp)
 set_property(TARGET ch21_try_this PROPERTY CXX_STANDARD 20)
 set_property(TARGET ch21_try_this PROPERTY CXX_STANDARD_REQUIRED ON)
@@ -37,3 +38,9 @@ set_property(TARGET ch21_ex11 PROPERTY CXX_STANDARD_REQUIRED ON)
 add_executable(ch21_ex12 ex12.cpp)
 set_property(TARGET ch21_ex12 PROPERTY CXX_STANDARD 20)
 set_property(TARGET ch21_ex12 PROPERTY CXX_STANDARD_REQUIRED ON)
+
+add_custom_command(
+        TARGET ch21_drill_map POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy
+                ${CMAKE_CURRENT_SOURCE_DIR}/classes.txt
+                ${CMAKE_CURRENT_BINARY_DIR}/classes.txt)
