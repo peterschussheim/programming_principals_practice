@@ -11,6 +11,10 @@ add_executable(ch21_drill_map drill_map.cpp)
 set_property(TARGET ch21_drill_map PROPERTY CXX_STANDARD 20)
 set_property(TARGET ch21_drill_map PROPERTY CXX_STANDARD_REQUIRED ON)
 
+add_executable(ch21_drill_vector drill_vector.cpp)
+set_property(TARGET ch21_drill_vector PROPERTY CXX_STANDARD 20)
+set_property(TARGET ch21_drill_vector PROPERTY CXX_STANDARD_REQUIRED ON)
+
 add_executable(ch21_ex1 ex1.cpp)
 set_property(TARGET ch21_ex1 PROPERTY CXX_STANDARD 20)
 set_property(TARGET ch21_ex1 PROPERTY CXX_STANDARD_REQUIRED ON)
@@ -44,3 +48,9 @@ add_custom_command(
         COMMAND ${CMAKE_COMMAND} -E copy
                 ${CMAKE_CURRENT_SOURCE_DIR}/classes.txt
                 ${CMAKE_CURRENT_BINARY_DIR}/classes.txt)
+
+add_custom_command(
+        TARGET ch21_drill_vector POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy
+                ${CMAKE_CURRENT_SOURCE_DIR}/floats.txt
+                ${CMAKE_CURRENT_BINARY_DIR}/floats.txt)
