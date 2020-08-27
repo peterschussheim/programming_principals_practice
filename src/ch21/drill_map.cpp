@@ -7,7 +7,6 @@
 // 7. Write the elements of msi to cout.
 // 8. Output the sum of the (integer) values in msi.
 
-// TODO: Resume working on the below tasks:
 // 9. Define a map<int,string> called mis.
 // 10. Enter the values from msi into mis; that is, if msi has an element
 //    (" lecture",21 ), mis should have an element ( 21,"lecture" ).
@@ -46,14 +45,24 @@ int main()
     std::cout << "\n";
     std::cout << "\n";
 
-    read_pairs(msi);
+    // read_pairs(msi);
     std::cout << "\n";
 
-    print_map(msi);
+    // print_map(msi);
     std::cout << "\n";
 
-    std::cout << "Sum of integers in msi: " << sum_vals(msi) << "\n";
+    // std::cout << "Sum of integers in msi: " << sum_vals(msi) << "\n";
 
+    // 9. Define a map<int,string> called mis.
+    std::map<int, std::string> mis;
+
+    // 10. Enter the values from msi into mis; that is, if msi has an element
+    //    (" lecture",21 ), mis should have an element ( 21,"lecture" ).
+    std::ifstream is_1{file_name};
+    while (is_1 >> key >> val) mis[val] = key;
+
+    // 11. Output the elements of mis to cout.
+    print_map(mis);
     std::cout << "\n";
 
     return 0;
