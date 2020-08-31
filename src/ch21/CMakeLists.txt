@@ -15,10 +15,6 @@ add_executable(ch21_drill_vector drill_vector.cpp)
 set_property(TARGET ch21_drill_vector PROPERTY CXX_STANDARD 20)
 set_property(TARGET ch21_drill_vector PROPERTY CXX_STANDARD_REQUIRED ON)
 
-add_executable(ch21_ex1 ex1.cpp)
-set_property(TARGET ch21_ex1 PROPERTY CXX_STANDARD 20)
-set_property(TARGET ch21_ex1 PROPERTY CXX_STANDARD_REQUIRED ON)
-
 add_executable(ch21_ex2 ex2.cpp)
 set_property(TARGET ch21_ex2 PROPERTY CXX_STANDARD 20)
 set_property(TARGET ch21_ex2 PROPERTY CXX_STANDARD_REQUIRED ON)
