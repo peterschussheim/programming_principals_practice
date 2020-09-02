@@ -31,6 +31,10 @@ add_executable(ch21_ex6 ex6.cpp)
 set_property(TARGET ch21_ex6 PROPERTY CXX_STANDARD 20)
 set_property(TARGET ch21_ex6 PROPERTY CXX_STANDARD_REQUIRED ON)
 
+add_executable(ch21_ex7 ex7.cpp)
+set_property(TARGET ch21_ex7 PROPERTY CXX_STANDARD 20)
+set_property(TARGET ch21_ex7 PROPERTY CXX_STANDARD_REQUIRED ON)
+
 add_executable(ch21_ex11 ex11.cpp)
 set_property(TARGET ch21_ex11 PROPERTY CXX_STANDARD 20)
 set_property(TARGET ch21_ex11 PROPERTY CXX_STANDARD_REQUIRED ON)
