@@ -66,7 +66,7 @@ int main()
                               "C++",      "C",     "SmallTalk",  "Brainfuck",
                               "Algol 68", "Cobol", "Simula"};
     ls.sort();
-    // TODO: Figure out why the tests below do not work correctly
+
     const std::string target_s_3 = "Java";
     const std::string target_s_4 = "C#";
 
@@ -117,13 +117,13 @@ bool my_binary_search(const std::vector<T>& v, const T& target)
 template<typename ForwardIt, typename T>
 bool my_binary_search(ForwardIt first, ForwardIt last, const T& target)
 {
-  // first = std::lower_bound(first, last, target);
   first = my_lower_bound(first, last, target);
-  return (!(first == last) && (target < *first));
+  return (!(first == last) && !(target < *first));
 }
 
 //------------------------------------------------------------------------------
-
+// Returns an iterator pointing to the first element in range [first,last) that
+// is not less than value, OR last is no element is found.
 template<typename ForwardIt, typename T>
 ForwardIt my_lower_bound(ForwardIt first, ForwardIt last, const T& target)
 {
