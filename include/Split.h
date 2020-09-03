@@ -1,5 +1,5 @@
 #pragma once
-#include "../src/std_lib_facilities.h"
+#include "std_lib_facilities.h"
 
 /*
   Peter Schussheim
@@ -20,7 +20,8 @@
 
   Note that this implementation is naive and relies on string copying.
 */
-vector<string> split(const string& s) {
+vector<string> split(const string& s)
+{
   vector<string> result;
   istringstream is{s};  // create a stringstream to read from s
   string word;
@@ -36,7 +37,8 @@ vector<string> split(const string& s) {
   check if a given char c can be found in
   string w.
 */
-bool is_ws(const char& c, const string& w) {
+bool is_ws(const char& c, const string& w)
+{
   for (char ch : w) {  // scan each char in string w
     if (c == ch) return true;
   }
@@ -55,13 +57,15 @@ bool is_ws(const char& c, const string& w) {
   vector<string> split_t = split(test1, ws);
     -> contents of split_t = {"a", "man", "a", "plan", "a", "canal", "panama"}
 */
-vector<string> split(const string& s, const string& w) {
+vector<string> split(const string& s, const string& w)
+{
   vector<string> result;
-  string word;                // variable to build up a string without whitespace
-  for (char c : s) {          // scan each char in s
-    if (!is_ws(c, w)) {       // if the current c is not a ws character
-      word.push_back(c);      // add current char to word
-    } else if (word != "") {  // non-empty word signals it has been 'cleaned'
+  string word;            // variable to build up a string without whitespace
+  for (char c : s) {      // scan each char in s
+    if (!is_ws(c, w)) {   // if the current c is not a ws character
+      word.push_back(c);  // add current char to word
+    }
+    else if (word != "") {  // non-empty word signals it has been 'cleaned'
       result.push_back(word);
       word = "";  // reset word's state
     }
