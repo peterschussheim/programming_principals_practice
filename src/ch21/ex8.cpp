@@ -1,3 +1,7 @@
+// Take the word-frequency example from §21.6.1 and modify it to output
+// its lines in order of frequency (rather than in lexicographical order).
+// An example line would be 3: C++ rather than C++: 3
+
 #include <iostream>
 
 int main()
