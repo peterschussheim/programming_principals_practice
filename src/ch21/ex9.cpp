@@ -73,10 +73,14 @@ int main()
 
 std::ostream& operator<<(std::ostream& os, const Order& order)
 {
+  auto& p = order.get_purchases();
   return os << "{ Name: " << order.get_name() << ",\n"
             << "  Address: " << order.get_address() << ",\n"
             << "  Date: " << order.get_date() << ",\n"
-            << "  Purchases: " << order.get_purchases() << " }";
+            << "  Purchases: ";
+
+  print_cont(p.begin(), p.end());
+  std::cout << " }";
 }
 
 //------------------------------------------------------------------------------
@@ -91,5 +95,5 @@ std::ostream& operator<<(std::ostream& os, const Purchase& p)
 
 template<class InputIt> void print_cont(InputIt start, InputIt end)
 {
-  for (auto p = start; start != end; ++p) { std::cout << p << '\n'; }
+  for (auto p = start; start != end; ++p) { std::cout << *p << '\n'; }
 }

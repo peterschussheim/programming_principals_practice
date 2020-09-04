@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <utility>
 #include "Purchase.h"
 
 // Define an Order class with (customer) name, address, data, and
@@ -18,10 +19,16 @@ private:
   std::vector<Purchase> purchases;  // items in this order
 
 public:
-  Order(std::string nn, std::string addr, std::string dd,
-        std::vector<Purchase>& pv)
-      : name{nn}, address{addr}, date{dd}, purchases{pv}
+  Order(std::string nn, std::string addr, std::string dd)
+      : name{nn}, address{addr}, date{dd}
   {
+  }
+
+  Order(std::string nn, std::string addr, std::string dd,
+        std::vector<Purchase> pp)
+      : name{nn}, address{addr}, date{dd}
+  {
+    for (auto& el : pp) purchases.push_back(el);
   }
 
   const std::string get_name() const { return name; }
