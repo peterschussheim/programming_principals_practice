@@ -1,9 +1,14 @@
-#ifndef ORDER
-#define ORDER
+#ifndef ORDER_H
+#define ORDER_H
 
 #include <string>
 #include <vector>
 #include "Purchase.h"
+
+// Define an Order class with (customer) name, address, data, and
+// vector<Purchase> members.
+// NOTE: As the question asks for a "data" member but doesn't indicate what
+// kind of data, I am using a string to hold a simple order date.
 
 class Order {
 private:
@@ -13,6 +18,16 @@ private:
   std::vector<Purchase> purchases;  // items in this order
 
 public:
+  Order(std::string nn, std::string addr, std::string dd,
+        std::vector<Purchase>& pv)
+      : name{nn}, address{addr}, date{dd}, purchases{pv}
+  {
+  }
+
+  const std::string get_name() const { return name; }
+  const std::string get_address() const { return address; }
+  const std::string get_date() const { return date; }
+  const std::vector<Purchase>& get_purchases() const { return purchases; }
 };
 
-#endif  // !ORDER
+#endif  // ORDER_H

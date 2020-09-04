@@ -1,5 +1,5 @@
 #pragma once
-#include "../src/std_lib_facilities.h"
+#include "std_lib_facilities.h"
 
 /*
   Peter Schussheim
@@ -19,9 +19,10 @@
   whitespace symbols.
 
   For example:
-    Punct_stream ps{istream || cin || istringstream}; // construct a Punct_stream with source.
-    ps.whitespace(",.?!");        // call member function to set the desired chars
-    for(string word; ps >> word;) { ...do something with word }
+    Punct_stream ps{istream || cin || istringstream}; // construct a
+  Punct_stream with source. ps.whitespace(",.?!");        // call member
+  function to set the desired chars for(string word; ps >> word;) { ...do
+  something with word }
 */
 
 class Punct_stream {
@@ -42,7 +43,8 @@ private:
   bool sensitive;        // is the stream case-sensitive?
 };
 
-Punct_stream& Punct_stream::operator>>(string& s) {
+Punct_stream& Punct_stream::operator>>(string& s)
+{
   while (!(buffer >> s)) {  // try to read from buffer
     if (buffer.bad() || !source.good()) return *this;
     buffer.clear();
@@ -54,7 +56,8 @@ Punct_stream& Punct_stream::operator>>(string& s) {
     for (char& ch : line) {
       if (is_whitespace(ch)) {
         ch = ' ';  // tranform to space
-      } else if (!sensitive) {
+      }
+      else if (!sensitive) {
         ch = tolower(ch);
       }
     }
@@ -65,10 +68,14 @@ Punct_stream& Punct_stream::operator>>(string& s) {
   return *this;
 }
 
-bool Punct_stream::is_whitespace(char c) {
+bool Punct_stream::is_whitespace(char c)
+{
   for (char w : white)        // compare each char of the string
     if (c == w) return true;  // against our whitespace set
   return false;
 }
 
-Punct_stream::operator bool() { return !(source.fail() || source.bad()) && source.good(); }
+Punct_stream::operator bool()
+{
+  return !(source.fail() || source.bad()) && source.good();
+}

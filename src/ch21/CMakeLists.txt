@@ -57,3 +57,14 @@ add_custom_command(
         COMMAND ${CMAKE_COMMAND} -E copy
                 ${CMAKE_CURRENT_SOURCE_DIR}/floats.txt
                 ${CMAKE_CURRENT_BINARY_DIR}/floats.txt)
+
+#set(sources_ch21_ex9 ${CMAKE_CURRENT_SOURCE_DIR}/orders_1.txt ${CMAKE_CURRENT_SOURCE_DIR}/orders_2.txt)
+#list(APPEND args_ex9 ${sources_ch21_ex9})
+add_custom_command(
+        TARGET ch21_ex9 POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy
+                ${CMAKE_CURRENT_SOURCE_DIR}/orders_1.txt
+                ${CMAKE_CURRENT_BINARY_DIR}/orders_1.txt
+        COMMAND ${CMAKE_COMMAND} -E copy
+                ${CMAKE_CURRENT_SOURCE_DIR}/orders_2.txt
+                ${CMAKE_CURRENT_BINARY_DIR}/orders_2.txt)
