@@ -1,10 +1,10 @@
-#include <iterator>
-#include <iostream>
 #include <fstream>
+#include <iostream>
+#include <iterator>
 #include <sstream>
-#include <vector>
 #include <string>
 #include <string_view>
+#include <vector>
 
 // From: https://stackoverflow.com/a/1120224/6129793
 // TODO: make this work! Need to overload in/out streams and test
@@ -17,7 +17,7 @@ public:
                             m_data[index + 1] - (m_data[index] + 1));
   }
   std::size_t size() const { return m_data.size() - 1; }
-  void readNextRow(std::istream& str)
+  void readNextRow(std::istream &str)
   {
     std::getline(str, m_line);
 
@@ -40,22 +40,30 @@ private:
 
 //------------------------------------------------------------------------------
 
-class CSVIterator {
+std::istream &operator>>(std::istream &str, CSVRow &data)
+{
+  data.readNextRow(str);
+  return str;
+}
+
+//------------------------------------------------------------------------------
+
+class CSV_iterator {
 public:
   typedef std::input_iterator_tag iterator_category;
   typedef CSVRow value_type;
   typedef std::size_t difference_type;
-  typedef CSVRow* pointer;
-  typedef CSVRow& reference;
+  typedef CSVRow *pointer;
+  typedef CSVRow &reference;
 
-  CSVIterator(std::istream& str) : m_str(str.good() ? &str : NULL)
+  CSV_iterator(std::istream &str) : m_str(str.good() ? &str : NULL)
   {
     ++(*this);
   }
-  CSVIterator() : m_str(NULL) {}
+  CSV_iterator() : m_str(NULL) {}
 
   // Pre Increment
-  CSVIterator& operator++()
+  CSV_iterator &operator++()
   {
     if (m_str) {
       if (!((*m_str) >> m_row)) { m_str = NULL; }
@@ -63,22 +71,32 @@ public:
     return *this;
   }
   // Post increment
-  CSVIterator operator++(int)
+  CSV_iterator operator++(int)
   {
-    CSVIterator tmp(*this);
+    CSV_iterator tmp(*this);
     ++(*this);
     return tmp;
   }
-  CSVRow const& operator*() const { return m_row; }
-  CSVRow const* operator->() const { return &m_row; }
+  CSVRow const &operator*() const { return m_row; }
+  CSVRow const *operator->() const { return &m_row; }
 
-  bool operator==(CSVIterator const& rhs)
+  bool operator==(CSV_iterator const &rhs)
   {
     return ((this == &rhs) || ((this->m_str == NULL) && (rhs.m_str == NULL)));
   }
-  bool operator!=(CSVIterator const& rhs) { return !((*this) == rhs); }
+  bool operator!=(CSV_iterator const &rhs) { return !((*this) == rhs); }
 
 private:
-  std::istream* m_str;
+  std::istream *m_str;
   CSVRow m_row;
+};
+
+class CSV_range {
+  std::istream &stream;
+
+public:
+  CSV_range(std::istream &str) : stream{str} {}
+
+  CSV_iterator begin() const { return CSV_iterator{stream}; }
+  CSV_iterator end() const { return CSV_iterator{}; }
 };

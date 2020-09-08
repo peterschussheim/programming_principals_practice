@@ -19,16 +19,17 @@ private:
   std::vector<Purchase> purchases;  // items in this order
 
 public:
-  Order(std::string nn, std::string addr, std::string dd)
-      : name{nn}, address{addr}, date{dd}
-  {
-  }
+  // Order(std::string nn, std::string addr, std::string dd)
+  //    : name{nn}, address{addr}, date{dd}
+  //{
+  //}
+  Order() = default;
 
   Order(std::string nn, std::string addr, std::string dd,
         std::vector<Purchase> pp)
       : name{nn}, address{addr}, date{dd}
   {
-    for (auto& el : pp) purchases.push_back(el);
+    for (auto& purch : pp) purchases.push_back(purch);
   }
 
   const std::string get_name() const { return name; }
