@@ -13,29 +13,24 @@
 
 class Order {
 private:
-  std::string name;                 // customer name
-  std::string address;              // customer address
-  std::string date;                 // order date (MM/DD/YYY)
-  std::vector<Purchase> purchases;  // items in this order
+  std::string n;                // customer name
+  std::string add;              // customer address
+  std::string d;                // order date (MM/DD/YYY)
+  std::vector<Purchase> purch;  // items in this order
 
 public:
-  // Order(std::string nn, std::string addr, std::string dd)
-  //    : name{nn}, address{addr}, date{dd}
-  //{
-  //}
   Order() = default;
-
   Order(std::string nn, std::string addr, std::string dd,
         std::vector<Purchase> pp)
-      : name{nn}, address{addr}, date{dd}
+      : n{nn}, add{addr}, d{dd}
   {
-    for (auto& purch : pp) purchases.push_back(purch);
+    for (auto& p : pp) purch.push_back(p);
   }
 
-  const std::string get_name() const { return name; }
-  const std::string get_address() const { return address; }
-  const std::string get_date() const { return date; }
-  const std::vector<Purchase>& get_purchases() const { return purchases; }
+  const std::string name() const { return n; }
+  const std::string address() const { return add; }
+  const std::string date() const { return d; }
+  const std::vector<Purchase>& purchases() const { return purch; }
 };
 
 #endif  // ORDER_H

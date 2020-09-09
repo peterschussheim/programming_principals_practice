@@ -1,9 +1,3 @@
-// TODO: Either change format of data to make parsing easier or
-// alter the CSV_parser classes to allow for more flexible options, such as
-// escape double quotes, handle nested lists, ets.
-
-//------------------------------------------------------------------------------
-
 // - [x] Define an Order class with (customer) name, address, data, and
 // vector<Purchase> members.
 // - [ ] Purchase is a class with a (product) name, unit_price, and count
@@ -25,20 +19,18 @@
 #include <iterator>
 #include <fstream>
 #include <sstream>
-#include <string_view>
 #include <iomanip>
-#include "CSV_parser.h"
 #include "Order.h"
 #include "Purchase.h"
 
 //------------------------------------------------------------------------------
 
-std::istream& operator>>(std::istream& is, const Order& order);
+std::istream& operator>>(std::istream& is, Order& order);
 std::ostream& operator<<(std::ostream& os, const Order& order);
 
 //------------------------------------------------------------------------------
 
-std::istream& operator>>(std::istream& is, const Purchase& p);
+std::istream& operator>>(std::istream& is, Purchase& p);
 std::ostream& operator<<(std::ostream& os, const Purchase& p);
 
 //------------------------------------------------------------------------------
@@ -60,19 +52,11 @@ int main()
     Order my_order{"Peter Schussheim", "123 Main St.", "01/01/2009", purchases};
     std::cout << my_order << '\n';*/
 
-    // create file with Orders and read into vo
-    std::cout << "Reading orders from local file\n";
     std::string orders_1{"orders_1.txt"};
     std::ifstream is{orders_1};
-
-    for (auto& row : CSV_range{is}) {
-      std::cout << row[0] << ", " << row[1] << ", " << row[2] << ", " << row[3]
-                << '\n';
-    }
-    // std::istream_iterator<std::string> ii{is};
-    // std::istream_iterator<std::string> eos;  // input sentinel
-    // std::vector<Order> vo{ii, eos};          // init vo from input
-
+    Order ord;
+    is >> ord;
+    std::cout << ord;
     return 0;
   }
   catch (const std::exception& e) {
@@ -86,17 +70,46 @@ int main()
 }
 
 //------------------------------------------------------------------------------
+// Wilhelm Keese // order.name
+// 54009 Del Mar Avenue, Oakland, California, 94616 // order.address
+// 08/27/2016  // order.date
+// Swiss Chard - Red|3.99|1  // purchase
+// A&W Root Beer 2 Litre|1.99|2
+// Veal - Provimi Inside|8.01|2
+// #  // end of order
+std::istream& operator>>(std::istream& is, Order& order)
+{
+  std::string name;
+  std::string address;
+  std::string date;
 
-std::istream& operator>>(std::istream& is, const Order& order) { return is; }
+  std::getline(is, name);
+  std::getline(is, address);
+  std::getline(is, date);
+
+  const char sentinel{'#'};  // end of this Order
+  std::vector<Purchase> vp;
+  // Purchase p;
+  std::string line;
+  std::string::size_type pos = 0;
+  std::getline(is, line);
+  while ((pos = line.find(sentinel, pos)) != std::string::npos) {
+    std::cout << pos << '\n';
+    ++pos;
+  }
+  order = Order{name, address, date, {}};
+
+  return is;
+}
 
 //------------------------------------------------------------------------------
 
 std::ostream& operator<<(std::ostream& os, const Order& order)
 {
-  auto& p = order.get_purchases();
-  os << "{ Name: " << order.get_name() << ",\n"
-     << "  Address: " << order.get_address() << ",\n"
-     << "  Date: " << order.get_date() << ",\n"
+  auto& p = order.purchases();
+  os << "{ Name: " << order.name() << ",\n"
+     << "  Address: " << order.address() << ",\n"
+     << "  Date: " << order.date() << ",\n"
      << "  Purchases: \n";
   print_cont(p.begin(), p.end(), 16);
   std::cout << "}";
@@ -104,15 +117,37 @@ std::ostream& operator<<(std::ostream& os, const Order& order)
 }
 
 //------------------------------------------------------------------------------
+// A&W Root Beer 2 Litre|1.99|2
+// Veal - Provimi Inside|8.01|2
+// #  // end of order
 
-std::istream& operator>>(std::istream& is, const Purchase& p) { return is; }
+std::istream& operator>>(std::istream& is, Purchase& p)
+{
+  // read line and construct ONE purchase from input
+  std::string line;  // line of current Purchase
+  std::string name;
+  double unit_price;
+  int quantity;
+  const char deliminator{'|'};  // specify delim between members
+
+  std::getline(is, line);
+  std::istringstream ss{line};
+  std::string::size_type pos = 0;
+  while ((pos = line.find(deliminator, pos)) != std::string::npos) {
+    std::cout << pos << '\n';
+    ++pos;
+  }
+  //
+
+  return is;
+}
 
 //------------------------------------------------------------------------------
 
 std::ostream& operator<<(std::ostream& os, const Purchase& p)
 {
-  return os << "{ " << p.get_name() << ", " << p.get_unit_price() << ", "
-            << p.get_count() << " }";
+  return os << "{ " << p.name() << ", " << p.unit_price() << ", " << p.count()
+            << " }";
 }
 
 //------------------------------------------------------------------------------

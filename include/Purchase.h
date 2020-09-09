@@ -7,19 +7,18 @@
 
 class Purchase {
 private:
-  std::string name;   // product name
-  double unit_price;  // price per unit
-  int count;          // quantity of product in this purchase
+  std::string n;  // product name
+  double unit_p;  // price per unit
+  int c;          // quantity of product in this purchase
 public:
   Purchase(std::string nn, double unit_p, int cc = 1)
-      : name{nn}, unit_price{unit_p}, count{cc}
+      : n{nn}, unit_p{unit_p}, c{cc}
   {
-    // handle Purchase without name and/or unit_price
   }
 
-  const std::string get_name() const { return name; }
-  const double get_unit_price() const { return unit_price; }
-  const int get_count() const { return count; }
+  const std::string name() const { return n; }
+  const double unit_price() const { return unit_p; }
+  const int count() const { return c; }
 };
 
 #endif  // PURCHASE_H
