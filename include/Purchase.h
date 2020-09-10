@@ -11,6 +11,7 @@ private:
   double unit_p;  // price per unit
   int c;          // quantity of product in this purchase
 public:
+  Purchase() = default;
   Purchase(std::string nn, double unit_p, int cc = 1)
       : n{nn}, unit_p{unit_p}, c{cc}
   {
