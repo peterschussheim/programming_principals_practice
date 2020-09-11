@@ -1,13 +1,13 @@
 // - [x] Define an Order class with (customer) name, address, data, and
 // vector<Purchase> members.
-// - [ ] Purchase is a class with a (product) name, unit_price, and count
+// - [x] Purchase is a class with a (product) name, unit_price, and count
 //  members.
-// - [ ] Define a mechanism for reading and writing Orders to and from a file.
+// - [x] Define a mechanism for reading and writing Orders to and from a file.
 // - [x] Define a mechanism for printing Orders.
-// - [ ] Create a file of at least ten Orders, read it into a vector<Order>,
+// - [x] Create a file of at least ten Orders, read it into a vector<Order>,
 // sort it by name (of customer), and write it back out to a file.
-// - [ ] Create another file of at least ten Order s of which about a third are
-// the same as in the first file, read it into a list<Order> , sort it by
+// - [x] Create another file of at least ten Orders of which about a third are
+// the same as in the first file, read it into a list<Order>, sort it by
 // address (of customer), and write it back out to a file.
 // - [ ] Merge the two files into a third using std::merge().
 
@@ -27,6 +27,7 @@
 
 std::istream& operator>>(std::istream& is, Order& order);
 std::ostream& operator<<(std::ostream& os, const Order& order);
+std::ofstream& operator<<(std::ofstream& os, const Order& order);
 
 //------------------------------------------------------------------------------
 
@@ -49,8 +50,40 @@ int main()
     std::vector<Order> vo;
     Order ord;
 
-    while (is >> ord) { vo.push_back(ord); }
-    for (auto& o : vo) std::cout << o << ",\n";
+    while (is >> ord)  // read until error state or eof
+    {
+      vo.push_back(ord);  // add order to container
+    }
+    // for (auto& o : vo) std::cout << o << ",\n";
+
+    std::sort(vo.begin(), vo.end(), [](Order& l, Order& r) {
+      return l.name() < r.name();
+    });  // sort by name
+
+    std::string orders_1_out{"orders_1_out.txt"};
+    std::ofstream ofs{orders_1_out};  // create stream to write sorted orders to
+    for (auto& o : vo) { ofs << o; }
+
+    std::list<Order> lo;  // list containing some of the same from orders_1
+    std::string orders_2{"orders_2.txt"};
+    std::ifstream is_2{orders_2};
+
+    while (is_2 >> ord) { lo.push_back(ord); }
+
+    lo.sort([](Order& l, Order& r) {
+      return l.address() < r.address();
+    });  // sort by address
+
+    std::string orders_2_out{"orders_2_out.txt"};  // output filename
+    std::ofstream ofs_2{orders_2_out};             // output stream
+    for (auto& o : lo) { ofs_2 << o; }
+
+    // TODO: Complete last part below:
+    // merge orders_1_out.txt and orders_2_out.txt into a new file using
+    // std::merge().
+    std::string orders_merged{"merged.txt"};
+    std::merge();
+
     return 0;
   }
   catch (const std::exception& e) {
@@ -64,13 +97,7 @@ int main()
 }
 
 //------------------------------------------------------------------------------
-// Wilhelm Keese // order.name
-// 54009 Del Mar Avenue, Oakland, California, 94616 // order.address
-// 08/27/2016  // order.date
-// Swiss Chard - Red|3.99|1  // purchase
-// A&W Root Beer 2 Litre|1.99|2
-// Veal - Provimi Inside|8.01|2
-// #  // end of order
+
 std::istream& operator>>(std::istream& is, Order& order)
 {
   std::string name;
@@ -97,22 +124,19 @@ std::istream& operator>>(std::istream& is, Order& order)
 }
 
 //------------------------------------------------------------------------------
-// A&W Root Beer 2 Litre|1.99|2
-// Veal - Provimi Inside|8.01|2
-// #  // end of order
 
 std::istream& operator>>(std::istream& is, Purchase& p)
 {
   // read line and construct ONE purchase from input
   std::string name;
-  double unit_price;
-  int quantity;
+  double unit_price{};
+  int quantity{};
 
   std::getline(is, name, '|');
   if (!is || name.size() == 0) return is;
 
   // name.pop_back();
-  char cc;  // used as a dummy placeholder for "|"
+  char cc{};  // used as a dummy placeholder for "|"
   is >> unit_price >> cc >> quantity;
   if (!is) return is;
 
@@ -126,6 +150,7 @@ std::istream& operator>>(std::istream& is, Purchase& p)
 
 //------------------------------------------------------------------------------
 
+// Formatted output intended for printing all Order members to a terminal.
 std::ostream& operator<<(std::ostream& os, const Order& order)
 {
   auto& p = order.purchases();
@@ -135,6 +160,21 @@ std::ostream& operator<<(std::ostream& os, const Order& order)
      << "  Purchases: \n";
   print_cont(p.begin(), p.end(), 16);
   std::cout << "}";
+  return os;
+}
+
+//------------------------------------------------------------------------------
+
+// Formatted output for writing Orders to a file in the SAME format as the
+// source file.
+std::ofstream& operator<<(std::ofstream& os, const Order& order)
+{
+  os << order.name() << "\n" << order.address() << "\n" << order.date() << "\n";
+  for (auto& purch : order.purchases()) {
+    os << purch.name() << "|" << purch.unit_price() << "|" << purch.count()
+       << "\n";
+  }
+  os << "#\n";
   return os;
 }
 
