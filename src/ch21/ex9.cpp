@@ -78,11 +78,19 @@ int main()
     std::ofstream ofs_2{orders_2_out};             // output stream
     for (auto& o : lo) { ofs_2 << o; }
 
-    // TODO: Complete last part below:
-    // merge orders_1_out.txt and orders_2_out.txt into a new file using
-    // std::merge().
+    // std::merge requires both input sources to be sorted
+    // lo is already sorted by address, so we just need to do the same
+    // to vo to make the ordering identicle.
+    std::sort(vo.begin(), vo.end(),
+              [](Order& l, Order& r) { return l.address() < r.address(); });
+    std::vector<Order> merged;  // destination
+    std::merge(vo.begin(), vo.end(), lo.begin(), lo.end(),
+               std::back_inserter(merged),
+               [](Order& l, Order& r) { return l.address() < r.address(); });
+
     std::string orders_merged{"merged.txt"};
-    std::merge();
+    std::ofstream ofs_merged{orders_merged};
+    for (auto& o : merged) ofs_merged << o;
 
     return 0;
   }
