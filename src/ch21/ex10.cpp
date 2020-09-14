@@ -1,22 +1,15 @@
-// - [x] Define an Order class with (customer) name, address, data, and
-// vector<Purchase> members.
-// - [x] Purchase is a class with a (product) name, unit_price, and count
-//  members.
-// - [x] Define a mechanism for reading and writing Orders to and from a file.
-// - [x] Define a mechanism for printing Orders.
-// - [x] Create a file of at least ten Orders, read it into a vector<Order>,
-// sort it by name (of customer), and write it back out to a file.
-// - [x] Create another file of at least ten Orders of which about a third are
-// the same as in the first file, read it into a list<Order>, sort it by
-// address (of customer), and write it back out to a file.
-// - [x] Merge the two files into a third using std::merge().
+// - [x] Compute the total value of the orders in the two files from the previ-
+// ous exercise. The value of an individual Purchase is (of course) its
+// unit_price*count
+
+// NOTE: since this is a continuation from the ex9, most of the definitions
+// and usage in main() are copied.
 
 #include <iostream>
 #include <vector>
 #include <list>
 #include <string>
 #include <algorithm>
-#include <iterator>
 #include <fstream>
 #include <sstream>
 #include <iomanip>
@@ -40,6 +33,8 @@ template<class InputIt> void print_cont(InputIt start, InputIt end, int width);
 
 //------------------------------------------------------------------------------
 
+template<class InputIt> double total_order(InputIt container);
+
 //------------------------------------------------------------------------------
 
 int main()
@@ -50,15 +45,7 @@ int main()
     std::vector<Order> vo;
     Order ord;
 
-    while (is >> ord)  // read until error state or eof
-    {
-      vo.push_back(ord);  // add order to container
-    }
-    // for (auto& o : vo) std::cout << o << ",\n";
-
-    std::sort(vo.begin(), vo.end(), [](Order& l, Order& r) {
-      return l.name() < r.name();
-    });  // sort by name
+    while (is >> ord) vo.push_back(ord);  // add order to container
 
     std::string orders_1_out{"orders_1_out.txt"};
     std::ofstream ofs{orders_1_out};  // create stream to write sorted orders to
@@ -70,28 +57,17 @@ int main()
 
     while (is_2 >> ord) { lo.push_back(ord); }
 
-    lo.sort([](Order& l, Order& r) {
-      return l.address() < r.address();
-    });  // sort by address
-
     std::string orders_2_out{"orders_2_out.txt"};  // output filename
     std::ofstream ofs_2{orders_2_out};             // output stream
     for (auto& o : lo) { ofs_2 << o; }
 
-    // std::merge requires both input sources to be sorted
-    // lo is already sorted by address, so we just need to do the same
-    // to vo to make the ordering identicle.
-    std::sort(vo.begin(), vo.end(),
-              [](Order& l, Order& r) { return l.address() < r.address(); });
-    std::vector<Order> merged;  // destination
-    std::merge(vo.begin(), vo.end(), lo.begin(), lo.end(),
-               std::back_inserter(merged),
-               [](Order& l, Order& r) { return l.address() < r.address(); });
-
-    std::string orders_merged{"merged.txt"};
-    std::ofstream ofs_merged{orders_merged};
-    for (auto& o : merged) ofs_merged << o;
-
+    // compute total value for orders_1 and orders_2
+    double vo_total = total_order(vo);
+    double lo_total = total_order(lo);
+    std::cout << "Total cost of orders in file \"orders_1.txt\": " << vo_total
+              << '\n';
+    std::cout << "Total cost of orders in file \"orders_2.txt\": " << lo_total
+              << '\n';
     return 0;
   }
   catch (const std::exception& e) {
@@ -204,5 +180,19 @@ template<class InputIt> void print_cont(InputIt start, InputIt end, int width)
 }
 
 //------------------------------------------------------------------------------
+
+// Calculate total cost of a container of Orders
+template<class InputIt> double total_order(InputIt container)
+{
+  // We should refactor this function to remove the nested loop.
+  // Ideas include adding a member to Purchase type which calculates the total
+  // cost of each Purchase.  Then we could change the nested loop to be an
+  // accumulation of each order's total value.
+  double total = 0.0;
+  for (auto& o : container) {
+    for (auto& p : o.purchases()) { total += p.unit_price() * p.count(); }
+  }
+  return total;
+}
 
 //------------------------------------------------------------------------------

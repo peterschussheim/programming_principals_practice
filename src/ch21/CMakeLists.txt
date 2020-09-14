@@ -38,6 +38,10 @@ add_executable(ch21_ex9 ex9.cpp)
 set_property(TARGET ch21_ex9 PROPERTY CXX_STANDARD 17)
 set_property(TARGET ch21_ex9 PROPERTY CXX_STANDARD_REQUIRED ON)
 
+add_executable(ch21_ex10 ex10.cpp)
+set_property(TARGET ch21_ex10 PROPERTY CXX_STANDARD 17)
+set_property(TARGET ch21_ex10 PROPERTY CXX_STANDARD_REQUIRED ON)
+
 add_executable(ch21_ex11 ex11.cpp)
 set_property(TARGET ch21_ex11 PROPERTY CXX_STANDARD 20)
 set_property(TARGET ch21_ex11 PROPERTY CXX_STANDARD_REQUIRED ON)
@@ -58,10 +62,11 @@ add_custom_command(
                 ${CMAKE_CURRENT_SOURCE_DIR}/floats.txt
                 ${CMAKE_CURRENT_BINARY_DIR}/floats.txt)
 
+# Alternative method of adding multiple items to a custom command
 #set(sources_ch21_ex9 ${CMAKE_CURRENT_SOURCE_DIR}/orders_1.txt ${CMAKE_CURRENT_SOURCE_DIR}/orders_2.txt)
 #list(APPEND args_ex9 ${sources_ch21_ex9})
 add_custom_command(
-        TARGET ch21_ex9 POST_BUILD
+        TARGET ch21_ex9 ch21_ex10 POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy
                 ${CMAKE_CURRENT_SOURCE_DIR}/orders_1.txt
                 ${CMAKE_CURRENT_BINARY_DIR}/orders_1.txt
