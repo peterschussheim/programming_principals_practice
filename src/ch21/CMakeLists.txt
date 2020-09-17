@@ -42,13 +42,12 @@ add_executable(ch21_ex10 ex10.cpp)
 set_property(TARGET ch21_ex10 PROPERTY CXX_STANDARD 17)
 set_property(TARGET ch21_ex10 PROPERTY CXX_STANDARD_REQUIRED ON)
 
-add_executable(ch21_ex11 ex11.cpp)
-set_property(TARGET ch21_ex11 PROPERTY CXX_STANDARD 20)
+find_package(fltk REQUIRED)
+add_executable(ch21_ex11 ex11.cpp ../Graph.cpp ../Window.cpp ../GUI.cpp ../Simple_window.cpp)
+target_link_libraries(ch21_ex11 PUBLIC ${FLTK_LIBRARIES})
+target_include_directories(ch21_ex11 PUBLIC ${FLTK_INCLUDE_DIR})
+set_property(TARGET ch21_ex11 PROPERTY CXX_STANDARD 14)
 set_property(TARGET ch21_ex11 PROPERTY CXX_STANDARD_REQUIRED ON)
-
-add_executable(ch21_ex12 ex12.cpp)
-set_property(TARGET ch21_ex12 PROPERTY CXX_STANDARD 20)
-set_property(TARGET ch21_ex12 PROPERTY CXX_STANDARD_REQUIRED ON)
 
 add_custom_command(
         TARGET ch21_drill_map POST_BUILD
