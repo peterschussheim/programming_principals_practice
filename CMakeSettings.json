@@ -18,12 +18,19 @@
         },
         {
           "name": "CMAKE_CXX_FLAGS",
-          "value": "-m64 -fdiagnostics-absolute-paths  /DWIN32 /D_WINDOWS /W3 /GR /EHsc",
+          "value": "-m64 -fdiagnostics-absolute-paths /DWIN32 /D_WINDOWS /W3 /GR /EHsc",
+          "type": "STRING"
+        },
+        {
+          "name": "CMAKE_CXX_FLAGS_DEBUG",
+          "value": "/MDd /Zi /Ob0 /Od /RTC1  /EHsc",
           "type": "STRING"
         }
       ],
       "enableClangTidyCodeAnalysis": true,
-      "intelliSenseMode": "windows-clang-x64"
+      "clangTidyChecks": "-*,clang-analyzer-cplusplus-*,cppcoreguidelines-*,-cppcoreguidelines-avoid-magic-numbers*",
+      "intelliSenseMode": "windows-clang-x64",
+      "cmakeExecutable": "C:/Program Files/CMake/bin/cmake.exe"
     }
   ]
 }
