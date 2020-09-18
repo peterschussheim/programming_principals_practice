@@ -1,4 +1,5 @@
 file(GLOB SOURCES CONFIGURE_DEPENDS "*.cpp")
+
 add_subdirectory(ch4)
 add_subdirectory(ch5)
 add_subdirectory(ch6)
@@ -17,19 +18,3 @@ add_subdirectory(ch18)
 add_subdirectory(ch19)
 add_subdirectory(ch20)
 add_subdirectory(ch21)
-
-add_executable(main main.cpp)
-set_property(TARGET main PROPERTY CXX_STANDARD 17)
-set_property(TARGET main PROPERTY CXX_STANDARD_REQUIRED ON)
-
-add_executable(Chrono Chrono.cpp)
-set_property(TARGET Chrono PROPERTY CXX_STANDARD 17)
-set_property(TARGET Chrono PROPERTY CXX_STANDARD_REQUIRED ON)
-
-add_executable(Test_output Test_output.cpp)
-set_property(TARGET Test_output PROPERTY CXX_STANDARD 17)
-set_property(TARGET Test_output PROPERTY CXX_STANDARD_REQUIRED ON)
-
-add_executable(To_lower To_lower.cpp)
-set_property(TARGET To_lower PROPERTY CXX_STANDARD 17)
-set_property(TARGET To_lower PROPERTY CXX_STANDARD_REQUIRED ON)
