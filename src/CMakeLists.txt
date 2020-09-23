@@ -18,3 +18,5 @@ add_subdirectory(ch18)
 add_subdirectory(ch19)
 add_subdirectory(ch20)
 add_subdirectory(ch21)
+# add_subdirectory(ch22) target skipped for now
+add_subdirectory(ch23)
