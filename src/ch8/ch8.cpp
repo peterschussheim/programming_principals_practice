@@ -1,5 +1,6 @@
 void swap_v(int, int);
-void swap_v(int a, int b) {
+void swap_v(int a, int b)
+{
   int temp;
   temp = a;
   a = b;
@@ -7,7 +8,8 @@ void swap_v(int a, int b) {
 }
 
 void swap_r(int&, int&);
-void swap_r(int& a, int& b) {
+void swap_r(int& a, int& b)
+{
   int temp;
   temp = a;
   a = b;

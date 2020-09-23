@@ -6,7 +6,7 @@
       "configurationType": "Debug",
       "buildRoot": "${projectDir}\\out\\build\\${name}",
       "installRoot": "${projectDir}\\out\\install\\${name}",
-      "cmakeCommandArgs": "",
+      "cmakeCommandArgs": "-Wno-dev",
       "buildCommandArgs": "-v",
       "ctestCommandArgs": "",
       "inheritEnvironments": [ "clang_cl_x64" ],
@@ -18,12 +18,40 @@
         },
         {
           "name": "CMAKE_CXX_FLAGS",
-          "value": "-m64 -fexceptions -fdiagnostics-absolute-paths  /DWIN32 /D_WINDOWS /W3 /GR /EHsc",
+          "value": "-m64 -fdiagnostics-absolute-paths /DWIN32 /D_WINDOWS /W3 /GR /EHsc",
           "type": "STRING"
+        },
+        {
+          "name": "CMAKE_CXX_FLAGS_DEBUG",
+          "value": "/MDd /Zi /Ob0 /Od /RTC1  /EHsc",
+          "type": "STRING"
+        },
+        {
+          "name": "_VCPKG_CL",
+          "value": "C:/Program Files (x86)/Microsoft Visual Studio/2019/Community/VC/Tools/MSVC/14.27.29110/bin/Hostx64/x86/cl.exe",
+          "type": "FILEPATH"
         }
       ],
       "enableClangTidyCodeAnalysis": true,
-      "intelliSenseMode": "windows-clang-x64"
+      "clangTidyChecks": "-*,clang-analyzer-cplusplus-*,cppcoreguidelines-*,-cppcoreguidelines-avoid-magic-numbers*",
+      "intelliSenseMode": "windows-clang-x64",
+      "cmakeExecutable": "C:/Program Files/CMake/bin/cmake.exe"
+    },
+    {
+      "name": "x64-MSVC-Debug",
+      "generator": "Ninja",
+      "configurationType": "Debug",
+      "buildRoot": "${projectDir}\\out\\build\\${name}",
+      "installRoot": "${projectDir}\\out\\install\\${name}",
+      "cmakeCommandArgs": "-Wno-dev",
+      "buildCommandArgs": "-v",
+      "ctestCommandArgs": "",
+      "inheritEnvironments": [ "msvc_x64_x64" ],
+      "variables": [],
+      "enableClangTidyCodeAnalysis": true,
+      "enableMicrosoftCodeAnalysis": true,
+      "clangTidyChecks": "-*,clang-analyzer-cplusplus-*,cppcoreguidelines-*,-cppcoreguidelines-avoid-magic-numbers*",
+      "intelliSenseMode": "windows-msvc-x64"
     }
   ]
 }

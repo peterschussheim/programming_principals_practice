@@ -9,10 +9,13 @@
 
   Input file location: out/build/.../src/uppers.txt
 */
+
+// TODO: add to cmakelists
 #include "std_lib_facilities.h"
 using namespace std;
 
-int main() {
+int main()
+{
   try {
     string iname;  // input filename
     string oname;  // output filename
@@ -37,11 +40,13 @@ int main() {
 
     keep_window_open("~");
     return 0;
-  } catch (exception& e) {
+  }
+  catch (exception& e) {
     cerr << e.what() << '\n';
     keep_window_open("~");
     return 1;
-  } catch (...) {
+  }
+  catch (...) {
     cerr << "unhandled exception\n";
     keep_window_open("~");
     return 2;

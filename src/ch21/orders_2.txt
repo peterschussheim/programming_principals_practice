@@ -1,0 +1,151 @@
+Thaddus Wain
+9976 Chinook Court, Richmond, Virginia, 23203
+06/18/2015
+Veal - Provimi Inside|8.01|1
+Vector Energy Bar|0.99|2
+Water - Green Tea Refresher|0.75|7
+#
+Sonnie Bythway
+17 Pierstorff Pass, Lake Charles, Louisiana, 70616
+08/25/2018
+Ice Cream - Fudge Bars|1.99|5
+Bread - Olive|2.78|3
+Coca-Cola, Six Pack|2.99|1
+#
+Candice Symonds
+2493 Rieder Pass, Washington, District of Columbia, 20404
+12/08/2011
+Bread - Olive|2.78|1
+Tart - Butter Plain Squares|.99|8
+A&W Root Beer 2 Litre|1.99|4
+#
+Richie Shailer
+35464 Orin Hill, Jamaica, New York, 11407
+10/17/2011
+Bread - Roll, Italian|0.59|7
+Cheese - Grana Padano|7.99|1
+Muffin - Blueberry Individual|1.99|7
+#
+Jonah Bickle
+57 Schlimgen Crossing, Bradenton, Florida, 34205
+07/10/2019
+Muffin - Blueberry Individual|1.99|3
+Whmis Spray Bottle Graduated|10.59|1
+#
+Westbrook Degg
+0387 Utah Hill, Houston, Texas, 77055
+04/09/2016
+Cheese - Grana Padano|7.99|1
+Muffin - Blueberry Individual|1.99|3
+#
+Ramsay Bernhardt
+986 Golf Course Trail, Des Moines, Iowa, 50335
+11/10/2017
+Bread Fig And Almond|5.89|1
+Pastry - French Mini Assorted|0.99|8
+Pepper - Green, Chili|0.46|7
+#
+Cinda Besant
+5 Russell Junction, Long Beach, California, 90831
+04/16/2015
+Wine - Muscadet Sur Lie|10.99|1
+Wine - Shiraz South Eastern|12.33|2
+Pastry - French Mini Assorted|0.99|10
+Pepper - Green, Chili|0.46|3
+#
+Wynn Kubal
+19 Pankratz Center, Levittown, Pennsylvania, 19058
+11/19/2013
+Nut - Almond, Blanched, Whole|10.79|1
+Vector Energy Bar|0.99|6
+Water - Green Tea Refresher|0.75|3
+#
+Becca Manueli
+84 Rutledge Plaza, Portland, Oregon, 97271
+09/16/2014
+Petite Baguette|3.99|3
+Bread - Olive|2.78|1
+Chicken - Tenderloin|1.79|4
+Ice Cream - Fudge Bars|1.99|10
+Coca-Cola, Six Pack|2.99|2
+#
+Licha Spilstead
+11 Havey Road, Omaha, Nebraska, 68197
+01/11/2015
+Veal - Striploin|13.37|3
+Italian Corn Meal Poly|4.99|2
+Wine - Red, Pelee Island Merlot|15.89|2
+Coca-Cola, Six Pack|2.99|1
+#
+Giustina Snap
+50161 Anzinger Pass, Hamilton, Ohio, 45020
+10/26/2016
+Chicken - Tenderloin|1.79|9
+Coca-Cola, Six Pack|2.99|2
+Tart - Butter Plain Squares|.99|3
+A&W Root Beer 2 Litre|1.99|6
+#
+Belle Doale
+9787 Dryden Drive, San Francisco, California, 94164
+07/09/2017
+Beef - Top Sirloin - Aaa|1.99|8
+Chicken - Tenderloin|1.79|9
+Wine - Shiraz South Eastern|12.33|2
+Pastry - French Mini Assorted|0.99|3
+#
+Lacy Vevers
+341 Ridgeview Point, Shawnee Mission, Kansas, 66276
+01/03/2019
+Nut - Pistachio, Shelled|9.89|3
+Wine - Red, Pelee Island Merlot|15.89|1
+Jack Daniels|25.01|1
+Chicken - Tenderloin|1.79|7
+Wine - Shiraz South Eastern|12.33|1
+Pastry - French Mini Assorted|0.99|7
+#
+Fawnia Redhole
+9 Roxbury Circle, North Hollywood, California, 91616
+10/12/2011
+Vacuum Bags 12x16|5.79|2
+Cocoa Powder - Natural|5.76|3
+Italian Corn Meal Poly|4.99|2
+Creme De Banane - Marie|17.27|1
+Muffin - Blueberry Individual|1.99|9
+Whmis Spray Bottle Graduated|10.59|1
+#
+Edan Faudrie
+2683 Shoshone Trail, El Paso, Texas, 79994
+08/08/2014
+Goulash Seasoning|3.75|1
+Tomatoes - Cherry, Yellow|3.99|3
+Ice Cream - Fudge Bars|1.99|2
+Bread - Olive|2.78|1
+Coca-Cola, Six Pack|2.99|2
+#
+Ambur Richardes
+6 Westend Court, Reno, Nevada, 89595
+02/23/2011
+Tomatoes - Cherry, Yellow|3.99|1
+Muffin Batt - Choc Chk|3.99|4
+Muffin - Blueberry Individual|1.99|2
+Whmis Spray Bottle Graduated|10.59|1
+#
+Duffy Tassel
+57 Roxbury Park, Fort Collins, Colorado, 80525
+04/06/2011
+Creme De Banane - Marie|17.27|1
+Vector Energy Bar|0.99|10
+Tart - Butter Plain Squares|.99|10
+A&W Root Beer 2 Litre|1.99|6
+#
+Rosalinda Banyard
+2275 Shasta Lane, Tacoma, Washington, 98411
+07/30/2012
+Muffin Batt - Choc Chk|3.99|2
+Cocoa Powder - Natural|5.76|1
+Italian Corn Meal Poly|4.99|1
+Wine - Red, Pelee Island Merlot|15.89|3
+Jack Daniels|25.01|1
+Wine - Shiraz South Eastern|12.33|1
+Pastry - French Mini Assorted|0.99|3
+Pepper - Green, Chili|0.46|6

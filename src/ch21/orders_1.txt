@@ -1,0 +1,100 @@
+Wilhelm Keese
+54009 Del Mar Avenue, Oakland, California, 94616
+08/27/2016
+Swiss Chard - Red|3.99|1
+A&W Root Beer 2 Litre|1.99|2
+Veal - Provimi Inside|8.01|2
+#
+Ransom Southerns
+874 Cambridge Point, Birmingham, Alabama, 35220
+07/24/2013
+Tomatoes - Yellow Hot House|1.09|3
+A&W Root Beer 2 Litre|1.99|7
+Veal - Provimi Inside|8.01|2
+Bread - Olive|2.78|2
+#
+Timmy Hatwell
+17 Elka Court, Meridian, Mississippi, 39305
+09/29/2017
+Veal - Provimi Inside|8.01|1
+Sour Puss Raspberry|0.99|10
+Bread - Olive|2.78|1
+Muffin - Blueberry Individual|1.99|4
+#
+Celle Dumbrell
+66199 Portage Crossing, Sioux Falls, South Dakota, 57105
+07/10/2015
+Muffin - Blueberry Individual|1.99|3
+Cheese - Grana Padano|7.99|1
+A&W Root Beer 2 Litre|1.99|9
+Veal - Provimi Inside|8.01|10
+#
+Richie Shailer
+35464 Orin Hill, Jamaica, New York, 11407
+10/17/2011
+Bread - Roll, Italian|0.59|7
+Cheese - Grana Padano|7.99|1
+Muffin - Blueberry Individual|1.99|7
+#
+Jonah Bickle
+57 Schlimgen Crossing, Bradenton, Florida, 34205
+07/10/2019
+Muffin - Blueberry Individual|1.99|3
+Whmis Spray Bottle Graduated|10.59|1
+#
+Westbrook Degg
+0387 Utah Hill, Houston, Texas, 77055
+04/09/2016
+Cheese - Grana Padano|7.99|1
+Muffin - Blueberry Individual|1.99|3
+#
+Georges Clemas
+114 Park Meadow Plaza, Fresno, California, 93778
+06/20/2012
+Muffin - Blueberry Individual|1.99|3
+Vector Energy Bar|0.99|5
+A&W Root Beer 2 Litre|1.99|4
+Veal - Provimi Inside|8.01|1
+#
+Filmore Punyer
+1 Hoffman Alley, Phoenix, Arizona, 85015
+10/11/2016
+Mince Meat - Filling|4.99|3
+Muffin - Blueberry Individual|1.99|3
+Coca-Cola, Six Pack|2.99|3
+Veal - Provimi Inside|8.01|1
+A&W Root Beer 2 Litre|1.99|4
+#
+Thaddus Wain
+9976 Chinook Court, Richmond, Virginia, 23203
+06/18/2015
+Veal - Provimi Inside|8.01|1
+Vector Energy Bar|0.99|2
+Water - Green Tea Refresher|0.75|7
+#
+Sonnie Bythway
+17 Pierstorff Pass, Lake Charles, Louisiana, 70616
+08/25/2018
+Ice Cream - Fudge Bars|1.99|5
+Bread - Olive|2.78|3
+Coca-Cola, Six Pack|2.99|1
+#
+Candice Symonds
+2493 Rieder Pass, Washington, District of Columbia, 20404
+12/08/2011
+Bread - Olive|2.78|1
+Tart - Butter Plain Squares|.99|8
+A&W Root Beer 2 Litre|1.99|4
+#
+Clarita Denizet
+86853 Shoshone Avenue, Los Angeles, California, 90189
+11/03/2013
+Veal - Provimi Inside|8.01|1
+Mince Meat - Filling|4.99|3
+#
+Mitch Garrioch
+03191 Lien Parkway, Birmingham, Alabama, 35285
+07/23/2017
+Bread - Olive|2.78|1
+Coca-Cola, Six Pack|2.99|3
+#
