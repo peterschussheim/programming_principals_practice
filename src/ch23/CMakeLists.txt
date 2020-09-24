@@ -1,6 +1,11 @@
 add_executable(ch23_try_this try_this.cpp)
 set_property(TARGET ch23_try_this PROPERTY CXX_STANDARD 20)
 set_property(TARGET ch23_try_this PROPERTY CXX_STANDARD_REQUIRED ON)
+add_custom_command(
+        TARGET ch23_try_this POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy
+                ${CMAKE_CURRENT_SOURCE_DIR}/my-mail-file.txt
+                ${CMAKE_CURRENT_BINARY_DIR}/my-mail-file.txt)
 
 add_executable(ch23_drill drill.cpp)
 set_property(TARGET ch23_drill PROPERTY CXX_STANDARD 20)
