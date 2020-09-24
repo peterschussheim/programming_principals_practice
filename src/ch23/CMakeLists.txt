@@ -10,6 +10,20 @@ add_custom_command(
 add_executable(ch23_drill drill.cpp)
 set_property(TARGET ch23_drill PROPERTY CXX_STANDARD 20)
 set_property(TARGET ch23_drill PROPERTY CXX_STANDARD_REQUIRED ON)
+add_custom_command(
+        TARGET ch23_drill POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy
+                ${CMAKE_CURRENT_SOURCE_DIR}/file.txt
+                ${CMAKE_CURRENT_BINARY_DIR}/file.txt)
+
+add_executable(ch23_table_validator table_validator.cpp)
+set_property(TARGET ch23_table_validator PROPERTY CXX_STANDARD 20)
+set_property(TARGET ch23_table_validator PROPERTY CXX_STANDARD_REQUIRED ON)
+add_custom_command(
+        TARGET ch23_table_validator POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy
+                ${CMAKE_CURRENT_SOURCE_DIR}/table.txt
+                ${CMAKE_CURRENT_BINARY_DIR}/table.txt)
 
 add_executable(ch23_ex1 ex1.cpp)
 set_property(TARGET ch23_ex1 PROPERTY CXX_STANDARD 20)
