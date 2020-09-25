@@ -6,7 +6,7 @@
 int main()
 {
   try {
-    // std::ifstream in{"table.txt"};
+    std::ifstream in{"table.txt"};
     return 0;
   }
   catch (const std::exception& e) {
