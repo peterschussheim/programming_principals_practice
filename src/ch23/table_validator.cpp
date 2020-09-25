@@ -1,4 +1,7 @@
 #include <iostream>
+#include <regex>
+#include <fstream>
+#include <string>
 
 int main()
 {
