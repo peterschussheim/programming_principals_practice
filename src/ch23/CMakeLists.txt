@@ -28,6 +28,15 @@ add_custom_command(
 add_executable(ch23_ex1 ex1.cpp)
 set_property(TARGET ch23_ex1 PROPERTY CXX_STANDARD 20)
 set_property(TARGET ch23_ex1 PROPERTY CXX_STANDARD_REQUIRED ON)
+add_custom_command(
+        TARGET ch23_ex1 POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy
+                ${CMAKE_CURRENT_SOURCE_DIR}/mail_file_with_errors.txt
+                ${CMAKE_CURRENT_BINARY_DIR}/mail_file_with_errors.txt
+        COMMAND ${CMAKE_COMMAND} -E copy
+                ${CMAKE_CURRENT_SOURCE_DIR}/mail_file_with_errors_2.txt
+                ${CMAKE_CURRENT_BINARY_DIR}/mail_file_with_errors_2.txt)
+
 
 add_executable(ch23_ex2 ex2.cpp)
 set_property(TARGET ch23_ex2 PROPERTY CXX_STANDARD 20)

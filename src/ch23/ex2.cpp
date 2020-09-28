@@ -1,3 +1,7 @@
+// Add a multimap and have it hold subjects. Let the program take an input
+// string from the keyboard and print out every message with that string as
+// its subject.
+
 #include <iostream>
 
 int main()

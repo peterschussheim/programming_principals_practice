@@ -5,7 +5,7 @@
 
 //------------------------------------------------------------------------------
 
-// find name of the sender in a Messafe;
+// find name of the sender in a Message;
 // return true if found
 // if found, place sender's name in s:
 bool find_from_addr(const Message* m, std::string& s);
