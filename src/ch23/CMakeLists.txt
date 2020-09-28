@@ -41,6 +41,11 @@ add_custom_command(
 add_executable(ch23_ex2 ex2.cpp)
 set_property(TARGET ch23_ex2 PROPERTY CXX_STANDARD 20)
 set_property(TARGET ch23_ex2 PROPERTY CXX_STANDARD_REQUIRED ON)
+add_custom_command(
+        TARGET ch23_ex2 POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy
+                ${CMAKE_CURRENT_SOURCE_DIR}/my-mail-file.txt
+                ${CMAKE_CURRENT_BINARY_DIR}/my-mail-file.txt)
 
 add_executable(ch23_ex3 ex3.cpp)
 set_property(TARGET ch23_ex3 PROPERTY CXX_STANDARD 20)
