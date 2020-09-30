@@ -9,13 +9,23 @@
 
 //------------------------------------------------------------------------------
 
-// Given a pointer to a Message, return the subject or an empty string if
-// there is no subject.
-std::string find_from_subject(const Message* m);
+int is_prefix(const std::string& s, const std::string& p);
 
 //------------------------------------------------------------------------------
 
-int is_prefix(const std::string& s, const std::string& p);
+// Return a string containing a copy of the Message body text.
+// How to extract a Message body? We need to consider that a body text can be
+// an empty, a single line or multiple lines.
+std::string find_body(const Message* m);
+
+//------------------------------------------------------------------------------
+
+// return the subject of the Message, if any, otherwise "":
+std::string find_subject(const Message* m);
+
+//------------------------------------------------------------------------------
+
+bool find_from_subject(const Message* m, std::string& s);
 
 //------------------------------------------------------------------------------
 
@@ -29,24 +39,27 @@ int main()
 {
   try {
     std::cout << "Please enter a subject to search for: ";
-    std::string subject;
-    std::cin >> subject;
+    std::string query;
+    getline(std::cin, query);
     std::cout << '\n';
-    std::cout << "Messages matching query \"" << subject << "\":\n";
+    std::cout << "Messages matching query \"" << query << "\":\n" << '\n';
 
     Mail_file m_file{"my-mail-file.txt"};  // init mail file
 
-    // init multimap to store subjects matching subject
-    std::multimap<std::string, const Message*> sender;
-    for (const auto& m : m_file) {
+    // init multimap to store Messages matching query
+    std::multimap<std::string, const Message*> subject;
+
+    for (const auto& msg : m_file) {
       std::string s;
-      if (find_from_addr(&m, s)) sender.insert(std::make_pair(s, &m));
+      if (find_from_subject(&msg, s)) {  // build map keyed by message subject
+
+        subject.insert(std::make_pair(s, &msg));
+      }
     }
 
-    // print each message with subject as its subject
-    auto pp = sender.equal_range(subject);
-    for (auto p = pp.first; p != pp.second; ++p) {
-      std::cout << find_from_subject(p->second) << '\n';
+    auto pp = subject.equal_range(query);           // beginning of a Message
+    for (auto p = pp.first; p != pp.second; ++p) {  // print each Message's body
+      std::cout << find_body(p->second) << '\n';
     }
 
     return 0;
@@ -62,6 +75,31 @@ int main()
 }
 
 //------------------------------------------------------------------------------
+
+std::string find_body(const Message* m)
+{
+  for (const auto& field : *m) {
+    // Assume message body begins AFTER a blank Message header field and
+    // terminates when given "----" (four dashes). For example:
+    // EMPTY Line
+    // This is a message just to say hello.
+    // So, "Hello".
+    // ----
+    if (int n = is_prefix(field, "Subject: ")) {
+      return std::string(field, n);
+      // std::cout << field << '\n';
+    }
+  }
+
+  return "";
+}
+
+std::string find_subject(const Message* m)
+{
+  for (const auto& x : *m) {
+    if (int n = is_prefix(x, "Subject: ")) { return std::string(x, n); }
+  }
+}
 
 //------------------------------------------------------------------------------
 
@@ -79,12 +117,15 @@ bool find_from_addr(const Message* m, std::string& s)
 
 //------------------------------------------------------------------------------
 
-std::string find_from_subject(const Message* m)
+bool find_from_subject(const Message* m, std::string& s)
 {
   for (const auto& x : *m) {
-    if (int n = is_prefix(x, "Subject: ")) { return std::string(x, n); }
+    if (int n = is_prefix(x, "Subject: ")) {
+      s = std::string(x, n);
+      return true;
+    }
   }
-  return "";
+  return false;
 }
 
 //------------------------------------------------------------------------------
