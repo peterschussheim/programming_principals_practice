@@ -24,6 +24,14 @@ public:
 
 //------------------------------------------------------------------------------
 
+std::ostream& operator<<(std::ostream& os, const Message& m)
+{
+  for (Line_iter p = m.begin(); p != m.end(); ++p) { os << *p << '\n'; }
+  return os;
+}
+
+//------------------------------------------------------------------------------
+
 // A Mail_file is a structure holding lines of text and messages:
 using Mess_iter = std::vector<Message>::const_iterator;
 
