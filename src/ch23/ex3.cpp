@@ -19,19 +19,27 @@ int main()
     std::cout << "Messages matching query \"" << query << "\":\n" << '\n';
 
     Mail_file m_file{"my-mail-file.txt"};
-
-    // init multimap to store Messages matching query
     std::multimap<std::string, const Message*> subject;
 
-    std::regex subj{R"(Subject: )"};
-    std::smatch matches;  // matched strings go here
-    for (const auto& msg : m_file) {
-      std::string s;
-      if (/* regex_search(msg_line,matches,pattern)*/) {  // build map keyed by
-                                                          // message subject
+    std::regex pattern{R"(Subject: (FW:|RE:)?(.*))"};
+    int message_num = 0;  // counter for messages in this file
 
-        subject.insert(std::make_pair(s, &msg));
+    for (const auto& msg : m_file) {
+      ++message_num;
+      std::smatch m;  // matched strings go here
+      std::cout << "Message " << message_num << ":\n";
+
+      for (const auto& line : msg) {  // look at each line in this message
+        bool matched = std::regex_search(line, m, pattern);
+        if (matched) {
+          for (int i = 0; i < m.size(); ++i) {
+            std::cout << "m[" << i << "] = " << m[i] << '\n';
+          }
+          subject.insert(std::make_pair(m[1], &msg));
+        }
       }
+
+      std::cout << '\n';
     }
 
     auto pp = subject.equal_range(query);           // beginning of a Message
