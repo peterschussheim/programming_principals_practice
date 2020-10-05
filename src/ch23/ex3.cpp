@@ -9,6 +9,10 @@
 
 //------------------------------------------------------------------------------
 
+std::string find_prefix(const Message* m, const std::string& s);
+std::string find_subject(const Message* m);
+//------------------------------------------------------------------------------
+
 int main()
 {
   try {
@@ -16,34 +20,20 @@ int main()
     std::string query;
     getline(std::cin, query);
     std::cout << '\n';
-    std::cout << "Messages matching query \"" << query << "\":\n" << '\n';
 
     Mail_file m_file{"my-mail-file.txt"};
     std::multimap<std::string, const Message*> subject;
 
-    std::regex pattern{R"(Subject: (FW:|RE:)?(.*))"};
-    int message_num = 0;  // counter for messages in this file
-
     for (const auto& msg : m_file) {
-      ++message_num;
-      std::smatch m;  // matched strings go here
-      std::cout << "Message " << message_num << ":\n";
-
-      for (const auto& line : msg) {  // look at each line in this message
-        bool matched = std::regex_search(line, m, pattern);
-        if (matched) {
-          for (int i = 0; i < m.size(); ++i) {
-            std::cout << "m[" << i << "] = " << m[i] << '\n';
-          }
-          subject.insert(std::make_pair(m[1], &msg));
-        }
-      }
-
-      std::cout << '\n';
+      std::string subj = find_subject(&msg);
+      if (subj != "") { subject.insert(std::make_pair(subj, &msg)); }
     }
 
+    std::cout << "Messages with subject matching query \"" << query << "\":\n"
+              << '\n';
     auto pp = subject.equal_range(query);           // beginning of a Message
     for (auto p = pp.first; p != pp.second; ++p) {  // print each Message
+
       std::cout << *p->second << '\n';
     }
 
@@ -57,6 +47,30 @@ int main()
     std::cerr << "unhandled exception\n";
     return 2;
   }
+}
+
+//------------------------------------------------------------------------------
+
+std::string find_prefix(const Message* m, const std::string& s)
+{
+  // return the string after the matched text in m that begins with s
+  // or an empty string if not found.
+  std::regex pattern{"^" + s + "(.*)$"};
+  std::smatch matches;
+  for (auto p = m->begin(); p != m->end(); ++p) {
+    bool matched = std::regex_match(*p, matches, pattern);
+    if (matched) return matches[1];
+  }
+
+  return "";
+}
+
+//------------------------------------------------------------------------------
+
+// return the subject of the Message, if any, otherwise ""
+std::string find_subject(const Message* m)
+{
+  return find_prefix(m, "Subject: ");
 }
 
 //------------------------------------------------------------------------------
