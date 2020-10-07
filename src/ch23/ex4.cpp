@@ -9,8 +9,10 @@
 
 #include <iostream>
 #include <map>
+#include <unordered_map>
 #include <string>
 #include <regex>
+#include <chrono>
 #include "Mail.h"
 
 // modifying enron file to terminate messages with  "----".
@@ -31,22 +33,52 @@ std::string find_sender(const Message* m);
 
 //------------------------------------------------------------------------------
 
+// TODO: Write up a summary of unordered_multimap vs multimap.
+// Mostly done with this.  Did some reading on benchmarking and evaluating
+// container performance and it is far from a trivial task
 int main()
 {
   try {
-    std::cout << "Opening large mail file...";
+    using Time_point = std::chrono::steady_clock::time_point;
+
+    Time_point start = std::chrono::steady_clock::now();
+    std::cout << "Opening file.\n";
     Mail_file m_file{"large_mail.txt"};
-    std::cout << " Done!\n";
+    Time_point end = std::chrono::steady_clock::now();
+    std::chrono::duration<double> elapsed_seconds = end - start;
+    std::cout << "Loaded file in " << elapsed_seconds.count() << " seconds.\n";
 
     std::multimap<std::string, const Message*> sender;
+    std::unordered_multimap<std::string, const Message*> sender_unordered;
 
     // build multimap of messages keyed by sender name
+    start = std::chrono::steady_clock::now();
     for (const auto& msg : m_file) {
       std::string from = find_sender(&msg);  // extract the sender in this msg
       if (from != "") sender.insert(std::make_pair(from, &msg));
     }
+    end = std::chrono::steady_clock::now();
+    elapsed_seconds = end - start;
 
-    std::cout << "Processed " << sender.size() << " messages.\n";
+    std::cout << "Processed " << sender.size() << " messages in "
+              << elapsed_seconds.count() << " (multimap).\n";
+    std::cout << "-------------------------------------------------------------"
+                 "-----------------\n";
+
+    // build an unordered_multimap of messages keyed by sender name
+    start = std::chrono::steady_clock::now();
+    for (const auto& msg : m_file) {
+      std::string from = find_sender(&msg);  // extract the sender in this msg
+      if (from != "") sender_unordered.insert(std::make_pair(from, &msg));
+    }
+    end = std::chrono::steady_clock::now();
+    elapsed_seconds = end - start;
+
+    std::cout << "Processed " << sender.size() << " messages in "
+              << elapsed_seconds.count() << " (unordered_multimap).\n";
+    std::cout << "-------------------------------------------------------------"
+                 "-----------------\n";
+
     std::cout << "Enter a sender email address to search for: ";
     std::string query;  // sender user wants to find
     getline(std::cin, query);
