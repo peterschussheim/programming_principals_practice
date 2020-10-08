@@ -51,11 +51,11 @@ add_executable(ch23_ex3 ex3.cpp)
 set_property(TARGET ch23_ex3 PROPERTY CXX_STANDARD 20)
 set_property(TARGET ch23_ex3 PROPERTY CXX_STANDARD_REQUIRED ON)
 
-add_executable(ch23_ex4 ex4.cpp)
-set_property(TARGET ch23_ex4 PROPERTY CXX_STANDARD 20)
-set_property(TARGET ch23_ex4 PROPERTY CXX_STANDARD_REQUIRED ON)
+add_executable(ch23_ex4_5 ex4_5.cpp)
+set_property(TARGET ch23_ex4_5 PROPERTY CXX_STANDARD 20)
+set_property(TARGET ch23_ex4_5 PROPERTY CXX_STANDARD_REQUIRED ON)
 add_custom_command(
-        TARGET ch23_ex4 POST_BUILD
+        TARGET ch23_ex4_5 POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy
                 ${CMAKE_CURRENT_SOURCE_DIR}/large_mail.txt
                 ${CMAKE_CURRENT_BINARY_DIR}/large_mail.txt)
