@@ -20,3 +20,4 @@ add_subdirectory(ch20)
 add_subdirectory(ch21)
 # add_subdirectory(ch22) target skipped for now
 add_subdirectory(ch23)
+add_subdirectory(ch24)
