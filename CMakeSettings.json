@@ -48,7 +48,7 @@
       "ctestCommandArgs": "",
       "inheritEnvironments": [ "msvc_x64_x64" ],
       "variables": [],
-      "enableClangTidyCodeAnalysis": false,
+      "enableClangTidyCodeAnalysis": true,
       "enableMicrosoftCodeAnalysis": true,
       "clangTidyChecks": "-*,clang-analyzer-cplusplus-*,cppcoreguidelines-*,-cppcoreguidelines-avoid-magic-numbers*",
       "intelliSenseMode": "windows-msvc-x64"
