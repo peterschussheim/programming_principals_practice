@@ -2,7 +2,7 @@ add_executable(ch24_try_this try_this.cpp)
 set_property(TARGET ch24_try_this PROPERTY CXX_STANDARD 20)
 set_property(TARGET ch24_try_this PROPERTY CXX_STANDARD_REQUIRED ON)
 
-add_executable(ch24_drill drill.cpp)
+add_executable(ch24_drill drill.cpp Matrix.cpp MatrixIO.cpp)
 set_property(TARGET ch24_drill PROPERTY CXX_STANDARD 20)
 set_property(TARGET ch24_drill PROPERTY CXX_STANDARD_REQUIRED ON)
 
