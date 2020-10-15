@@ -1,8 +1,5 @@
 
-//
-// 6. Compute a multiplication table for [0,n)*[0,m) and represent it as a 2D
-// Matrix . Take n and m from cin and print out the table nicely (assume that
-// m is small enough that the results fit on a line).
+
 //
 // 7. Read ten complex<double> s from cin (yes, cin supports >> for complex )
 // and put them into a Matrix . Calculate and output the sum of the ten com-
@@ -14,6 +11,7 @@
 #include <cerrno>
 #include <cfenv>
 #include <iostream>
+#include <iomanip>
 #include <string>
 #include <fstream>
 #include "Matrix.cpp"
@@ -26,6 +24,9 @@ void drill_2();
 void drill_3();
 void drill_4();
 void drill_5();
+void drill_6();
+
+//------------------------------------------------------------------------------
 
 //------------------------------------------------------------------------------
 
@@ -36,7 +37,8 @@ int main()
     // drill_2();
     // drill_3();
     // drill_4();
-    drill_5();
+    // drill_5();
+    drill_6();
     return 0;
   }
   catch (const std::exception& e) {
@@ -150,6 +152,62 @@ void drill_5()
 
   // print m
   std::cout << m << '\n';
+}
+
+void drill_6()
+{
+  // 6. Compute a multiplication table for [0,n)*[0,m) and represent it as a 2D
+  // Matrix . Take n and m from cin and print out the table nicely (assume that
+  // m is small enough that the results fit on a line).
+
+  std::cout << "Multiplication Table Generator\n";
+  std::cout << "---------------------------------------------------------------"
+               "----------\n";
+  std::cout << "Please enter desired range as two integers\n";
+  std::cout << "(ex: 10 25 generates a table with columns 0-10\n";
+  std::cout << "and columns from 0-25).\n";
+  std::cout << "---------------------------------------------------------------"
+               "----------\n";
+  std::cout << '\n';
+
+  int n = 5;
+  int m = 10;
+
+  // std::cin >> n >> m;
+  std::cout << '\n';
+
+  // 2-dimension multiplication table
+  Numeric_lib::Matrix<int, 2> m_table(n + 1, m + 1);  // handle zero-based idx
+
+  for (int i = 0; i < m_table.dim1(); ++i)  // set values
+  {
+    for (int j = 0; j < m_table.dim2(); ++j) { m_table(i, j) = i * j; }
+  }
+
+  std::cout << "X  |";
+  for (Numeric_lib::Index col = 1; col < m_table.dim1(); ++col) {
+    std::cout << std::right << std::setfill(' ') << std::setw(2);
+    std::cout << col << "  ";  // print column header
+  }
+
+  std::cout << '\n';
+  for (Numeric_lib::Index col = 1; col < m_table.dim1() * 4; ++col) {
+    std::cout << "-";
+  }
+
+  std::cout << '\n';
+  for (Numeric_lib::Index row = 1; row < m_table.dim2(); ++row) {
+    std::cout << std::right << std::setfill(' ') << std::setw(2);
+    std::cout << row << " | " << m_table[row] << '\n';
+    /* std::cout <<*/
+  }
+
+  /*for (int i = 0; i < m_table.dim1(); ++i) {
+    for (int j = 0; i < m_table.dim2(); ++j) {
+      std::cout << m_table(i, j) << " ";
+    }
+    std::cout << '\n';
+  }*/
 }
 
 //------------------------------------------------------------------------------
