@@ -6,7 +6,7 @@ add_executable(ch24_drill drill.cpp Matrix.cpp MatrixIO.cpp)
 set_property(TARGET ch24_drill PROPERTY CXX_STANDARD 20)
 set_property(TARGET ch24_drill PROPERTY CXX_STANDARD_REQUIRED ON)
 
-add_executable(ch24_ex1 ex1.cpp)
+add_executable(ch24_ex1 ex1.cpp Matrix.cpp MatrixIO.cpp)
 set_property(TARGET ch24_ex1 PROPERTY CXX_STANDARD 20)
 set_property(TARGET ch24_ex1 PROPERTY CXX_STANDARD_REQUIRED ON)
 
