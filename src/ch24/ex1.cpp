@@ -3,10 +3,10 @@
 // an array { 1 2 3 4 5 }. DONE
 
 // 2) Define a single triple() function that can be used for both
-// a.apply(triple) and apply(triple,a).
+// a.apply(triple) and apply(triple,a). DONE
 
 // 3) Explain why it could be a bad idea to write every function to be used by
-// apply() that way.
+// apply() that way. DONE
 
 #include <iostream>
 #include "Matrix.cpp"
@@ -24,6 +24,13 @@ int triple_broadcast(int& n) { return n *= 3; }
 template<class T, class Q> void scale(T& n, Q s) { n *= s; }
 template<class T, class Q> T scale(T& n, Q s) { return n * s; }
 
+// single triple() function that can be used for both
+// a.apply(triple) and apply(triple,a).
+// Note that this style of function is not ideal as it generates potentially
+// unnecessary operations. For example, if our apply function expects a void
+// function f(), using the single triple function costs an extra machine op.
+int triple(int& n) { return n *= 3; }
+
 //------------------------------------------------------------------------------
 
 int main()
@@ -39,12 +46,16 @@ int main()
 
     std::cout << "triple_inplace: " << a.slice(0);
     std::cout << '\n';
-    std::cout << "triple_broadcast: " << b.slice(0);
+    std::cout << "triple_broadcast: " << b.slice(0) << '\n';
 
     Mat_int c(5);
     for (int i = 0; i < c.size(); ++i) { c(i) = i + 1; }  // fill 1D Matrix
-    // TODO: Complete a generic triple function
-    // Mat_intd = apply(scale)
+
+    Mat_int d = apply(triple, c);
+    c.apply(triple);
+    std::cout << "triple: " << c.slice(0) << '\n';
+    std::cout << "triple broadcast: " << d.slice(0) << '\n';
+
     return 0;
   }
   catch (const std::exception& e) {
