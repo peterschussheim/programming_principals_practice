@@ -14,6 +14,7 @@ namespace Numeric_lib {
     for (Index i = 0; i < v.dim1(); ++i) {
       os << "  ";
       os << v(i);
+      os << "  ";
     }
 
     os << '}';
