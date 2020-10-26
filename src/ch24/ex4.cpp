@@ -21,6 +21,7 @@ using Numeric_lib::Index;
 void classical_elimination(Matrix& A, Vector& b);
 Vector classical_gaussian_elimination(Matrix A, Vector b);
 Vector back_substitution(const Matrix& A, const Vector& b);
+void elim_with_partial_pivot(Matrix& A, Vector& b);
 
 //------------------------------------------------------------------------------
 
@@ -95,6 +96,14 @@ Vector classical_gaussian_elimination(Matrix A, Vector b)
 
 //------------------------------------------------------------------------------
 
+Vector partial_gaussian_elimination(Matrix A, Vector b)
+{
+  elim_with_partial_pivot(A, b);
+  return back_substitution(A, b);
+}
+
+//------------------------------------------------------------------------------
+
 void classical_elimination(Matrix& A, Vector& b)
 {
   const Index n = A.dim1();
@@ -136,12 +145,42 @@ Vector back_substitution(const Matrix& A, const Vector& b)
 
 //------------------------------------------------------------------------------
 
+void elim_with_partial_pivot(Matrix& A, Vector& b)
+{
+  const Index n = A.dim1();
+  for (Index j = 0; j < n; ++j) {
+    Index pivot_row = j;
+
+    // look for suitable pivot:
+    for (Index k = j + 1; k < n; ++k) {
+      if (std::abs(A(k, j)) < std::abs(A(pivot_row, j))) pivot_row = k;
+
+      // swap the rows if we found a better pivot:
+      if (pivot_row != j) {
+        A.swap_rows(j, pivot_row);
+        std::swap(b(j), b(pivot_row));
+      }
+
+      // elimination:
+      for (Index i = j + 1; i < n; ++i) {
+        const double pivot = A(j, j);
+        if (pivot == 0) std::cerr << "can't solve: pivot==0" << '\n';
+        const double mult = A(i, j) / pivot;
+        A[i].slice(j) = scale_and_add(A[j].slice(j), -mult, A[i].slice(j));
+        b(i) -= mult * b(j);
+      }
+    }
+  }
+}
+
+//------------------------------------------------------------------------------
+
 void solve_random_system(Index n)
 {
   Matrix A = random_matrix(n);
   Vector b = random_vector(n);
-  std::cout << "A = " << std::defaultfloat << A << '\n';
-  std::cout << "b = " << std::defaultfloat << b << '\n';
+  std::cout << "A = " << std::defaultfloat << A << "\n\n";
+  std::cout << "b = " << std::defaultfloat << b << "\n\n";
   try {
     Vector x = classical_gaussian_elimination(A, b);
     std::cout << "classical elim solution is x = " << std::defaultfloat << x
@@ -156,11 +195,33 @@ void solve_random_system(Index n)
 
 //------------------------------------------------------------------------------
 
+void solve_random_system_partial_pivot(Index n)
+{
+  Matrix A = random_matrix(n);
+  Vector b = random_vector(n);
+  std::cout << "A = " << std::defaultfloat << A << "\n\n";
+  std::cout << "b = " << std::defaultfloat << b << "\n\n";
+  try {
+    Vector x = partial_gaussian_elimination(A, b);
+    std::cout << "partial_gaussian_elimination solution is x = "
+              << std::defaultfloat << x << '\n';
+    Vector v = A * x;
+    std::cout << "A*x = " << std::defaultfloat << v << '\n';
+  }
+  catch (const std::exception& e) {
+    std::cerr << e.what() << '\n';
+  }
+}
+
+//------------------------------------------------------------------------------
+
 int main()
 {
   solve_random_system(3);
+  std::cout << "---------------------------------------------------------------"
+               "--------------\n";
+  solve_random_system_partial_pivot(3);
 
-  // TODO: write elim_with_partial_pivot(Matrix& A, Vector& b);
   // TODO: figure out the reason for - -nan(ind) results
   return 0;
 }
