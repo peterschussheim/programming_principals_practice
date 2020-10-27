@@ -1,3 +1,6 @@
+// 7. Rewrite the Gaussian elimination program without using the Matrix li-
+// brary; that is, use built-in arrays or vector s instead of Matrix es.
+
 #include <iostream>
 
 int main()
