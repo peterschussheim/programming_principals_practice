@@ -22,22 +22,29 @@ struct Back_subst_failure : std::runtime_error {
 };
 
 //------------------------------------------------------------------------------
-typedef std::vector<std::vector<double>> vector_2d;
+
+typedef std::vector<std::vector<double>> Matrix;
+typedef std::vector<double> Vector;
 
 //------------------------------------------------------------------------------
 
-vector_2d scale_and_add(const vector_2d& a, double c, const vector_2d& b);
-double my_dot_product(const vector_2d& a, const vector_2d& b);
-void classical_elim_array(vector_2d A, std::vector<double> b);
-std::vector<double> back_substitution(const vector_2d& A,
-                                      const std::vector<double>& b);
+void classical_elimination(Matrix& A, Vector& b);
+Vector classical_gaussian_elimination(Matrix A, Vector b);
+Vector back_substitution(Matrix& A, Vector& b);
 
-void solve_random_system(int n);  // solve n-dim system
 //------------------------------------------------------------------------------
 
 int main()
 {
   try {
+    Matrix A = {{1, -2, -3}, {0, 2, 1}, {-1, 1, 2}};
+    Vector b = {0, -8, 3};
+    // TODO: overload << operator
+    std::cout << "A:\n" << A << '\n';
+    std::cout << "\nb:\n" << b << '\n';
+
+    Vector x = classical_gaussian_elimination(A, b);
+    std::cout << "\nx:\n" << x << '\n';
     return 0;
   }
   catch (const std::exception& e) {
@@ -52,45 +59,47 @@ int main()
 
 //------------------------------------------------------------------------------
 
-vector_2d scale_and_add(const vector_2d& a, double c, const vector_2d& b)
+Vector classical_gaussian_elimination(Matrix A, Vector b)
 {
-  if (a.size() != b.size()) std::cerr << "wrong sizes for scale_and_add()\n";
-  vector_2d res(a.size());
-  for (int i = 0; i < a.size(); ++i) { res[i] += a[i] * c + b[i]; }
-  return res;
+  classical_elimination(A, b);
+  return back_substitution(A, b);
 }
 
 //------------------------------------------------------------------------------
 
-double my_dot_product(const vector_2d& a, const vector_2d& b)
-{
-  if (a.size() != b.size()) std::cerr << "sizes wrong for dot_product()\n";
-
-  double sum = 0.0;
-  for (int i = 0; i < a.size(); ++i) { sum += (a[i] * b[i]); }
-
-  return sum;
-}
-
-//------------------------------------------------------------------------------
-
-void classical_elim_array(vector_2d A, std::vector<double> b) {}
-
-//------------------------------------------------------------------------------
-
-std::vector<double> back_substitution(const vector_2d& A,
-                                      const std::vector<double>& b)
+void classical_elimination(Matrix& A, Vector& b)
 {
   const int n = A.size();
-  std::vector<double> x(n);
-  for (int i = n - 1; i >= 0; --i) {
-    // double s = b[i] - dot_product
+
+  for (int j = 0; j < n - 1; ++j) {
+    const double pivot = A[j][j];
+    if (pivot == 0) throw Elim_failure(j);
+
+    for (int i = j + 1; i < n; ++i) {
+      const double mult = A[i][j] / pivot;
+      for (int k = j; k < n; ++k) { A[i][k] -= A[j][k] * mult; }
+      b[i] -= mult * b[j];
+    }
   }
-  return std::vector<double>();
 }
 
 //------------------------------------------------------------------------------
 
-void solve_random_system(int n) {}
+Vector back_substitution(Matrix& A, Vector& b)
+{
+  const int n = A.size();
+  Vector x(n);
+  for (int i = n - 1; i >= 0; --i) {
+    double s = b[i];
+    for (int j = i + 1; j < n; ++j) {
+      s -= A[i][j] * x[j];
+      if (double m = A[i][i]) { x[i] = s / m; }
+      else {
+        throw Back_subst_failure(i);
+      }
+    }
+  }
+  return x;
+}
 
 //------------------------------------------------------------------------------
