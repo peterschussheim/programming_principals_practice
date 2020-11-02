@@ -34,12 +34,34 @@ Vector back_substitution(Matrix& A, Vector& b);
 
 //------------------------------------------------------------------------------
 
+std::ostream& operator<<(std::ostream& os, Matrix& m)
+{
+  os << "{\n";
+  for (int i = 0; i != m.size(); ++i) {
+    for (int k = 0; k != m[i].size(); ++k) { os << m[i][k] << ' '; }
+    os << '\n';
+  }
+  os << "}\n";
+  return os;
+}
+
+std::ostream& operator<<(std::ostream& os, Vector& v)
+{
+  os << "{\n";
+  for (int i = 0; i != v.size(); ++i) { os << v[i] << ' '; }
+  os << "}\n";
+  return os;
+}
+
+//------------------------------------------------------------------------------
+
 int main()
 {
   try {
     Matrix A = {{1, -2, -3}, {0, 2, 1}, {-1, 1, 2}};
     Vector b = {0, -8, 3};
-    // TODO: overload << operator
+
+    // TODO: debug program, current output is incorrect
     std::cout << "A:\n" << A << '\n';
     std::cout << "\nb:\n" << b << '\n';
 
