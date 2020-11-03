@@ -34,22 +34,23 @@ Vector back_substitution(Matrix& A, Vector& b);
 
 //------------------------------------------------------------------------------
 
-std::ostream& operator<<(std::ostream& os, Matrix& m)
+std::ostream& operator<<(std::ostream& os, Vector& v)
 {
-  os << "{\n";
-  for (int i = 0; i != m.size(); ++i) {
-    for (int k = 0; k != m[i].size(); ++k) { os << m[i][k] << ' '; }
-    os << '\n';
+  os << '{';
+  for (int i = 0; i != v.size(); ++i) {
+    os << "  ";
+    os << v[i];
+    os << "  ";
   }
-  os << "}\n";
+  os << '}';
   return os;
 }
 
-std::ostream& operator<<(std::ostream& os, Vector& v)
+std::ostream& operator<<(std::ostream& os, Matrix& m)
 {
   os << "{\n";
-  for (int i = 0; i != v.size(); ++i) { os << v[i] << ' '; }
-  os << "}\n";
+  for (int i = 0; i != m.size(); ++i) { os << m[i] << '\n'; }
+  os << "}";
   return os;
 }
 
@@ -58,8 +59,8 @@ std::ostream& operator<<(std::ostream& os, Vector& v)
 int main()
 {
   try {
-    Matrix A = {{1, -2, -3}, {0, 2, 1}, {-1, 1, 2}};
-    Vector b = {0, -8, 3};
+    Matrix A = {{1, -2, -3}, {0, 1, 2}, {-1, 1, 2}};
+    Vector b = {5, -8, 3};
 
     // TODO: debug program, current output is incorrect
     std::cout << "A:\n" << A << '\n';
@@ -67,6 +68,8 @@ int main()
 
     Vector x = classical_gaussian_elimination(A, b);
     std::cout << "\nx:\n" << x << '\n';
+
+    // Vector v = A * x;
     return 0;
   }
   catch (const std::exception& e) {
@@ -113,12 +116,10 @@ Vector back_substitution(Matrix& A, Vector& b)
   Vector x(n);
   for (int i = n - 1; i >= 0; --i) {
     double s = b[i];
-    for (int j = i + 1; j < n; ++j) {
-      s -= A[i][j] * x[j];
-      if (double m = A[i][i]) { x[i] = s / m; }
-      else {
-        throw Back_subst_failure(i);
-      }
+    for (int j = i + 1; j < n; ++j) { s -= A[i][j] * x[j]; }
+    if (double m = A[i][i]) { x[i] = s / m; }
+    else {
+      throw Back_subst_failure(i);
     }
   }
   return x;
