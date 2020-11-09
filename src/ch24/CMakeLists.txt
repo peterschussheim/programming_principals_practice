@@ -46,6 +46,6 @@ add_executable(ch24_ex11 ex11.cpp)
 set_property(TARGET ch24_ex11 PROPERTY CXX_STANDARD 20)
 set_property(TARGET ch24_ex11 PROPERTY CXX_STANDARD_REQUIRED ON)
 
-add_executable(ch24_ex12 ex12.cpp Matrix.cpp)
+add_executable(ch24_ex12 ex12.cpp)
 set_property(TARGET ch24_ex12 PROPERTY CXX_STANDARD 20)
 set_property(TARGET ch24_ex12 PROPERTY CXX_STANDARD_REQUIRED ON)
