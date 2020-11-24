@@ -6,8 +6,8 @@
 #include <iomanip>
 #include <string>
 #include <fstream>
-#include "Matrix.cpp"
-#include "MatrixIO.cpp"
+#include "Matrix.h"
+#include "MatrixIO.h"
 
 //------------------------------------------------------------------------------
 

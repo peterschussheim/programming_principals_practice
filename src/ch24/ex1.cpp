@@ -9,8 +9,8 @@
 // apply() that way. DONE
 
 #include <iostream>
-#include "Matrix.cpp"
-#include "MatrixIO.cpp"
+#include "Matrix.h"
+#include "MatrixIO.h"
 #include <string>
 #include <fstream>
 

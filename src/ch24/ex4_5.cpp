@@ -12,7 +12,7 @@
 #include <chrono>
 #include <utility>
 #include "Matrix.cpp"
-#include "MatrixIO.cpp"
+#include "MatrixIO.h"
 
 //------------------------------------------------------------------------------
 // Simplify notation for two types used in this exercise:

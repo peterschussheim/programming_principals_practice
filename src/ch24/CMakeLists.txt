@@ -2,11 +2,11 @@ add_executable(ch24_try_this try_this.cpp)
 set_property(TARGET ch24_try_this PROPERTY CXX_STANDARD 20)
 set_property(TARGET ch24_try_this PROPERTY CXX_STANDARD_REQUIRED ON)
 
-add_executable(ch24_drill drill.cpp Matrix.cpp MatrixIO.cpp)
+add_executable(ch24_drill drill.cpp Matrix.cpp)
 set_property(TARGET ch24_drill PROPERTY CXX_STANDARD 20)
 set_property(TARGET ch24_drill PROPERTY CXX_STANDARD_REQUIRED ON)
 
-add_executable(ch24_ex1 ex1.cpp Matrix.cpp MatrixIO.cpp)
+add_executable(ch24_ex1 ex1.cpp Matrix.cpp)
 set_property(TARGET ch24_ex1 PROPERTY CXX_STANDARD 20)
 set_property(TARGET ch24_ex1 PROPERTY CXX_STANDARD_REQUIRED ON)
 
@@ -18,7 +18,7 @@ add_executable(ch24_ex3 ex3.cpp)
 set_property(TARGET ch24_ex3 PROPERTY CXX_STANDARD 20)
 set_property(TARGET ch24_ex3 PROPERTY CXX_STANDARD_REQUIRED ON)
 
-add_executable(ch24_ex4_to_5 ex4_5.cpp Matrix.cpp MatrixIO.cpp)
+add_executable(ch24_ex4_to_5 ex4_5.cpp Matrix.cpp)
 set_property(TARGET ch24_ex4_to_5 PROPERTY CXX_STANDARD 20)
 set_property(TARGET ch24_ex4_to_5 PROPERTY CXX_STANDARD_REQUIRED ON)
 
