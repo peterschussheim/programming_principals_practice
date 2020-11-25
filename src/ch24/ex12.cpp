@@ -101,7 +101,18 @@ int main()
 
     std::cout << "\n-----------------------------------------------------\n";
     for (int i = 0; i < THREE_DIM; ++i) { std::cout << m31[i] << '\n'; }
-    // TODO: Complete remainder of this exercise
+    for (int i = 0; i < THREE_DIM; ++i) { std::cout << m32[i] << '\n'; }
+    for (int i = 0; i < THREE_DIM; ++i) { std::cout << m33[i] << '\n'; }
+
+    std::cout << '\n';
+    std::cout << '\n';
+    Numeric_lib::Matrix<double> v24 = v21 + v22 + v23;
+    std::cout << '\n'
+              << v21 << "\n + \n"
+              << v22 << "\n + \n"
+              << v23 << "\n =\n"
+              << v24 << '\n';
+
     return 0;
   }
   catch (const std::exception& e) {
