@@ -152,7 +152,7 @@ void print(unsigned char i) { std::cout << int(i) << '\t'; }
 void try_this_3()
 {
   int si = 257;  // doesn't fit into signed integer
-  char c = si;   // implicit conversion to char
+  char c = si;   // implicit conversion to char (char is a signed int!!)
   unsigned char uc = si;
   signed char sc = si;
   print(si);
@@ -161,7 +161,7 @@ void try_this_3()
   print(sc);
   std::cout << '\n';
 
-  si = 129;  // doesn't fit into a signed char
+  si = 128;  // doesn't fit into a signed char
   c = si;
   uc = si;
   sc = si;
@@ -178,7 +178,7 @@ int main()
   // try_this_2();
   // std::cout << "sizeof(signed char): " << sizeof(signed char) << '\n';
   // infinite();
-  // try_this_3();
-  print_dec_to_hex();
+  try_this_3();
+  // print_dec_to_hex();
   return 0;
 }
