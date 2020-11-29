@@ -1,5 +1,7 @@
 #include <iostream>
 #include <bitset>
+#include <iomanip>
+#include <sstream>
 
 struct Message {
   int a;
@@ -77,6 +79,48 @@ void try_this_2()
   }
 }
 
+// center-aligns string within a field of width w to enforce alignment.
+std::string center(const std::string s, const int w)
+{
+  std::stringstream ss;
+  std::stringstream spaces;
+  int padding = w - s.size();
+  for (int i = 0; i < padding / 2; ++i) { spaces << " "; }
+  ss << spaces.str() << s << spaces.str();
+  if (padding > 0 && padding % 2 != 0) { ss << " "; }
+  return ss.str();
+}
+
+// print value x with specified amount of left padding pad.
+template<typename T> std::string prt(T x, const int width)
+{
+  std::stringstream ss;
+  ss << std::fixed << std::right;
+  ss.fill(' ');     // fill space around display
+  ss.width(width);  // set width around printed val
+
+  ss << x;
+  return ss.str();
+}
+
+void print_dec_to_hex()
+{
+  const int small_col_width = 8 - 2;
+  const int large_col_width = 48 - 2;
+  std::cout << center("Decimal", small_col_width) << " | "
+            << center("Hex", small_col_width) << " | "
+            << center("Binary", large_col_width) << '\n';
+  std::cout << std::string(small_col_width * 2 + large_col_width + 2 * 3, '-')
+            << '\n';
+  for (unsigned int i = 0; i < 255; ++i) {
+    std::cout << std::dec << prt(i, small_col_width) << " | " << std::hex
+              << "0x" << i << std::setfill(' ') << std::setw(small_col_width)
+              << " | "
+              << prt(std::bitset<8 * sizeof(unsigned int)>{i}, large_col_width)
+              << '\n';
+  }
+}
+
 void infinite()
 {
   // This function runs for ever due to a mismatch of unsigned and signed
@@ -100,7 +144,7 @@ void infinite()
 
 template<typename T> void print(T i) { std::cout << i << '\t'; }
 void print(char i) { std::cout << int(i) << '\t'; }
-void print(signed char) { std::cout << int(i) << '\t'; }
+void print(signed char i) { std::cout << int(i) << '\t'; }
 void print(unsigned char i) { std::cout << int(i) << '\t'; }
 
 //------------------------------------------------------------------------------
@@ -110,7 +154,7 @@ void try_this_3()
   int si = 257;  // doesn't fit into signed integer
   char c = si;   // implicit conversion to char
   unsigned char uc = si;
-  signed char = si;
+  signed char sc = si;
   print(si);
   print(c);
   print(uc);
@@ -134,6 +178,7 @@ int main()
   // try_this_2();
   // std::cout << "sizeof(signed char): " << sizeof(signed char) << '\n';
   // infinite();
-  try_this_3();
+  // try_this_3();
+  print_dec_to_hex();
   return 0;
 }
