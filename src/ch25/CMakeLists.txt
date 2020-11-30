@@ -5,7 +5,10 @@ add_custom_command(
         TARGET ch25_try_this POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy
                 ${CMAKE_CURRENT_SOURCE_DIR}/encrypted.txt
-                ${CMAKE_CURRENT_BINARY_DIR}/encrypted.txt)
+                ${CMAKE_CURRENT_BINARY_DIR}/encrypted.txt
+        COMMAND ${CMAKE_COMMAND} -E copy
+                ${CMAKE_CURRENT_SOURCE_DIR}/constitution.txt
+                ${CMAKE_CURRENT_BINARY_DIR}/constitution.txt)
 
 add_executable(ch25_drill drill.cpp)
 set_property(TARGET ch25_drill PROPERTY CXX_STANDARD 20)

@@ -218,7 +218,8 @@ void decipher(const unsigned long* const v, unsigned long* const w,
 }
 
 //------------------------------------------------------------------------------
-// TODO: complete this and write function to encrypt a file
+
+// Used by the receiver of an encrypted message to decipher the text.
 void decrypt(std::string infile, std::string outfile, std::string key)
 {
   const int nchar = 2 * sizeof(long);  // 64 bits
@@ -232,7 +233,7 @@ void decrypt(std::string infile, std::string outfile, std::string key)
 
   const unsigned long* k = reinterpret_cast<const unsigned long*>(key.data());
 
-  unsigned long* inptr[2];
+  unsigned long inptr[2];
   char outbuf[nchar + 1];
   outbuf[nchar] = 0;  // terminator
 
@@ -247,8 +248,49 @@ void decrypt(std::string infile, std::string outfile, std::string key)
 }
 
 //------------------------------------------------------------------------------
+// TODO: Figure out why the encrypted output is generated as many columns
+// wide rather than a few as in the example from the book.
+// Use to encrypt the contents of a plaintext file.
+void encrypt(std::string infile, std::string outfile, std::string key)
+{
+  const int nchar = 2 * sizeof(long);  // 64 bits
+  const int kchar = 2 * nchar;         // 128 bits
+
+  while (key.size() < kchar) key += '0';  // pad key with 0
+
+  std::ifstream inf(infile);
+  std::ofstream outf(outfile);
+  if (!inf || !outf) std::cerr << "bad file name\n";
+
+  const unsigned long* k = reinterpret_cast<const unsigned long*>(key.data());
+
+  unsigned long outptr[2];
+  char inbuf[nchar];
+  unsigned long* inptr = reinterpret_cast<unsigned long*>(inbuf);
+  int count = 0;
+
+  while (inf.get(inbuf[count])) {
+    outf << std::hex;  // use hex for output
+    if (++count == nchar) {
+      encipher(inptr, outptr, k);
+      // pad with leading zeros:
+      outf << std::setw(8) << std::setfill('0') << outptr[0] << ' '
+           << std::setw(8) << std::setfill('0') << outptr[1] << ' ';
+      count = 0;
+    }
+  }
+
+  if (count)  // pad
+  {
+    while (count != nchar) inbuf[count++] = '0';
+    encipher(inptr, outptr, k);
+    outf << outptr[0] << ' ' << outptr[1] << ' ';
+  }
+}
+
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
+
 int main()
 {
   // try_this_1();
@@ -257,8 +299,7 @@ int main()
   // infinite();
   // try_this_3();
   // print_dec_to_hex();
-
-  // TODO: complete encryption program
-  decrypt("encrypted.txt", "decrypted.txt", "bs");
+  encrypt("constitution.txt", "encrypted_constitution.txt", "sim");
+  // decrypt("encrypted.txt", "decrypted.txt", "bs");
   return 0;
 }
