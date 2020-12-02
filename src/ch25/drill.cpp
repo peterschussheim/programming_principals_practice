@@ -18,6 +18,15 @@
 int main()
 {
   try {
+    // int v = 1;
+    unsigned int v = 1;
+    for (int i = 0; i < sizeof(v) * 8; ++i) {
+      std::cout << i << ":\t" << v << '\n';
+      v <<= 1;
+    }
+
+    short unsigned int shrt_u = 0x1;
+    std::cout << "shrt_u: " << shrt_u << '\t' << std::hex << shrt_u << '\n';
     return 0;
   }
   catch (const std::exception& e) {
