@@ -67,8 +67,17 @@ int main()
     c <<= 15;  // perform left shift on c by 15 bits
     v_bit.push_back(c);
 
-    short unsigned d = 1;
-    // for(auto i = 0; i < )
+    // right shift on d 8 times
+    short unsigned d = ~0;  // start with all bits set
+    d >>= 8;
+    v_bit.push_back(d);
+
+    short unsigned e = ~0;
+    e <<= 8;
+    v_bit.push_back(e);
+
+    short unsigned f = 0;
+
     return 0;
   }
   catch (const std::exception& e) {
