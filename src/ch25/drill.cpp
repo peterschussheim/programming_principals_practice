@@ -76,7 +76,21 @@ int main()
     e <<= 8;
     v_bit.push_back(e);
 
-    short unsigned f = 0;
+    short unsigned f = 1;
+    for (int i = 2; i < 15; i += 2) {
+      // std::cout << std::bitset<8 * sizeof(short unsigned)>{f} << '\n';
+      short unsigned temp = 1;
+      temp <<= i;
+      f |= temp;
+    }
+
+    v_bit.push_back(f);
+
+    short unsigned g = ~f;
+    v_bit.push_back(g);
+
+    std::cout << '\n';
+    print_bits(v_bit);
 
     return 0;
   }
