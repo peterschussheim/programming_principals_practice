@@ -14,10 +14,6 @@ add_executable(ch25_drill drill.cpp)
 set_property(TARGET ch25_drill PROPERTY CXX_STANDARD 20)
 set_property(TARGET ch25_drill PROPERTY CXX_STANDARD_REQUIRED ON)
 
-add_executable(ch25_ex1 ex1.cpp)
-set_property(TARGET ch25_ex1 PROPERTY CXX_STANDARD 20)
-set_property(TARGET ch25_ex1 PROPERTY CXX_STANDARD_REQUIRED ON)
-
 add_executable(ch25_ex2 ex2.cpp)
 set_property(TARGET ch25_ex2 PROPERTY CXX_STANDARD 20)
 set_property(TARGET ch25_ex2 PROPERTY CXX_STANDARD_REQUIRED ON)
