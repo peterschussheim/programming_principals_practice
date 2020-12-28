@@ -20,30 +20,80 @@ constexpr int min_word_size = 3;
 
 Sub_map sub{
     // clang-format off
+  {"a", "a"},
+  {"b", "b"},
+  {"c", "c"},
+  {"d", "d"},
+  {"e", "e"},
+  {"f", "f"},
   {"o", "0"},
   {"l", "1"},
-  {"to", "2"},
-  {"for", "4"},
+  //{"i", "1"},
   {"s", "5"},
-  {"g", "6"},
   {"t", "7"},
-  {"ate", "8"},
-  {"g", "9"}
+  //{"for", "4"},
+  //{"g", "6"},
+  //{"ate", "8"},
+  //{"g", "9"}
     // clang-format on
 };
 
 //------------------------------------------------------------------------------
 
-// Returns the hex substitution for a given sub_string.
-// Ex: auto replacement = get_hex_substitution("ate", sub); // "ate"
-std::string get_hex_substitution(std::string sub_string, Sub_map table)
+std::string get_hex_substitution(char sub_string, Sub_map table);
+std::string process_word(std::string& w, Sub_map& s);
+void create_hex_dict(std::string infile, std::string outfile, Sub_map& s);
+
+//------------------------------------------------------------------------------
+
+int main()
 {
-  // TODO: Need to use a less stringent algorithm to handle partial matches
-  auto search = table.find(sub_string);
-  if (search != table.end()) { return search->second; }
+  create_hex_dict("usa_dict.txt", "hex_speak.txt", sub);
+
+  // std::string original = "forty";
+  //// std::string original = "late";
+  // std::string result = process_word(original, sub);
+  // std::cout << original << " --> " << result << '\n';
+  return 0;
+}
+
+//------------------------------------------------------------------------------
+
+// Returns the hex substitution for a given sub_string.
+// Ex: auto replacement = get_hex_substitution("t", sub); // "7"
+// Ex: auto replacement = get_hex_substitution("f", sub); // "f"
+std::string get_hex_substitution(char sub_string, Sub_map table)
+{
+  auto search = table.find(std::string{sub_string});
+  if (search != table.end()) { return (*search).second; }
   else {
     return "";  // if we cannot find a replacement in table, return empty string
   }
+}
+
+//------------------------------------------------------------------------------
+
+// Process an individual word to try and substitute with hexadecimal characters.
+// returns std::string.
+std::string process_word(std::string& w, Sub_map& s)
+{
+  std::string result;
+  for (int i = 0; i < w.size(); ++i) {  // check each char
+    std::string repl = get_hex_substitution(w[i], sub);
+    if (repl.empty()) {
+      // if repl is empty, there was no suitable char to substitute
+      // and we should skip the current word completely since our requirements
+      // specify only the hex alphabet can be used to construct words
+      // result += repl;
+      return "";
+    }
+    else {
+      // use the current w char
+      result += repl;
+    }
+  }
+
+  return result;
 }
 
 //------------------------------------------------------------------------------
@@ -53,7 +103,6 @@ std::string get_hex_substitution(std::string sub_string, Sub_map table)
 // attempt to build words from dictionary using only hex characters and
 // substitutions above.
 // write valid hex words to file
-
 void create_hex_dict(std::string infile, std::string outfile, Sub_map& s)
 {
   std::ifstream inf(infile);
@@ -65,29 +114,11 @@ void create_hex_dict(std::string infile, std::string outfile, Sub_map& s)
     std::string curr, hex;
     inf >> curr;                         // read each line
     if (curr.size() >= min_word_size) {  // ensure word meets min size
-      for (auto& search : sub) {
-        // look for the first occurence of a potential replaceable string
-        std::string::size_type idx = curr.find_first_of(search.first);
-        if (idx != std::string::npos) {  // if we found an occurence
-          // set hex to the string with the replacement
-          hex = search.second + std::string{curr, idx};
-          // hex = search.second + std::string{curr, search.first.size() - idx};
-        }
-      }
+      hex = process_word(curr, sub);
     }
     // TODO: Not done, need to add a condition when writing out hex words
-    outf << hex << '\n';
+    if (hex.size() > 0) { outf << hex << '\n'; }
   }
 }
 
 //------------------------------------------------------------------------------
-
-int main()
-{
-  create_hex_dict("usa_dict.txt", "hex_speak.txt", sub);
-
-  /* std::string ex_eng = "late";
-   std::string subs = get_hex_substitution(ex_eng, sub);*/
-
-  return 0;
-}
