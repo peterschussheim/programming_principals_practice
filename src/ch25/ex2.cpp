@@ -12,12 +12,25 @@
 
 //------------------------------------------------------------------------------
 
-// substitution map
+// This was a very fun, very challenging exercise which reminded me of my
+// childhood using calculators in school to write vulgarities.  The solution
+// implemented below could be expanded, if for instance, a requirement was to
+// use a different set of substitutions or to use uppercase words as input and
+// output.
+//
+// std::map was used because I thought this problem was well-suited to key-value
+// pairs, however, another program could easily be written using std::vector or
+// std:string.
+
+//------------------------------------------------------------------------------
+
 // Hex characters: 0123456789ABCDEF
 using Sub_map = std::map<std::string, std::string>;
-
 constexpr int min_word_size = 3;
 
+//------------------------------------------------------------------------------
+
+// substitution map
 Sub_map sub{
     // clang-format off
   {"a", "a"},
@@ -40,9 +53,10 @@ Sub_map sub{
 
 //------------------------------------------------------------------------------
 
-std::string get_hex_substitution(char sub_string, Sub_map table);
+std::string get_hex_substitution(char sub_string, Sub_map& table);
 std::string process_word(std::string& w, Sub_map& s);
-void create_hex_dict(std::string infile, std::string outfile, Sub_map& s);
+void create_hex_dict(const std::string& ifile, const std::string& ofile,
+                     Sub_map& s);
 
 //------------------------------------------------------------------------------
 
@@ -50,10 +64,6 @@ int main()
 {
   create_hex_dict("usa_dict.txt", "hex_speak.txt", sub);
 
-  // std::string original = "forty";
-  //// std::string original = "late";
-  // std::string result = process_word(original, sub);
-  // std::cout << original << " --> " << result << '\n';
   return 0;
 }
 
@@ -62,19 +72,19 @@ int main()
 // Returns the hex substitution for a given sub_string.
 // Ex: auto replacement = get_hex_substitution("t", sub); // "7"
 // Ex: auto replacement = get_hex_substitution("f", sub); // "f"
-std::string get_hex_substitution(char sub_string, Sub_map table)
+std::string get_hex_substitution(char sub_string, Sub_map& table)
 {
-  auto search = table.find(std::string{sub_string});
-  if (search != table.end()) { return (*search).second; }
+  Sub_map::iterator it = table.find(std::string{sub_string});
+  if (it != table.end()) { return (*it).second; }
   else {
-    return "";  // if we cannot find a replacement in table, return empty string
+    return "";  // if we cannot find a replacement, return an empty string
   }
 }
 
 //------------------------------------------------------------------------------
 
 // Process an individual word to try and substitute with hexadecimal characters.
-// returns std::string.
+// returns the "hex string" or an empty string.
 std::string process_word(std::string& w, Sub_map& s)
 {
   std::string result;
@@ -98,15 +108,13 @@ std::string process_word(std::string& w, Sub_map& s)
 
 //------------------------------------------------------------------------------
 
-// create ofstream "hex_speak.txt"
-// read dictionary into memory
-// attempt to build words from dictionary using only hex characters and
-// substitutions above.
-// write valid hex words to file
-void create_hex_dict(std::string infile, std::string outfile, Sub_map& s)
+// read dictionary into memory and build words from dictionary using
+// only hex characters and substitutions above. write valid hex words to file.
+void create_hex_dict(const std::string& ifile, const std::string& ofile,
+                     Sub_map& s)
 {
-  std::ifstream inf(infile);
-  std::ofstream outf(outfile);
+  std::ifstream inf(ifile);
+  std::ofstream outf(ofile);
   if (!inf || !outf) std::cerr << "bad file name\n";
 
   while (inf)  // while the list has words to read
@@ -116,7 +124,8 @@ void create_hex_dict(std::string infile, std::string outfile, Sub_map& s)
     if (curr.size() >= min_word_size) {  // ensure word meets min size
       hex = process_word(curr, sub);
     }
-    // TODO: Not done, need to add a condition when writing out hex words
+    // if we couldn't created a hex version of the word, hex will be empty
+    // so we should ignore and only write to the file valid hex words.
     if (hex.size() > 0) { outf << hex << '\n'; }
   }
 }
