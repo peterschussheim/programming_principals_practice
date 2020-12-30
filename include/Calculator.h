@@ -1,3 +1,5 @@
+#ifndef CALCULATOR_H
+#define CALCULATOR_H
 
 /*
     Original code from
@@ -23,16 +25,18 @@
       '> (17 + 4) / (5 - 1)'
 */
 
-#include "std_lib_facilities.h"
+#include <string>
+#include <vector>
+#include <iostream>
 
 class Token {
 public:
   char kind;
   double value;
-  string name;
+  std::string name;
   Token(char ch) : kind{ch}, value{0} {}                // Token{'*'}
   Token(char ch, double val) : kind{ch}, value{val} {}  // Token{number, 4.321}
-  Token(char ch, string n)
+  Token(char ch, std::string n)
       : kind{ch}, value{0}, name{n} {}  // Token{name, "pi"}
 };
 
@@ -51,12 +55,12 @@ private:
 
 const char print =
     ';';  // terminates an expression and prints the result on a newline
-const char number = '8';       // arbitrary choice to represent numeric literals
-const char let = 'L';          // declaration token
-const char name = 'a';         // name token
-const char quit = 'Q';         // quit token
-const string declkey = "let";  // declaration keyword
-const string quit_key = "quit";  // keyword to exit the program
+const char number = '8';  // arbitrary choice to represent numeric literals
+const char let = 'L';     // declaration token
+const char name = 'a';    // name token
+const char quit = 'Q';    // quit token
+const std::string declkey = "let";    // declaration keyword
+const std::string quit_key = "quit";  // keyword to exit the program
 
 Token Token_stream::get()
 {
@@ -66,7 +70,7 @@ Token Token_stream::get()
     return buffer;
   }
   char ch;
-  cin >> ch;  // remember, >> operator skips ws (space, newline, tab, etc)
+  std::cin >> ch;  // remember, >> operator skips ws (space, newline, tab, etc)
   switch (ch) {
     case print:
     case '(':
@@ -89,17 +93,17 @@ Token Token_stream::get()
     case '7':
     case '8':
     case '9': {
-      cin.putback(ch);  // put digit back into stream
+      std::cin.putback(ch);  // put digit back into stream
       double val;
-      cin >> val;  // read a floating-point
+      std::cin >> val;  // read a floating-point
       return Token(number, val);
     }
     default:
       if (isalpha(ch)) {
-        string s;
+        std::string s;
         s += ch;
-        while (cin.get(ch) && (isalpha(ch) || isdigit(ch))) s += ch;
-        cin.putback(ch);                      // should we be using cin.unget??
+        while (std::cin.get(ch) && (isalpha(ch) || isdigit(ch))) s += ch;
+        std::cin.putback(ch);                 // should we be using cin.unget??
         if (s == declkey) return Token{let};  // declaration keyword
         if (s == quit_key) return Token{quit};  // quit keyword
 
@@ -303,27 +307,4 @@ void calculate()
     }
 }
 
-int main()
-{
-  try {
-    // system-defined names:
-    define_name("pi", 3.1415926535);
-    define_name("e", 2.7182818284);
-    define_name("k", 1000);
-
-    calculate();
-
-    keep_window_open("~");
-    return 0;
-  }
-  catch (exception& e) {
-    cerr << "exception: " << e.what() << endl;
-    keep_window_open("~");
-    return 1;
-  }
-  catch (...) {
-    cerr << "exception\n";
-    keep_window_open("~");
-    return 2;
-  }
-}
+#endif  // CALCULATOR_H
