@@ -25,9 +25,18 @@
       '> (17 + 4) / (5 - 1)'
 */
 
+// TODO: Add usage examples and instructions when starting program
+// TODO: add bitwise logical operator &
+// TODO: add bitwise logical operator |
+// TODO: add bitwise logical operator ^
+// TODO: add bitwise logical operator ~
+
+#include "Error.h"
 #include <string>
 #include <vector>
 #include <iostream>
+
+//------------------------------------------------------------------------------
 
 class Token {
 public:
@@ -39,6 +48,8 @@ public:
   Token(char ch, std::string n)
       : kind{ch}, value{0}, name{n} {}  // Token{name, "pi"}
 };
+
+//------------------------------------------------------------------------------
 
 class Token_stream {
 public:
@@ -53,6 +64,8 @@ private:
                      // Token_stream::putback()
 };
 
+//------------------------------------------------------------------------------
+
 const char print =
     ';';  // terminates an expression and prints the result on a newline
 const char number = '8';  // arbitrary choice to represent numeric literals
@@ -61,6 +74,8 @@ const char name = 'a';    // name token
 const char quit = 'Q';    // quit token
 const std::string declkey = "let";    // declaration keyword
 const std::string quit_key = "quit";  // keyword to exit the program
+
+//------------------------------------------------------------------------------
 
 Token Token_stream::get()
 {
@@ -130,26 +145,26 @@ void Token_stream::ignore(char c)
 
   // now search input:
   char ch;
-  while (cin >> ch)
+  while (std::cin >> ch)
     if (ch == c) return;
 }
 
 struct Variable {
-  string name;
+  std::string name;
   double value;
-  Variable(string n, double v) : name(n), value(v) {}
+  Variable(std::string n, double v) : name(n), value(v) {}
 };
 
-vector<Variable> var_table;
+std::vector<Variable> var_table;
 
-double get_value(string s)
+double get_value(std::string s)
 {  // return the value of a Variable names s
   for (int i = 0; i < var_table.size(); ++i)
     if (var_table[i].name == s) return var_table[i].value;
   error("get: undefined name ", s);
 }
 
-void set_value(string s, double d)
+void set_value(std::string s, double d)
 {
   for (int i = 0; i <= var_table.size(); ++i)
     if (var_table[i].name == s) {
@@ -159,7 +174,7 @@ void set_value(string s, double d)
   error("set: undefined name ", s);
 }
 
-bool is_declared(string s)
+bool is_declared(std::string s)
 {
   // is var already in var_table?
   for (int i = 0; i < var_table.size(); ++i)
@@ -167,7 +182,7 @@ bool is_declared(string s)
   return false;
 }
 
-double define_name(string var, double val)
+double define_name(std::string var, double val)
 {
   // add (var,val) to names vector
   if (is_declared(var)) error(var, " declared twice");
@@ -201,6 +216,8 @@ double primary()
       error("primary expected");
   }
 }
+
+//------------------------------------------------------------------------------
 
 double term()
 {
@@ -237,6 +254,8 @@ double term()
   }
 }
 
+//------------------------------------------------------------------------------
+
 double expression()
 {
   double left = term();
@@ -256,6 +275,8 @@ double expression()
   }
 }
 
+//------------------------------------------------------------------------------
+
 double declaration()
 {
   // assume we have seen "let"
@@ -263,7 +284,7 @@ double declaration()
   // declare a variable called "name" with initial val "expression"
   Token t = ts.get();
   if (t.kind != 'a') error("name expected in declaration");
-  string name = t.name;
+  std::string name = t.name;
 
   if (is_declared(name)) error(name, " declared twice");
   Token t2 = ts.get();
@@ -273,6 +294,8 @@ double declaration()
   var_table.push_back(Variable(name, d));
   return d;
 }
+
+//------------------------------------------------------------------------------
 
 double statement()
 {
@@ -286,25 +309,31 @@ double statement()
   }
 }
 
+//------------------------------------------------------------------------------
+
 void clean_up_mess() { ts.ignore(print); }
 
-const string prompt = "> ";
-const string result = "= ";
+const std::string prompt = "> ";
+const std::string result = "= ";
+
+//------------------------------------------------------------------------------
 
 void calculate()
 {
   while (true) try {
-      cout << prompt;
+      std::cout << prompt;
       Token t = ts.get();                    // get Token from Token_stream
       while (t.kind == print) t = ts.get();  // discard all print statements
       if (t.kind == quit) return;            // quit program
       ts.putback(t);
-      cout << result << statement() << '\n';
+      std::cout << result << statement() << '\n';
     }
-    catch (runtime_error& e) {
-      cerr << e.what() << '\n';
+    catch (std::runtime_error& e) {
+      std::cerr << e.what() << '\n';
       clean_up_mess();
     }
 }
+
+//------------------------------------------------------------------------------
 
 #endif  // CALCULATOR_H
