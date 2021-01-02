@@ -1,3 +1,7 @@
+// Without using any standard headers (such as <limits> ) or documenta-
+// tion, compute the number of bits in an int and determine whether char is
+// signed or unsigned on your implementation.
+
 #include <iostream>
 
 int main()
