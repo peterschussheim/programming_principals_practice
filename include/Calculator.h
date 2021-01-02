@@ -29,6 +29,9 @@
 // TODO: add bitwise logical operator |
 // TODO: add bitwise logical operator ^
 // TODO: add bitwise logical operator ~
+// TODO: Re-read PPP chapters 6 and 7 to refresh my memory existing of existing
+// calculator design.
+// when implementing bitwise NOT ~ operation, we must check for an integral.
 // TODO: add command to list user and system variables
 
 #include "Error.h"
@@ -95,6 +98,10 @@ Token Token_stream::get()
     case '*':
     case '/':
     case '=':
+    case '&':
+    case '|':
+    case '^':
+    case '~':  // unary only
     case '%':
       return Token(ch);  // each character represent itself
     case '.':  // a floating-point literal can start with a dot ex: .9483
@@ -340,11 +347,12 @@ const std::string line_break =
 
 void calculate()
 {
+  std::cout << welcome << supported_operators << user_defined_variables
+            << syntax << quit_calc << examples << "\n\n"
+            << line_break << "\n\n";
+
   while (true) try {
-      std::cout << welcome << supported_operators << user_defined_variables
-                << syntax << quit_calc << examples << "\n\n"
-                << line_break << "\n\n"
-                << prompt;
+      std::cout << prompt;
 
       Token t = ts.get();                    // get Token from Token_stream
       while (t.kind == print) t = ts.get();  // discard all print statements
