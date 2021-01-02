@@ -25,11 +25,11 @@
       '> (17 + 4) / (5 - 1)'
 */
 
-// TODO: Add usage examples and instructions when starting program
 // TODO: add bitwise logical operator &
 // TODO: add bitwise logical operator |
 // TODO: add bitwise logical operator ^
 // TODO: add bitwise logical operator ~
+// TODO: add command to list user and system variables
 
 #include "Error.h"
 #include <string>
@@ -313,15 +313,39 @@ double statement()
 
 void clean_up_mess() { ts.ignore(print); }
 
+//------------------------------------------------------------------------------
+
 const std::string prompt = "> ";
 const std::string result = "= ";
+const std::string welcome = "Welcome to calc_c++!\n\n";
+const std::string supported_operators =
+    "calc_c++ supports the following operators:\n\n\t+, -, *, /, %, "
+    "( wrapped_expression ).\n\n";
+const std::string user_defined_variables =
+    "Users may declare and define custom variables using the "
+    "following syntax:\n\n\tlet x = 33 + 2;\n\nTo access x, enter: x;.\n\n";
+const std::string syntax =
+    "Please terminate each statement entered with a semicolon (;).\n\n";
+const std::string quit_calc =
+    "When finished with your calculations, type 'quit' and press the enter "
+    "key.\n";
+const std::string examples =
+    "Example usage:\n\n\t> let s = 100 * 0.75;\n\n\t> s * (33 + pi) - "
+    "2;\n\n\t> 300 * (33 + 2) / 3;\n\n\t> (17 + 4) / (5 - 1) ";
+const std::string line_break =
+    "--------------------------------------------------------------------------"
+    "-----";
 
 //------------------------------------------------------------------------------
 
 void calculate()
 {
   while (true) try {
-      std::cout << prompt;
+      std::cout << welcome << supported_operators << user_defined_variables
+                << syntax << quit_calc << examples << "\n\n"
+                << line_break << "\n\n"
+                << prompt;
+
       Token t = ts.get();                    // get Token from Token_stream
       while (t.kind == print) t = ts.get();  // discard all print statements
       if (t.kind == quit) return;            // quit program
