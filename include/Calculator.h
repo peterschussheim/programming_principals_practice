@@ -31,7 +31,7 @@
 // TODO: add bitwise logical operator ~
 // TODO: Re-read PPP chapters 6 and 7 to refresh my memory existing of existing
 // calculator design.
-// when implementing bitwise NOT ~ operation, we must check for an integral.
+// when implementing all bitwise operations, we must check for an integral.
 // TODO: add command to list user and system variables
 
 #include "Error.h"
@@ -217,6 +217,9 @@ double primary()
       return -primary();
     case '+':
       return primary();
+    case '~':
+      // TODO: Add check to throw error if primary() returns floating-point val
+      return ~static_cast<int>(primary());
     case name:
       return get_value(t.name);
     default:
@@ -247,7 +250,10 @@ double term()
         left = fmod(left, d);
         t = ts.get();
         break;
-        /* int i1 = narrow_cast<int>(left);
+        /*
+        // narrow_cast is defined in std_lib_facilities and performs a check
+        and throws and exception if narrowing would remove information.
+        int i1 = narrow_cast<int>(left);
          int i2 = narrow_cast<int>(primary());
          if (i2 == 0) error("%: divide by zero");
          left = i1 % i2;
