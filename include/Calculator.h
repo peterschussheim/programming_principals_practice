@@ -1,37 +1,16 @@
 #ifndef CALCULATOR_H
 #define CALCULATOR_H
 
-/*
-    Original code from
-   http://www.stroustrup.com/Programming/calculator08buggy.cpp
+// Note: when adding the bitwise operators to the calculator, I took the easy
+// and simple path of casting doubles to integers.  One consequence of this
+// decision is information loss when a user enters floating-point values.
+// Currently there is a minimal disclaimer during program startup which explains
+// this shortcoming.  One improvement would involve rejecting
+// non-integral values when performing bitwise arithmetic, accompanied with
+// a helpful message to the user.  Another option is to accept floating-point
+// values and when printing the result, indicate on the same line as the value
+// that a narrowing conversion took place.
 
-    Simple calculator command line program implemented as an excercise in
-   building a relatively complex program and making improvements iteratively.
-
-    Features:
-      - Supports operators: '+', '-', '*', '/', '%', "'(' expression ')'"
-      - User-defined variables: 'let x = 33 + 2;' -> 'x;' = 35
-      - System-defined variables: pi, e, etc.
-
-    Example Usage:
-      **Use the ';' operator to terminate an expression (ex: '44 * 3;')**
-      **Use the 'let' keyword to declare a user-defined variable (ex: 'let y =
-   200.094;')**
-      **To quit the program, type 'quit' and hit enter**
-
-      '> let s = 100 * 0.75;'
-      '> s * (33 + pi) - 2;'
-      '> 300 * (33 + 2) / 3;'
-      '> (17 + 4) / (5 - 1)'
-*/
-
-// TODO: add bitwise logical operator &
-// TODO: add bitwise logical operator |
-// TODO: add bitwise logical operator ^
-// TODO: add bitwise logical operator ~
-// TODO: Re-read PPP chapters 6 and 7 to refresh my memory existing of existing
-// calculator design.
-// when implementing all bitwise operations, we must check for an integral.
 // TODO: add command to list user and system variables
 
 #include "Error.h"
@@ -244,6 +223,24 @@ double term()
         left /= d;
         break;
       }
+      case '&': {
+        int l_int = static_cast<int>(left);
+        int p_int = static_cast<int>(primary());
+        left = l_int & p_int;
+        break;
+      }
+      case '|': {
+        int l_int = static_cast<int>(left);
+        int p_int = static_cast<int>(primary());
+        left = l_int | p_int;
+        break;
+      }
+      case '^': {
+        int l_int = static_cast<int>(left);
+        int p_int = static_cast<int>(primary());
+        left = l_int ^ p_int;
+        break;
+      }
       case '%': {
         double d = primary();
         if (d == 0) error("%: divide by zero");
@@ -332,8 +329,15 @@ const std::string prompt = "> ";
 const std::string result = "= ";
 const std::string welcome = "Welcome to calc_c++!\n\n";
 const std::string supported_operators =
-    "calc_c++ supports the following operators:\n\n\t+, -, *, /, %, "
-    "( wrapped_expression ).\n\n";
+    "calc_c++ supports the following operators:\n\n"
+    "\t+, -, *, /, %, ( wrapped_expression ).\n\n"
+    "Additionally, the following bitwise operators are supported on integers "
+    "ONLY:\n\n"
+    "\t&, ~, |, and ^.\n\n"
+    "Performing the above bitwise operations on floating point values will "
+    "result in\n"
+    "information loss (floats are narrowed to integers).  You've been "
+    "warned!\n\n";
 const std::string user_defined_variables =
     "Users may declare and define custom variables using the "
     "following syntax:\n\n\tlet x = 33 + 2;\n\nTo access x, enter: x;.\n\n";
@@ -344,7 +348,8 @@ const std::string quit_calc =
     "key.\n";
 const std::string examples =
     "Example usage:\n\n\t> let s = 100 * 0.75;\n\n\t> s * (33 + pi) - "
-    "2;\n\n\t> 300 * (33 + 2) / 3;\n\n\t> (17 + 4) / (5 - 1) ";
+    "2;\n\n\t> 300 * (33 + 2) / 3;\n\n\t> (17 + 4) / (5 - 1)"
+    "\n\n\t> ~5838;\n\n\t> 100 & 4;\n\n\t> 4990 | 501;\n\n\t> 25 ^ 19;";
 const std::string line_break =
     "--------------------------------------------------------------------------"
     "-----";
