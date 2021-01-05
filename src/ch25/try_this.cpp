@@ -124,7 +124,7 @@ void print_dec_to_hex()
 
 void infinite()
 {
-  // This function runs for ever due to a mismatch of unsigned and signed
+  // This function runs forever due to a mismatch of unsigned and signed
   // integers.  The largest decimal value that an unsigned char can hold
   // is 160 whereas for a signed char, the max decimal value is 128.
   // So, with this in mind, we predict that when the loop variable i is
