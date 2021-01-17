@@ -3,25 +3,35 @@
 // signed or unsigned on your implementation.
 
 #include <iostream>
+#include <bitset>
 
 int main()
 {
   try {
-    // TODO: Write out a few notes on the code below.
-    // TODO: Write a few static assertions to validate the results below with
-    // <limits>.
-
-    int n = 0;
-    int i = 1;
+    std::bitset<8 * sizeof(int)> bin;  // display binary representation
+    int n = 0;    // bit position, 0 indicates the least significant bit
+    int val = 1;  // integer value in decimal representation
     while (true) {
-      std::cout << "bit " << n << " set: " << (i << n) << '\n';
-      if ((i << n) < (i << (n - 1))) break;
-      ++n;
+      bin = val << n;
+      std::cout << "bit at position " << n << " set: " << (val << n) << '\t'
+                << bin << '\n';
+
+      if ((val << n) < (val << (n - 1)))  // compare current bit to previous bit
+      {
+        break;  // if the value at n is less than the previous value, break out
+                // of the loop, since we are overflowing or going into negative
+                // values.
+      }
+
+      ++n;  // move to the left, to a more significant bit
     }
 
-    std::cout << "int has " << n + 1 << " bits, shifting by " << n
+    std::cout << "int has " << n + 1 << " bits, shifting left by " << n
               << " positions.\n\n";
 
+    // TODO: Refine the assertions below and play with them before moving on.
+    static_assert(4 <= sizeof(int), "ints are too small");
+    // static_assert(!std::numeric_limits<char>::is_signed, "char is signed");
     char ch = -1;
     if (ch == -1)
       std::cout << "char is signed\n";
