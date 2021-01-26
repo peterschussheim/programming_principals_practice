@@ -48,6 +48,7 @@ int main()
 {
   try {
     ex10();
+    std::cout << '\n';
     ex11();
     return 0;
   }
@@ -122,7 +123,22 @@ void ex10()
 
 //------------------------------------------------------------------------------
 
-// TODO: complete
-void ex11() { std::bitset<32> bs; }
+void ex11()
+{
+  std::bitset<32> ppn;
+
+  ppn = 4194303 << 10;
+  ppn |= 7 << 4;
+  ppn |= 0 << 3;
+  ppn |= 1 << 2;
+  ppn |= 1 << 1;
+  ppn |= 1;
+  std::cout << "PFN: " << (ppn.to_ulong() >> 10) << '\n';
+  std::cout << "CCA: " << ((ppn.to_ulong() >> 4) & 0x7) << '\n';
+  std::cout << "nonreachable: " << ((ppn.to_ulong() >> 3) & 1) << '\n';
+  std::cout << "dirty: " << ((ppn.to_ulong() >> 2) & 1) << '\n';
+  std::cout << "valid: " << ((ppn.to_ulong() >> 1) & 1) << '\n';
+  std::cout << "global: " << (ppn.to_ulong() & 1) << '\n';
+}
 
 //------------------------------------------------------------------------------
